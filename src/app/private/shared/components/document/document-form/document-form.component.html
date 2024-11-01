@@ -1,0 +1,19 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid gap-3">
+        <div class="col-12 field">
+            <label>Documentos</label>
+            <app-giro-upload maxSize="50000000"
+                             [multiple]="multiple"
+                             [base64]="true" formControlName="files" accept=".pdf,.csv"></app-giro-upload>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" (onClick)="closeEvent.emit()"  label="Cancelar"></p-button>
+            <p-button [disabled]="
+            this.form.status === 'PENDING'
+            || !this.form['controls']['files'].value?.length"
+          [loading]="this.buttonIsLoading" label="Registrar" type="submit"></p-button>
+        </div>
+    </div>
+</form>

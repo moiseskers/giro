@@ -1,0 +1,20 @@
+<div class="flex justify-content-between">
+    <div class="flex gap-1" style="flex: 0 0 50%;">
+        <p-inputGroup>
+            <input pInputText [formControl]="control" [placeholder]="placeholder" type="text">
+            <p-inputGroupAddon (click)="control.setValue('')  ; searchEvent.emit(this.control.value)" *ngIf="this.control?.value">
+                <i class="pi pi-times cursor-pointer"></i>
+            </p-inputGroupAddon>
+            <button (click)="searchEvent.emit(this.control.value)" icon="pi pi-search" pButton type="button"></button>
+        </p-inputGroup>
+    </div>
+
+    <div class="flex gap-1" *ngIf="label">
+        <button (click)="buttonEvent.emit()" [label]="label" pButton pRipple></button>
+    </div>
+</div>
+
+
+
+
+

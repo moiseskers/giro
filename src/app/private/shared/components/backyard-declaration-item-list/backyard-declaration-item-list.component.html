@@ -1,0 +1,50 @@
+<p-table [lazy]="true" [loading]="loading" #table [tableStyle]="{ 'min-width': '50rem' }" [value]="data?.items" styleClass="p-datatable-striped" (onSort)="sort($event)">
+    <ng-template pTemplate="header">
+        <tr class="">
+            <th>Subcategoría</th>
+            <th>Material</th>
+            <th>Tipo</th>
+            <th>Fecha de operación</th>
+            <th *ngIf="([Role.ADMIN] | hasAnyRole)">Año de cumplimiento</th>
+            <th>Recolector</th>
+            <th>Pretratamiento</th>
+            <th>Valorizador</th>
+
+            <th pSortableColumn="tons" class="white-space-nowrap">Toneladas
+                <p-sortIcon field="tons"></p-sortIcon>
+            </th>
+            <th pSortableColumn="materialCost" class="white-space-nowrap">Costo
+                <p-sortIcon field="materialCost"></p-sortIcon>
+            </th>
+            <th>Código del documento tributario</th>
+        </tr>
+    </ng-template>
+    <ng-template let-model pTemplate="body">
+        <tr>
+            <td>{{ modelIn(model)?.subcategory ?? '-' }}</td>
+            <td>{{ modelIn(model)?.material ?? '-' }}</td>
+            <td>{{ DeclarationItemType[modelIn(model)?.declarationItemType] ?? '-' }}</td>
+            <td>{{ modelIn(model)?.operationEndDate | date:'dd/MM/yyyy' }}</td>
+            <td *ngIf="([Role.ADMIN] | hasAnyRole)">{{ modelIn(model)?.complianceYear | date:'yyyy' }}</td>
+            <td>{{ modelIn(model)?.pickup?.businessName ?? '-' }}</td>
+            <td>{{ modelIn(model)?.pretreatment?.businessName ?? '-' }}</td>
+            <td>{{ modelIn(model)?.valuer?.businessName ?? '-' }}</td>
+            <td>{{ modelIn(model)?.tons | milligrams }} t</td>
+            <td>{{ modelIn(model)?.materialCost | number:'1.2-2' }} CLP</td>
+            <td>{{ modelIn(model)?.document }}</td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <tr>
+            <td *ngIf="!([Role.ADMIN] | hasAnyRole)" colspan="7" class="text-right"></td>
+            <td *ngIf="([Role.ADMIN] | hasAnyRole)" colspan="8" class="text-right"></td>
+            <td class="white-space-nowrap"> {{ totalTons }}</td>
+            <td class="white-space-nowrap">{{ materialCost }}</td>
+            <td></td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+

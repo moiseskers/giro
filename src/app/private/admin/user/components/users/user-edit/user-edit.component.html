@@ -1,0 +1,8 @@
+<app-user-form
+    [isEditing]="true"
+    [organizationIdAutoCompleteValue]="this.model.organization.businessName"
+    [model]="model"
+    (saveEvent)="save($event)"
+    [buttonIsLoading]="this.loaderService.loading[this.serviceUpdateLoaderId]"
+    (closeEvent)="ref.close()">
+</app-user-form>

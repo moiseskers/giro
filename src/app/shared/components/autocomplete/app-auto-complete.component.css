@@ -1,0 +1,176 @@
+@layer primeng {
+    .p-autocomplete {
+        display: inline-flex;
+        position: relative;
+    }
+
+    .p-autocomplete-loader {
+        position: absolute;
+        top: 50%;
+        margin-top: -0.5rem;
+    }
+
+    .p-autocomplete-dd .p-autocomplete-input {
+        flex: 1 1 auto;
+        width: 1%;
+    }
+
+    .p-autocomplete-dd .p-autocomplete-input,
+    .p-autocomplete-dd .p-autocomplete-multiple-container {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+    }
+
+    .p-autocomplete-dd .p-autocomplete-dropdown {
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0px;
+    }
+
+    .p-autocomplete-panel {
+        overflow: auto;
+    }
+
+    .p-autocomplete-items {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+    }
+
+    .p-autocomplete-item {
+        cursor: pointer;
+        white-space: nowrap;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .p-autocomplete-multiple-container {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        cursor: text;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+
+    .p-autocomplete-token {
+        width: fit-content;
+        cursor: default;
+        display: inline-flex;
+        align-items: center;
+        flex: 0 0 auto;
+    }
+
+    .p-autocomplete-token-icon {
+        display: flex;
+        cursor: pointer;
+    }
+
+    .p-autocomplete-input-token {
+        flex: 1 1 auto;
+        display: inline-flex;
+    }
+
+    .p-autocomplete-input-token input {
+        border: 0 none;
+        outline: 0 none;
+        background-color: transparent;
+        margin: 0;
+        padding: 0;
+        box-shadow: none;
+        border-radius: 0;
+        width: 100%;
+    }
+
+    .p-fluid .p-autocomplete {
+        display: flex;
+    }
+
+    .p-fluid .p-autocomplete-dd .p-autocomplete-input {
+        width: 1%;
+    }
+
+    .p-autocomplete-clear-icon {
+        position: absolute;
+        top: 50%;
+        margin-top: -0.5rem;
+        cursor: pointer;
+    }
+
+    .p-autocomplete-clearable {
+        position: relative;
+    }
+}
+
+.input-container {
+    position: relative;
+}
+
+
+.input-container input {
+    padding-left: 30px !important; /* Adjust as needed */
+}
+
+.input-container-0 input {
+    padding-left: 0px !important; /* Adjust as needed */
+}
+
+.icon {
+    position: absolute;
+    left: 10px; /* Adjust the distance from the left */
+    top: 50%; /* Position the icon vertically centered */
+    transform: translateY(-50%);
+    color: #aaa; /* Adjust icon color */
+}
+
+.p-autocomplete-dropdown.ng-dirty.ng-invalid {
+    border-color: var(--red-500);
+}
+
+.p-chip {
+    background-color: #d4d6d9;
+    color: #231f20;
+    border-radius: 16px;
+    padding: 0 0.75rem;
+}
+.p-chip-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr));
+    grid-gap: 0.5rem;
+    justify-items: center;
+    margin: 0;
+    padding: 0;
+    grid-auto-rows: 1fr;
+}
+
+.p-inputtext.ng-dirty.ng-invalid {
+    border-color: #ef3340 !important;
+}
+
+.p-inputtext:enabled:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.2rem #ffcc00;
+    border-color: #ffcc00;
+}
+
+.p-inputtext:enabled:focus + .left-button {
+    outline: 0 none !important;
+    outline-offset: 0 !important;
+    box-shadow: 0 0 0 0.2rem #ffcc00 !important;
+    border-color: #ffcc00 !important;
+}
+
+.left-button {
+    border-top: 1px solid var(--surface-200) !important;
+    border-right: 1px solid var(--surface-200) !important;
+    border-bottom: 1px solid var(--surface-200) !important;
+}
+
+.left-button:enabled:focus {
+    outline: 0 none;
+    outline-offset: 0;
+    box-shadow: 0 0 0 0.2rem #ffcc00;
+    border-color: #ffcc00;
+}

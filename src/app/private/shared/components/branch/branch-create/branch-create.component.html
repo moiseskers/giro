@@ -1,0 +1,3 @@
+<app-branch-form
+        [organizationType]="this.organization?.organizationType"
+        (saveEvent)="save($event)" [buttonIsLoading]=" this.loaderService.loading[this.serviceSaveLoaderId]" (closeEvent)="ref.close()"></app-branch-form>

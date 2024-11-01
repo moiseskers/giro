@@ -1,0 +1,62 @@
+<app-giro-data-view-v2>
+    <ng-template pTemplate="toolbar-content">
+        <app-date-and-action-button
+            aTitle="SUS METAS POR SUBCATEGORIA"
+            [date]="updatedAt | date : 'dd/MM/yyyy'"
+            (uploadBase64)="uploadBase64($event)"
+        ></app-date-and-action-button>
+    </ng-template>
+
+    <div class="grid">
+        <div class="col-6">
+            <app-skeleton
+                [isLoading]="
+                    loaderService.loading[domiciliaryChartLoaderId] === '1'
+                "
+                height="508px"
+            >
+                <ng-container *ngIf="displayDomiciliaryChartContainer">
+                    <app-doughnut-chart
+                        (yearEvent)="
+                            yearChange(
+                                'DOMICILIARY',
+                                $event,
+                                domiciliaryChartLoaderId,
+                                'domiciliary'
+                            )
+                        "
+                        title="Domiciliario"
+                        [data]="domiciliaryChart"
+                        [info]="domiciliaryChartMessage"
+                        styleClass="border-solid border-1 surface-border p-5 border-round-sm"
+                    ></app-doughnut-chart>
+                </ng-container>
+            </app-skeleton>
+        </div>
+        <div class="col-6">
+            <app-skeleton
+                [isLoading]="
+                    loaderService.loading[noDomiciliaryChartLoaderId] === '1'
+                "
+                height="508px"
+            >
+                <ng-container *ngIf="displayNoDomiciliaryChartContainer">
+                    <app-doughnut-chart
+                        (yearEvent)="
+                            yearChange(
+                                'NON_DOMICILIARY',
+                                $event,
+                                noDomiciliaryChartLoaderId,
+                                'noDomiciliary'
+                            )
+                        "
+                        title="No Domiciliario"
+                        [data]="noDomiciliaryChart"
+                        [info]="noDomiciliaryChartMessage"
+                        styleClass="border-solid border-1 surface-border p-5 border-round-sm"
+                    ></app-doughnut-chart>
+                </ng-container>
+            </app-skeleton>
+        </div>
+    </div>
+</app-giro-data-view-v2>

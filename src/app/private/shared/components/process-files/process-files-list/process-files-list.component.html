@@ -1,0 +1,35 @@
+<app-giro-data-view
+        [displayActionButton]="[Roles.ADMIN] | hasAnyRole"
+        [content]="content" aTitle="Archivos del Processo" buttonLabel="Nuevo" class="col-12" (actionEmitter)="new()"></app-giro-data-view>
+
+<ng-template #content>
+    <p-table (onSort)="sort($event)" [lazy]="true"  [tableStyle]="{ 'min-width': '50rem' }" [value]="model?.items" styleClass="p-datatable-striped" >
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Documento</th>
+                <th pSortableColumn="lastModifiedAt" class="white-space-nowrap">Fecha de envío <p-sortIcon field="lastModifiedAt"></p-sortIcon></th>
+                <th class="text-right"> {{buttonCount > 1  ? 'Acciones' : 'Acción'}}</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model)?.name ?? '-' }}</td>
+                <td>{{ (modelIn(model)?.createdAt | date : 'dd/MM/yyyy') ?? '-' }}</td>
+                <td class="text-right white-space-nowrap" #actionsTd>
+                    <p-button [disabled]="loaderService.loading[this.downloadLoaderId]" class="mr-2" icon="pi pi-download" (onClick)="download(modelIn(model)?.id)"></p-button>
+                    <p-button *appHasAnyRole="[Roles.ADMIN]" [outlined]="true" icon="pi pi-trash" severity="secondary" (onClick)="delete(modelIn(model)?.id)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <app-paginator
+            (pageFunction)="page($event)"
+            *ngIf="model?.meta?.totalItems > 10"
+            [pageParamName]="'pageIndex'"
+            [pageSizeParamName]="'itemsPerPage'"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            [totalElements]="model?.meta?.totalItems">
+    </app-paginator>
+
+</ng-template>

@@ -1,0 +1,57 @@
+<div class="grid app-gap grid-nogutter">
+    <app-p-toolbar class="col-12" styleClass="shadow-2">
+        <div class="p-toolbar-group-start custom-class">
+            <app-p-autoComplete
+                appendTo="body"
+                [forceSelection]="true"
+                [(ngModel)]="fields[1].value"
+                (ngModelChange)="ngModelChange(fields[1])"
+                (completeMethod)="filterProducers($event)"
+                [suggestions]="producerFiltered"
+                [dropdown]="true"
+                id="producer"
+                name="producer"
+                styleClass="w-full"
+                inputStyleClass="w-full"
+                placeholder="Todos productores"
+                optionValue="id"
+                optionLabel="businessName"
+                [multiple]="false"
+            >
+            </app-p-autoComplete>
+        </div>
+
+        <div class="p-toolbar-group-center"></div>
+        <div class="p-toolbar-group-end">
+            <p-button
+                (click)="download()"
+                [loading]="loaderService.loading[loaderId] === '1'"
+                label="Descargar"
+                pRipple
+            ></p-button>
+        </div>
+    </app-p-toolbar>
+    <app-card [content]="content" class="col-12"></app-card>
+</div>
+
+<ng-template #content>
+    <div class="grid gap-3">
+        <div class="col-12">
+            <app-goal-achievement-status-container
+                [producerId]="selectedProducerId"
+            ></app-goal-achievement-status-container>
+        </div>
+
+        <div class="col-12">
+            <app-goals-subcategory
+                [producerId]="selectedProducerId"
+            ></app-goals-subcategory>
+        </div>
+
+        <div class="col-12">
+            <app-management-backyard-container
+                [producerId]="selectedProducerId"
+            ></app-management-backyard-container>
+        </div>
+    </div>
+</ng-template>

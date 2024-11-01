@@ -1,0 +1,13 @@
+<app-appeal-offer-form
+        [input]="model"
+        [organizationId]="this.organizationId"
+        [code]="applicationResponseDto.code"
+        [evaluationDate]="applicationResponseDto?.evaluations[applicationResponseDto?.evaluations?.length -1]?.evaluationDate"
+        [refuseReason]="applicationResponseDto?.evaluations[applicationResponseDto?.evaluations?.length -1]?.refuseReason"
+        *ngIf="!loaderService.loading[this.getApplicationsAttachmentsLoaderId]"
+        (saveEvent)="save($event)"
+        [buttonIsLoading]="this.loaderService.loading[this.serviceSaveLoaderId]" (closeEvent)="ref.close()">
+</app-appeal-offer-form>
+
+
+

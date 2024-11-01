@@ -1,0 +1,54 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" class="grid grid-nogutter bg-no-repeat bg-cover fadein  animation-duration-500" focusFirstInvalidField>
+
+    <div class="w-full flex flex-column gap-4">
+
+        <div class="grid formgrid">
+            <div class="col-12 field">
+                <div class="flex flex-column">
+                    <label appRedAsterisk class="mb-1" for="organizationTaxIdentificationNumber">RUT *</label>
+                    <span class="p-input-icon-right">
+                                <i *ngIf="this.form.status == 'PENDING'" class="pi pi-spin pi-spinner"></i>
+                                <input class="p-inputtext w-full" formControlName="organizationTaxIdentificationNumber" id="organizationTaxIdentificationNumber"
+                                       appToUpperCase
+                                       mask="AA.AAA.AAA-A"
+                                       name="organizationTaxIdentificationNumber" placeholder="00.000.000-0" type="text"/>
+                            </span>
+                    <small [customErrorMessages]="[{
+                            errorIdentifier: 'mask', message: 'RUT no es válido.'
+                        },
+                        {
+                            errorIdentifier: 'identityAlreadyExists', message: 'RUT ya Existe!'
+                     }]" app-form-error formControlName="organizationTaxIdentificationNumber"></small>
+                </div>
+            </div>
+
+            <div class="col-12 field">
+                <label appRedAsterisk for="organizationBusinessName">Razón social *</label>
+                <input class="p-inputtext w-full" formControlName="organizationBusinessName" id="organizationBusinessName" name="organizationBusinessName" placeholder="Razón social (Ej: Salmones S.A)" type="text"/>
+                <small app-form-error formControlName="organizationBusinessName"></small>
+            </div>
+
+            <div class="col-12 field">
+                <label appRedAsterisk for="organizationTradeName">Nombre de fantasia *</label>
+                <input class="p-inputtext w-full"
+                       formControlName="organizationTradeName"
+                       id="organizationTradeName" name="organizationTradeName" placeholder="Nombre de fantasia (Ej: Salmones)" type="text"/>
+                <small app-form-error formControlName="organizationTradeName"></small>
+            </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <div class="flex gap-2 justify-content-end">
+            <app-p-button materialIcon="arrow_back" (click)="previous()"  [outlined]="true" iconPos="left" label="Volver" severity="secondary"></app-p-button>
+            <app-p-button
+                    type="submit"
+                    [disabled]="this.form.status == 'PENDING'" [loading]="this.form.status == 'PENDING'"
+                    materialIcon="arrow_forward" iconPos="right" label="Enviar" ></app-p-button>
+        </div>
+    </div>
+
+</form>
+
+
+

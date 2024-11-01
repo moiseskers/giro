@@ -1,0 +1,14 @@
+<app-giro-data-view-v2 aTitle="DOCUMENTOS">
+    <app-material-search-bar [placeholder]="'Buscar por nombre del documento'" (searchEvent)="search($event)"></app-material-search-bar>
+    <app-material-document-list
+            (searchEvent)="filter($event)"
+            (pageEvent)="filter($event)"
+            (sortEvent)="filter($event)"
+
+            [loading]="loaderService.loading[loaderId] === '1'"
+            [downloadLoaderId]="this.downloadLoaderId"
+
+            (downloadButtonEvent)="download($event)"
+
+            [model]="model"></app-material-document-list>
+</app-giro-data-view-v2>

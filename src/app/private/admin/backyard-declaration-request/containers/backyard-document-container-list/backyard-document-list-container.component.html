@@ -1,0 +1,51 @@
+<app-giro-data-view [content]="content" aTitle="Documentos comprobatorios" buttonLabel="Nuevo" class="col-12" (actionEmitter)="new()"></app-giro-data-view>
+
+<ng-template #content>
+    <p-table [tableStyle]="{ 'min-width': '50rem' }" [value]="model?.items" styleClass="p-datatable-striped" [lazy]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Documento</th>
+                <th>CIGs</th>
+                <th>Remitente</th>
+                <th>Estado</th>
+                <th class="text-right">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model)?.name ?? '-' }}</td>
+                <td>{{ modelIn(model)?.cig ?? '-' }}</td>
+                <td>{{ modelIn(model)?.sender ?? '-' }}</td>
+                <td><app-document-declaration-statuses  [status]="DeclarationDocumentStatusEnum[modelIn(model)?.status]"></app-document-declaration-statuses></td>
+                <td class="text-right white-space-nowrap">
+                    <p-button [disabled]="loaderService.loading[this.downloadLoaderId]" class="mr-2" icon="pi pi-download" (onClick)="download(modelIn(model)?.id)"></p-button>
+                    <button pButton icon="pi pi-ellipsis-h" severity="secondary" [outlined]="true" (click)="menu.toggle($event)">
+                        <p-menu #menu [model]="menuItems" [popup]="true" appendTo="body">
+                            <ng-template pTemplate="item" let-item>
+                                <a (click)="action(item, modelIn(model).id)" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                                    <div>
+                                        <span [class]="item.icon"></span>
+                                        <span> {{ item.label }}</span>
+                                    </div>
+                                    <div>
+                                        <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                                    </div>
+                                </a>
+                            </ng-template>
+                        </p-menu>
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <app-paginator
+            (pageFunction)="page($event)"
+            *ngIf="model?.meta?.totalItems > 10"
+            [pageParamName]="'pageIndex'"
+            [pageSizeParamName]="'itemsPerPage'"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            [totalElements]="model?.meta?.totalItems">
+    </app-paginator>
+
+</ng-template>

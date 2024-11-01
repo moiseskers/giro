@@ -1,0 +1,7 @@
+<ng-container [ngSwitch]="status">
+    <p-tag [styleClass]="bigger ? 'min-height' : ''" *ngSwitchCase="DeclarationStatus.FINALIZED" [value]="statusAsString" severity="success"></p-tag>
+    <p-tag [styleClass]="bigger ? 'min-height' : ''" *ngSwitchCase="DeclarationStatus.PENDING"   [value]="statusAsString" severity="warning"></p-tag>
+    <p-tag [styleClass]="bigger ? 'min-height' : ''" *ngSwitchCase="DeclarationStatus.OVERDUE"   [value]="statusAsString" severity="danger"></p-tag>
+    <p-tag [styleClass]="bigger ? 'min-height' : ''" *ngSwitchCase="DeclarationStatus.APPROVED"  [value]="statusAsString" severity="success"></p-tag>
+</ng-container>
+

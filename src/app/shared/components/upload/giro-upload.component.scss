@@ -1,0 +1,20 @@
+.default-padding {
+  padding: var(--spacing-5);
+}
+
+.default-padding-1 {
+  padding: 12px;
+}
+
+//.invalid-input.ng-invalid.ng-touched.ng-dirty {
+//  border-color: #ef3340 !important;
+//
+//  div {
+//    border-color: inherit !important;
+//  }
+//}
+
+.invalid-input {
+  border-color: #ef3340 !important;
+  border-style: solid; // Ensure border-style is set
+}

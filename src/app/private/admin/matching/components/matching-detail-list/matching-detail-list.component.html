@@ -1,0 +1,74 @@
+<app-giro-data-view [content]="content" aTitle="Detalles del matching" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <p-table
+        #table
+        [lazy]="true"
+        [loading]="isLoading"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [value]="model?.items"
+        styleClass="p-datatable-striped"
+        (onSort)="sort($event)"
+    >
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Productor </th>
+                <th>Material (Pedido)</th>
+                <th>Tipo </th>
+
+                <th pSortableColumn="tonsGoal" class="white-space-nowrap">Meta <p-sortIcon field="tonsGoal"></p-sortIcon> </th>
+                <th> {{ CategoryTypeEnum[category] === CategoryTypeEnum.DOMICILIARY ?  'Factura' : 'ID de declaración' }} </th>
+                <th>Categoría </th>
+
+                <th>Subcategoría (Stock) </th>
+                <th>Material (Stock)</th>
+                <th pSortableColumn="tonsAcquired" class="white-space-nowrap">Toneladas compensadas <p-sortIcon field="tonsAcquired"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr class="white-space-nowrap">
+
+                <td>{{ modelIn(model)?.organization?.businessName }} | {{modelIn(model)?.organization?.taxIdentificationNumber }}</td>
+                <td>{{ modelIn(model)?.orderMaterial }}</td>
+                <td>{{ DeclarationItemTypeEnum[modelIn(model)?.orderMaterialType] }}</td>
+
+                <td>{{ modelIn(model)?.tonsGoal | milligrams | addSymbol:'t'}}</td>
+                <td>{{ modelIn(model)?.associationCode ?? '-' }}</td>
+                <td>{{ CategoryTypeEnum[category] }}</td>
+
+                <td>{{ modelIn(model)?.inventorySubcategory  }}</td>
+                <td>{{ modelIn(model)?.inventoryMaterial  }}</td>
+                <td>{{ (modelIn(model)?.tonsAcquired | milligrams | addSymbol:'t') }}</td>
+
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr class="white-space-nowrap">
+                <td colspan="3"></td>
+                <td>{{ meta }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td>{{ compensatedTons }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <app-paginator
+            *ngIf="model?.meta?.totalItems > 10"
+            (pageFunction)="page($event)" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,68 @@
+<app-default-column-separator-grid [content]="content"></app-default-column-separator-grid>
+
+<ng-template #cardBody>
+    <p-table  [lazy]="true"  #table [loading]="this.loaderService.loading[tableLoaderId]" [value]="model?.items">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nombre</th>
+                <th>RUT</th>
+                <th>Correo</th>
+                <th>Tipo de entidad</th>
+                <th>Razón social</th>
+                <th>Estado</th>
+                <th class="text-right">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model).name }}</td>
+                <td>{{ modelIn(model).organization.taxIdentificationNumber }}</td>
+                <td>{{ modelIn(model).email  }}</td>
+                <td>{{ organizationTypes[modelIn(model).organization.organizationType] }}</td>
+                <td>{{ modelIn(model).organization.businessName }}</td>
+                <td>
+                    <app-user-statuses [status]="model.status"></app-user-statuses>
+                </td>
+                <td class="text-right white-space-nowrap">
+                    <p-button class="mr-2" icon="pi pi-search" (click)="view(modelIn(model).id)"></p-button>
+                    <p-menu [model]="items" #menu  [popup]="true" appendTo="body">
+                        <ng-template pTemplate="item" let-item>
+                            <a (click)="action(item, modelIn(model).id)" *ngIf="item.label === 'Enviar nuevamente' &&  modelIn(model).status === 'PENDING'"
+                               [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                                <div>
+                                    <span [class]="item.icon"></span>
+                                    <span> {{ item.label }}</span>
+                                </div>
+                                <div>
+                                    <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                                </div>
+                            </a>
+
+                            <a (click)="action(item, modelIn(model).id)" *ngIf="item.label === 'Borrar'" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                                <div>
+                                    <span [class]="item.icon"></span>
+                                    <span> {{ item.label }}</span>
+                                </div>
+                                <div>
+                                    <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                                </div>
+                            </a>
+                        </ng-template>
+                    </p-menu>
+                    <button pButton icon="pi pi-ellipsis-h" severity="secondary" [outlined]="true" (click)="menu.toggle($event)"  ></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-paginator (pageFunction)="page($event)" [pageParamName]="'pageIndex'" [pageSizeParamName]="'itemsPerPage'" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+</ng-template>
+
+<ng-template #content>
+    <app-filter addButtonTitle="Nuevo usuario" (actionButtonEvent)="add()" (filterEvent)="filter($event)" (sortEvent)="sort($event)" [filters]="filters" [table]="table"></app-filter>
+    <app-card [content]="cardBody" ></app-card>
+</ng-template>
+
+
+
+
+

@@ -1,0 +1,21 @@
+<app-giro-data-view-v2>
+    <ng-template pTemplate="toolbar-content">
+        <app-date-and-action-button
+                [uploadButtonIsLoading]="this.loaderService.loading[this.uploadButtonLoaderId] === '1'"
+                (uploadBase64)="uploadBase64($event)" aTitle="SOCIOS" [date]="this.model?.lastModifiedAt | date : 'dd/MM/yyyy'"></app-date-and-action-button>
+    </ng-template>
+
+    <div class="grid m-0">
+        <div class="col p-0 pr-1">
+            <app-skeleton [isLoading]="loaderService.loading[loaderId] === '1'" height="117px">
+                <app-counter-card [cardTitle]="this?.model?.totalPartners?.toString() || '0'" [description]="'Número de socios'"  styleClass="border-solid border-1 surface-border"></app-counter-card>
+            </app-skeleton>
+        </div>
+
+        <div class="col  p-0 pl-1">
+            <app-skeleton [isLoading]="loaderService.loading[loaderId] === '1'" height="117px">
+                <app-counter-card [cardTitle]="(this?.model?.totalTons || 0) | milligrams | addSymbol:'t'" [description]="'Total puesto en el mercado'" styleClass="border-solid border-1 surface-border"></app-counter-card>
+            </app-skeleton>
+        </div>
+    </div>
+</app-giro-data-view-v2>

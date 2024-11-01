@@ -1,0 +1,45 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid gap-3">
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="name">Nombre *</label>
+            <input appAutofocus class="p-inputtext w-full" formControlName="name" id="name" name="name" type="text" placeholder="Nombre del representante legal"/>
+            <small app-form-error formControlName="name"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="nationality">Nacionalidad *</label>
+            <input class="p-inputtext w-full" formControlName="nationality" id="nationality" name="nationality" type="text" placeholder="Informe la nacionalidad del representante legal"/>
+            <small app-form-error formControlName="nationality"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="taxIdentificationNumber">RUT *</label>
+            <input mask="AA.AAA.AAA-A" appToUpperCase class="p-inputtext w-full" formControlName="taxIdentificationNumber" id="taxIdentificationNumber" name="taxIdentificationNumber" type="text" placeholder="00.000.000-0"/>
+            <small app-form-error  [customErrorMessages]="[{ errorIdentifier: 'mask', message: 'RUT no es válido.' }, { errorIdentifier: 'identityAlreadyExists', message: 'RUT ya Existe!' }]" formControlName="taxIdentificationNumber"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="email">Correo *</label>
+            <input class="p-inputtext w-full" formControlName="email" id="email" name="email" type="text" placeholder="correo@ejemplo.com"/>
+            <small app-form-error formControlName="email"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="phone">Teléfono</label>
+            <input class="p-inputtext w-full" formControlName="phone" id="phone" name="phone" type="text" placeholder="(00) 00000-0000" mask="(00) 00000-0000" [validation]="false"/>
+            <small app-form-error formControlName="phone" [customErrorMessages]="{errorIdentifier: 'mask', message: 'El número de teléfono no es válido.'}"></small>
+        </div>
+
+        <div class="col-12 w-full">
+            <p-divider></p-divider>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" label="Cancelar" (onClick)="closeEvent.emit()"></p-button>
+            <p-button [disabled]="this.form.status === 'PENDING'" [loading]="this.buttonIsLoading" label="Registrar" type="submit" ></p-button>
+        </div>
+    </div>
+</form>
+

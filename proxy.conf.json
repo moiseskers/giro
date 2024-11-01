@@ -1,0 +1,34 @@
+{
+    "/ngrok": {
+        "target": "https://388b-152-244-83-148.ngrok-free.app/",
+        "changeOrigin": true,
+        "secure": false,
+        "pathRewrite": {
+            "^/ngrok": ""
+        }
+    },
+    "/api": {
+        "target": "http://localhost:3000",
+        "changeOrigin": true,
+        "secure": false,
+        "pathRewrite": {
+            "^/api": ""
+        }
+    },
+    "/population-served": {
+        "target": "https://dev.eureciclo.io/giro-bindings/population-served",
+        "changeOrigin": true,
+        "secure": false,
+        "pathRewrite": {
+            "^/population-served": ""
+        }
+    },
+    "/giro-gateway": {
+        "target": "https://dev.eureciclo.io/giro-gateway",
+        "changeOrigin": true,
+        "secure": false,
+        "pathRewrite": {
+            "^/giro-gateway": ""
+        }
+    }
+}

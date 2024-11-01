@@ -1,0 +1,14 @@
+<app-giro-data-view [content]="content" aTitle="Declaraciones" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <app-backyard-declaration-list
+            [loading]="!(loaderServiceV2.loading[this.loaderId] === '2')"
+            [filterIsLoading]="!(loaderServiceV2.loading[this.declarationFilterLoaderId] === '2')"
+            (viewEvent)="viewEvent($event)"
+            (sortEvent)="sortEvent($event)"
+            (filterEvent)="filterProcess($event)"
+            [model]="declarations"
+            (pageEvent)="pageEvent($event)"
+            [filters]="filters"
+    ></app-backyard-declaration-list>
+</ng-template>

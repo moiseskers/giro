@@ -1,0 +1,5 @@
+<ng-container [ngSwitch]="statusEnum[status]">
+    <p-tag *ngSwitchCase="statusEnum.FINALIZED" [value]="statusEnum[status]" severity="success"></p-tag>
+    <p-tag *ngSwitchCase="statusEnum.PENDING" [value]="statusEnum[status]" severity="warning"></p-tag>
+</ng-container>
+

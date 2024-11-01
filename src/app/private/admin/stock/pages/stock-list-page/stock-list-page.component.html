@@ -1,0 +1,152 @@
+<app-default-column-separator-grid [content]="content"></app-default-column-separator-grid>
+
+<ng-template #content>
+
+    <div class="grid">
+        <div class="col py-0 pr-1">
+            <app-skeleton [isLoading]="totalizerIsLoading" height="117px">
+                <app-card
+                        styleClass="p-5"
+
+                        [cardTitle]="(this?.model?.meta?.totalTonsDomiciliary | milligrams | addSymbol:'ton') ?? '0 ton'" [content]="body1">
+                    <ng-template #body1>
+                        Toneladas domiciliarias
+                    </ng-template>
+                </app-card>
+            </app-skeleton>
+        </div>
+
+        <div class="col py-0 pl-1">
+            <app-skeleton [isLoading]="totalizerIsLoading" height="117px">
+                <app-card
+                        styleClass="p-5"
+                        [cardTitle]="(this?.model?.meta?.totalTonsNonDomiciliary | milligrams | addSymbol:'ton') ?? '0 ton'" [content]="body2">
+                    <ng-template #body2>
+                        Toneladas no domiciliarias
+                    </ng-template>
+                </app-card>
+            </app-skeleton>
+        </div>
+    </div>
+
+    <app-filter-v2 [table]="table" (sortEvent)="sort($event)" (filterEvent)="filter($event)" [fields]="fields">
+
+        <ng-template pTemplate="fields">
+            <div class="w-full field">
+                <label appRedAsterisk for="category">Categoría</label>
+                <app-p-autoComplete
+                        appendTo="body"
+                        [forceSelection]="true"
+                        [(ngModel)]="fields[1].value"
+                        (ngModelChange)="ngModelChange('categoryIds', fields[1])"
+                        (completeMethod)="filterCategory($event)"
+                        [suggestions]="categoryFiltered"
+                        [dropdown]="true"
+                        id="category"
+                        name="category"
+                        styleClass="w-full"
+                        inputStyleClass="w-full"
+                        placeholder="Seleccione la categoría"
+                        optionValue="id"
+                        optionLabel="name">
+                </app-p-autoComplete>
+            </div>
+
+            <div class="w-full field">
+                <label appRedAsterisk for="category">Subcategoría</label>
+                <app-p-autoComplete
+                        [disabled]="!fields[1]?.value || loaderService.loading[subcategoryLoaderId] !== '2'"
+                        appendTo="body"
+                        [forceSelection]="true"
+                        [(ngModel)]="fields[2].value"
+                        (ngModelChange)="ngModelChange('subcategoryIds', fields[2])"
+                        (completeMethod)="filterSubcategory($event)"
+                        [suggestions]="subcategoryFiltered"
+                        [dropdown]="true"
+                        id="subcategory"
+                        name="subcategory"
+                        styleClass="w-full"
+                        inputStyleClass="w-full"
+                        placeholder="Seleccione la subcategoría"
+                        optionValue="id"
+                        optionLabel="name">
+                </app-p-autoComplete>
+            </div>
+
+            <div class="w-full field">
+                <label appRedAsterisk for="material">Material</label>
+                <app-p-autoComplete
+                        [disabled]="!fields[2]?.value || loaderService.loading[materialLoaderId] !== '2'"
+                        appendTo="body"
+                        [forceSelection]="true"
+                        [(ngModel)]="fields[3].value"
+                        (completeMethod)="filterMaterial($event)"
+                        [suggestions]="materialFiltered"
+                        [dropdown]="true"
+                        id="material"
+                        name="material"
+                        styleClass="w-full"
+                        inputStyleClass="w-full"
+                        placeholder="Seleccione el material"
+                        optionValue="id"
+                        optionLabel="name">
+                </app-p-autoComplete>
+            </div>
+
+            <div class="w-full field">
+                <label appRedAsterisk for="category">Año</label>
+
+                <app-year-picker
+
+
+                        [(ngModel)]="fields[4].value" ></app-year-picker>
+
+
+<!--                <input [(ngModel)]="fields[4].value"-->
+<!--                       [required]="true"-->
+<!--                       appYearValidator-->
+<!--                       class="p-inputtext w-full"-->
+<!--                       type="text"/>-->
+            </div>
+        </ng-template>
+
+        <ng-template pTemplate="buttons">
+            <p-button class="h-full" styleClass="h-full" [loading]="this.loaderService.loading[downloadId] === '1'" (click)="download()" label="Descargar"></p-button>
+        </ng-template>
+    </app-filter-v2>
+
+    <app-card [content]="cardBody"></app-card>
+</ng-template>
+
+<ng-template #cardBody>
+    <p-table #table [lazy]="true" [loading]="this.loaderService.loading[loaderId] !== '2'" [value]="model?.items || []">
+        <ng-template pTemplate="header">
+            <tr class="white-space-nowrap">
+                <th>Factura/ID de declaración</th>
+                <th>Categoría </th>
+                <th>Subcategoría </th>
+                <th>Material </th>
+                <th pSortableColumn="quantity">Toneladas <p-sortIcon field="quantity"></p-sortIcon></th>
+                <th pSortableColumn="complianceYear">Año <p-sortIcon field="complianceYear"></p-sortIcon></th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model)?.associationCode }} </td>
+                <td>{{ modelIn(model)?.category?.name }}</td>
+                <td>{{ modelIn(model)?.subcategory?.name }}</td>
+                <td>{{ modelIn(model)?.material?.name }}</td>
+                <td>{{ modelIn(model)?.quantity | milligrams | addSymbol:'t'  }}</td>
+                <td>{{ modelIn(model)?.complianceYear | date:'yyyy' || '----' }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-paginator (pageFunction)="page($event)" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+</ng-template>
+
+
+
+
+
+
+

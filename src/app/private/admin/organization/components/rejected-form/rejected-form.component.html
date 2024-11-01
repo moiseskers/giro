@@ -1,0 +1,19 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid gap-3">
+        <div class="col-12 field">
+            <label appRedAsterisk for="rejectedDescription">Descripción *</label>
+            <textarea placeholder="Deje el motivo del rechazo de este gestor" id="rejectedDescription" class="w-full" rows="5" cols="30" pInputTextarea formControlName="rejectedDescription"></textarea>
+            <small app-form-error formControlName="rejectedDescription"></small>
+        </div>
+
+        <div class="col-12 w-full">
+            <p-divider></p-divider>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" (onClick)="cancel()" label="Cancelar"></p-button>
+            <p-button [disabled]="this.form.status === 'PENDING'" [loading]="this.buttonIsLoading" label="Registrar" type="submit"></p-button>
+        </div>
+    </div>
+</form>

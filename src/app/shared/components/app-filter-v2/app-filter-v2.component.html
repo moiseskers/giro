@@ -1,0 +1,66 @@
+<div class="flex flex-column gap-2">
+    <div class="custom-menubar flex justify-content-between card shadow-2 p-3">
+        <ng-container *ngIf="this.hasBase">
+            <div class="flex gap-1" style="flex: 0 0 50%;">
+                <p-inputGroup>
+                    <input [(ngModel)]="this.baseFilterInput.value" [placeholder]="this?.baseFilterInput?.placeholder ?? ''" pInputText type="text">
+                    <p-inputGroupAddon (click)="this.baseFilterInput.value = ''; fromBase()" *ngIf="this.baseFilterInput?.value">
+                        <i class="pi pi-times cursor-pointer"></i>
+                    </p-inputGroupAddon>
+                    <button (click)="fromBase()" icon="pi pi-search" pButton type="button"></button>
+                </p-inputGroup>
+            </div>
+        </ng-container>
+
+        <div class="flex gap-1">
+            <ng-container *ngIf="!fullButtonsTemplate">
+
+                <ng-container *ngIf="hasDefaultButtons">
+                    <app-p-button severity="secondary" (click)="clearAllFiltersAndSubmit()" [link]="true" iconPos="right" label="Limpiar filtro" materialIcon="cancel"></app-p-button>
+                    <p-button (click)="this.clearAllFields(); sidebarVisible = true" [outlined]="true"  severity="secondary">
+                        <ng-template pTemplate="iconTemplate">
+                            <div class="flex gap-2 align-items-center p-button-label">
+                                <span class="material-symbols-outlined">tune</span> Filtrar
+                            </div>
+                        </ng-template>
+                    </p-button>
+                </ng-container>
+
+                <ng-container *ngIf="buttonsTemplate">
+                    <ng-container *ngTemplateOutlet="buttonsTemplate"></ng-container>
+                </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="fullButtonsTemplate">
+                <ng-container *ngTemplateOutlet="fullButtonsTemplate"></ng-container>
+            </ng-container>
+        </div>
+    </div>
+</div>
+
+<p-sidebar [(visible)]="sidebarVisible" position="right" title="Filtro">
+
+    <ng-template pTemplate="header">
+            <span class="text-xl font-semibold" style="color: var(--lima-950) ">
+                Filtro
+            </span>
+    </ng-template>
+
+    <ng-template pTemplate>
+        <div class="flex flex-column justify-content-between h-full">
+            <div>
+                <app-dynamic-form-builder-ng-model *ngIf="!sidebarFieldsTemplate" [fields]="inputs"></app-dynamic-form-builder-ng-model>
+                <ng-container *ngIf="sidebarFieldsTemplate">
+                    <ng-container *ngTemplateOutlet="sidebarFieldsTemplate"></ng-container>
+                </ng-container>
+            </div>
+            <div class="flex flex-column gap-1 mt-5">
+                <p-button (click)="inputsSubmit()" [disabled]="
+                this?.form?.invalid ||
+                dynamicFormBuilderNgModelComponent?.form?.form?.invalid" class="w-full" label="Filtrar" pRipple styleClass="w-full" type="submit"></p-button>
+                <p-button (click)="close()" [outlined]="true" class="w-full" label="Cancelar" pRipple styleClass="w-full"></p-button>
+            </div>
+        </div>
+    </ng-template>
+</p-sidebar>
+

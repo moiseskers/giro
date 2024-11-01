@@ -1,0 +1,237 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form, issuerRutNgModelChangeRef, receiverRutNgModelChangeRef, cityNgModelChangeRef)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid">
+
+        <div class="col-12 field" *ngIf="!isEditing">
+            <app-giro-upload
+                uploadDescription="Se permite un máximo de 50 mb, en formato pdf o xml"
+                [required]="true"
+                [ngModel]="documentValue"
+                (ngModelChange)="documentNgModelChange($event)"
+                [ngModelOptions]="{
+                    standalone: true
+                }"
+                [base64]="true"
+                [multiple]="false"
+                accept=".pdf,.xml">
+            </app-giro-upload>
+            <small app-form-error [formControl]="form.controls.document"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="issuerRUT">RUT emisor *</label>
+            <input
+                    #issuerRutNgModelChangeRef="ngModel"
+                    [ngModel]="issuerRutValue"
+                    [required]="true"
+                    (ngModelChange)="issuerRutNgModelChange($event, issuerRutNgModelChangeRef)"
+                    [ngModelOptions]="{
+                        standalone: true
+                    }"
+                    appToUpperCase
+                    mask="AA.AAA.AAA-A"
+                    placeholder="00.000.000-0"
+                    id="issuerRUT"
+                    name="issuerRUT"
+                    class="p-inputtext w-full"
+                    type="text"
+            />
+            <small
+                    [customErrorMessages]="[
+                        {
+                            errorIdentifier: 'mask', message: 'RUT no es válido.'
+                        },
+                        {
+                            errorIdentifier: 'rutNotFound', message: 'El RUT informado no esta registrado en el sistema.'
+                        }
+                    ]"
+                    app-form-error
+                   [formControl]="issuerRutNgModelChangeRef.control"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="issuer">Emisor *</label>
+            <input
+                    placeholder="Informe el emisor"
+                    formControlName="issuer"
+                    id="issuer"
+                    name="issuer"
+                    class="p-inputtext w-full"    type="text"/>
+            <small app-form-error formControlName="issuer"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="invoiceNumber">Número de factura *</label>
+            <input
+                    placeholder="Informe el número de factura"
+                    formControlName="invoiceNumber"
+                    id="invoiceNumber"
+                    name="issuer"
+                    class="p-inputtext w-full"    type="text"/>
+            <small app-form-error [formControl]="form.controls.invoiceNumber"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="issueDate">Fecha de emisión *</label>
+            <app-p-calendar
+                    id="issueDate"
+                    styleClass="w-full"
+                    class="w-full"
+                    inputId="issueDate"
+                    formControlName="issueDate"
+                    dateFormat="dd/mm/yy"
+                    appendTo="body"
+            >
+            </app-p-calendar>
+            <small app-form-error [formControl]="form.controls.issueDate"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="receiverRUT">RUT receptor *</label>
+            <input
+                    [required]="true"
+                    #receiverRutNgModelChangeRef="ngModel"
+                    [ngModel]="receiverRutValue"
+                    (ngModelChange)="receiverRutNgModelChange($event, receiverRutNgModelChangeRef)"
+                    [ngModelOptions]="{
+                        standalone: true
+                    }"
+                    appToUpperCase
+                    mask="AA.AAA.AAA-A"
+                    placeholder="00.000.000-0"
+                    id="receiverRUT"
+                    name="receiverRUT"
+                    class="p-inputtext w-full"
+                    type="text"/>
+            <small
+                    [customErrorMessages]="[
+                        {
+                            errorIdentifier: 'mask', message: 'RUT no es válido.'
+                        },
+                        {
+                            errorIdentifier: 'rutNotFound', message: 'El RUT informado no esta registrado en el sistema.'
+                        }
+                    ]"
+                    app-form-error
+                    [formControl]="receiverRutNgModelChangeRef.control"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="receiver">Receptor (Señor) *</label>
+            <input
+                    placeholder="Informe el receptor (Señor)"
+                    formControlName="receiver"
+                    id="receiver"
+                    name="receiver"
+                    class="p-inputtext w-full"    type="text"/>
+            <small app-form-error  [formControl]="form.controls.receiver" ></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="economicActivities">Giro *</label>
+            <input
+                    placeholder="Informe el giro del señor"
+                    formControlName="economicActivities"
+                    id="economicActivities"
+                    name="receiver"
+                    class="p-inputtext w-full"    type="text"/>
+            <small app-form-error  [formControl]="form.controls.economicActivities"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="address">Dirección *</label>
+            <input
+                    placeholder="Informe la dirección del señor"
+                    formControlName="address"
+                    id="address"
+                    name="address"
+                    class="p-inputtext w-full"    type="text"/>
+            <small app-form-error [formControl]="form.controls.address"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="city">Comuna *</label>
+            <app-p-autoComplete
+                    [required]="true"
+                    #cityNgModelChangeRef="ngModel"
+                    [disabled]="this.loaderService.loading[this.cityLoaderId]"
+                    [ngModel]="cityValue"
+                    (ngModelChange)="cityNgModelChange($event)"
+                    [ngModelOptions]="{standalone: true}"
+                    id="city"
+                    styleClass="w-full"
+                    placeholder="Seleccione la comuna del señor"
+                    (completeMethod)="filterCity($event)"
+                    [dropdown]="true"
+                    [suggestions]="filteredCities"
+                    optionLabel="name">
+            </app-p-autoComplete>
+            <small app-form-error [formControl]="cityNgModelChangeRef?.control"></small>
+        </div>
+
+        <div class="col-12 field">
+            <app-invoice-item-table-form formControlName="items" [validateRow]="true"></app-invoice-item-table-form>
+            <small app-form-error [customErrorMessages]="[{ errorIdentifier: 'invalid', message: 'Por favor, complete todas las líneas adicionales o elimine las mismas, si es necesario.' }]"  [formControl]="form.controls.items"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="netValue">Monto neto *</label>
+            <input
+                    [options]="{ prefix: '', thousands: '.', decimal: ',', suffix: ' CLP', align: 'left' }" currencyMask
+                    placeholder="0,00 CLP"
+                    formControlName="netValue"
+                    id="netValue"
+                    name="netValue"
+                    class="p-inputtext w-full"
+                    type="text"/>
+            <small app-form-error [formControl]="form.controls.netValue"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="retainedIVA">IVA *</label>
+            <input
+                    [value]="(iva | number:'1.2-2') + ' CLP'"
+                    [disabled]="true"
+                    [options]="{ prefix: '', thousands: '.', decimal: ',', suffix: ' CLP', align: 'left' }" currencyMask
+                    placeholder="0,00 CLP"
+                    name="IVA"
+                    class="p-inputtext w-full"
+                    type="text"/>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="retainedIVA">IVA retenido *</label>
+            <input
+                    [disabled]="true"
+                    [value]="(retainedIVA | number:'1.2-2') + ' CLP'"
+                    [options]="{ prefix: '', thousands: '.', decimal: ',', suffix: ' CLP', align: 'left' }" currencyMask
+                    placeholder="0,00 CLP"
+                    id="retainedIVA"
+                    name="retainedIVA"
+                    class="p-inputtext w-full"
+                    type="text"/>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="total">Total *</label>
+            <input
+                    [disabled]="true"
+                    [value]="(total | number:'1.2-2') + ' CLP'"
+                    [options]="{ prefix: '', thousands: '.', decimal: ',', suffix: ' CLP', align: 'left' }" currencyMask
+                    placeholder="0,00 CLP"
+                    id="total"
+                    name="total"
+                    class="p-inputtext w-full"
+                    type="text"/>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" (click)="this.dynamicDialogRef.close(false)" label="Cancelar"></p-button>
+            <p-button [disabled]="this.form?.status === 'PENDING' || form.controls.items.invalid " label="Registrar" type="submit" [loading]="saveLoader"></p-button>
+        </div>
+
+    </div>
+</form>
+
+
+

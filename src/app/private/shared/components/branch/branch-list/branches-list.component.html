@@ -1,0 +1,46 @@
+<app-giro-data-view  [displayActionButton]="([Roles.ADMIN] | hasAnyRole) && !blockedPanel"
+                      [content]="content" aTitle="Identificación (ID)" buttonLabel="Nuevo" class="col-12" (actionEmitter)="new()"></app-giro-data-view>
+
+<ng-template #content>
+
+    <p-blockUI [target]="pnl" [blocked]="blockedPanel && model?.items.length !== 0">
+    </p-blockUI>
+
+    <p-table
+        #pnl
+        [lazy]="true"  [tableStyle]="{ 'min-width': '50rem' }" [value]="model?.items" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID</th>
+                <th *ngIf="OrganizationType[organization?.organizationType] === OrganizationType.PRODUCER ">Tipo</th>
+                <th>Dirección</th>
+                <th>Comuna</th>
+                <th>Región</th>
+                <th *ngIf="[Roles.ADMIN] | hasAnyRole" class="text-right">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model)?.code ?? '-' }}</td>
+                <td  *ngIf=" OrganizationType[organization?.organizationType] === OrganizationType.PRODUCER ">{{BranchProducerType[modelIn(model)?.producerType] ?? '-' }}</td>
+                <td>{{ modelIn(model)?.address ?? '-' }}</td>
+                <td>{{ modelIn(model)?.city ?? '-'}}</td>
+                <td>{{ modelIn(model)?.state ?? '-' }}</td>
+                <td class="text-right white-space-nowrap" *ngIf="[Roles.ADMIN] | hasAnyRole">
+                    <p-button [disabled]="loaderService.loading[this.loaderServiceGetById]" class="mr-2" icon="pi pi-pencil" (onClick)="edit(modelIn(model)?.id)"></p-button>
+                    <p-button [outlined]="true" icon="pi pi-trash" severity="secondary" (onClick)="delete(modelIn(model)?.id)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <app-paginator
+            (pageFunction)="page($event)"
+            *ngIf="model?.meta?.totalItems > 10 && !blockedPanel"
+            [pageParamName]="'pageIndex'"
+            [pageSizeParamName]="'itemsPerPage'"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            [totalElements]="model?.meta?.totalItems">
+    </app-paginator>
+
+</ng-template>

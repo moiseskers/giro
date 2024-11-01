@@ -1,0 +1,55 @@
+<app-p-toolbar class="col-12 " styleClass="shadow-2">
+    <div class="p-toolbar-group-start custom-class">
+        <ng-container *ngIf="this.model?.status">
+            <ng-container [ngSwitch]="applicationStatus[this.model?.status]">
+                <p-tag *ngSwitchCase="applicationStatus.APPROVED" [value]="applicationStatus[this.model?.status]" severity="success"></p-tag>
+                <p-tag *ngSwitchCase="applicationStatus.REFUSED" [value]="applicationStatus[this.model?.status]" severity="danger"></p-tag>
+                <p-tag *ngSwitchCase="applicationStatus.PENDING" [value]="applicationStatus[this.model?.status]" severity="warning"></p-tag>
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="p-toolbar-group-center">
+    </div>
+    <div class="p-toolbar-group-end">
+        <p-menu #menu [model]="this?.model?.statuses" [popup]="true" appendTo="body">
+            <ng-template pTemplate="item" let-item>
+                <a (click)="action(item, modelIn(model))" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                    <div>
+                        <span [class]="item.icon"></span>
+                        <span> {{ item.label }}</span>
+                    </div>
+                    <div>
+                        <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                    </div>
+                </a>
+            </ng-template>
+
+        </p-menu>
+        <app-p-button [disabled]="this?.model?.statuses?.length === 0 || this?.model?.statuses?.length === null" [loading]="this.loaderService.loading[this.updateStatusLoaderId]" label="Cambiar estado" (click)="menu.toggle($event)" iconPos="right" >
+            <ng-template pTemplate="icon">
+                <div class="flex">
+                    <ChevronDownIcon />
+                </div>
+            </ng-template>
+        </app-p-button>
+    </div>
+</app-p-toolbar>
+
+<app-card [content]="content"></app-card>
+
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter" *ngIf="(loaderService.loading[this.getByBiddingIdAndApplicationIdLoaderId] | loaderHelper)">
+            <app-manager-information [organizationId]="this.organizationId" [managerId]="managerId" class="col-12"></app-manager-information>
+            <app-evaluation class="col-12" [evaluations]="this.model.evaluations"  ></app-evaluation>
+            <app-manager-document-list
+                    [loaderId]="this.managerDocumentListLoaderId"
+                    (sortEvent)="managerDocumentListSort($event)"
+                    (downloadEvent)="managerDocumentListDownload($event)"
+                    (pageEvent)="managerDocumentListPage($event)"
+                    [managerDocumentListLoaderId]="managerDocumentListLoaderId"
+                    [model]="applicationResponseDto" [downloadLoaderId]="downloadLoaderId" class="col-12">
+            </app-manager-document-list>
+        </div>
+    </div>
+</ng-template>

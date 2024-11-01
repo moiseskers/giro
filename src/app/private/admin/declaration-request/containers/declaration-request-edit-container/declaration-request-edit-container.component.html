@@ -1,0 +1,9 @@
+<app-declaration-request-form
+        [organizationType]="organizationType"
+        *ngIf="!loaderService.loading[organizationsSearchLoaderId]"
+        [model]="model"
+        [editing]="true"
+        [saveLoader]="loaderService.loading[saveLoaderId]"
+        (onSave)="save($event)"
+></app-declaration-request-form>
+

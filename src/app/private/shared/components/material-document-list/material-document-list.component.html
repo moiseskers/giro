@@ -1,0 +1,44 @@
+<p-table
+    #table
+    (onSort)="sort($event)"
+    [lazy]="true"
+    [loading]="loading"
+    [value]="model?.items || []"
+    styleClass="p-datatable-striped">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>Documento</th>
+            <th class="white-space-nowrap" *ngIf="([Role.ADMIN] | hasAnyRole)">Remitientes</th>
+            <th class="white-space-nowrap" pSortableColumn="lastModifiedAt">Fecha de envío
+                <p-sortIcon field="lastModifiedAt"></p-sortIcon>
+            </th>
+            <th class="text-right">Acciones</th>
+        </tr>
+    </ng-template>
+    <ng-template let-model pTemplate="body" let-row let-rowIndex="rowIndex">
+        <tr>
+            <td>{{ modelIn(model)?.name ?? '-' }}</td>
+            <td *ngIf="([Role.ADMIN] | hasAnyRole)">{{ getAllowedOrganizationTypes(modelIn(model)?.allowedOrganizationTypes) }}</td>
+            <td>{{ modelIn(model)?.lastModifiedAt | date : 'dd/MM/yyyy' }}</td>
+            <td class="text-right white-space-nowrap">
+                <p-button (onClick)="downloadButtonEvent.emit({ id: modelIn(model)?.id, index:  rowIndex })" [loading]="
+                loaderService.loading[downloadLoaderId[rowIndex]] === '1'
+                " class="mr-2" icon="pi pi-download"></p-button>
+
+                <p-button
+                        *ngIf="[Role.ADMIN] | hasAnyRole"
+                        (click)="deleteButtonEvent.emit({ id: modelIn(model)?.id, index:  rowIndex })"  [loading]="
+                  loaderService.loading[deleteLoaderId[rowIndex]] === '1'
+              " icon="pi pi-trash" [outlined]="true" severity="primary"/>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<app-paginator
+        (pageFunction)="page($event)"
+        *ngIf="model?.meta?.totalItems > 10"
+        [rowsPerPageOptions]="[10, 20, 30]"
+        [totalElements]="model?.meta?.totalItems">
+</app-paginator>
+

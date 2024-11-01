@@ -1,0 +1,204 @@
+<form #ngForm="ngForm" (ngSubmit)="ngForm.valid ?  save() : markAllAsTouched(ngForm)" id="form" focusFirstInvalidField>
+
+    <div class="grid formgrid gap-3">
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="consumer">Consumidor industrial *</label>
+            <app-p-autoComplete
+                    appendTo="body"
+                    [forceSelection]="true"
+                    #consumerNgModelChangeRef="ngModel"
+                    [required]="true"
+                    [ngModel]="consumerValue"
+                    (ngModelChange)="
+                        ngModelChange(this.form.controls.industrialConsumerId, $event);
+                        this.form.controls.industrialConsumerBranchId.setValue('');
+                        consumerId?.control.reset()
+                    "
+                    id="consumer"
+                    name="consumer"
+                    styleClass="w-full"
+                    placeholder="Seleccione el consumidor industrial"
+                    (completeMethod)="filterConsumer($event)"
+                    [dropdown]="true"
+                    [suggestions]="consumerFiltered"
+                    optionLabel="name">
+            </app-p-autoComplete>
+            <small app-form-error [formControl]="consumerNgModelChangeRef?.control" ></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="consumerIdValue">ID consumidor industrial *</label>
+            <app-p-autoComplete
+                    appendTo="body"
+                    placeholder="Seleccione el ID del consumidor industrial"
+                    id="consumerIdValue"
+                    name="consumerIdValue"
+                    [ngModel]="consumerIdValue"
+                    [suggestions]="consumerIdFiltered"
+                    [disabled]="consumerNgModelChangeRef?.control?.invalid"
+                    (completeMethod)="filterConsumerId($event)"
+
+                    #consumerId="ngModel"
+                    [forceSelection]="true"
+                    [required]="true"
+                    (ngModelChange)="ngModelChange(this.form.controls.industrialConsumerBranchId, $event)"
+
+                    styleClass="w-full"
+
+                    [dropdown]="true"
+                    optionLabel="name">
+            </app-p-autoComplete>
+            <small app-form-error [formControl]="consumerId?.control" ></small>
+        </div>
+
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="collector">Gestor de recolección</label>
+            <app-p-autoComplete
+                    appendTo="body"
+                    placeholder="Seleccione el gestor de recolección"
+                    id="collector"
+                    name="collector"
+                    [ngModel]="collectorValue"
+                    [suggestions]="collectorFiltered"
+
+                    (completeMethod)="filterCollector($event)"
+
+                    #collector="ngModel"
+                    [forceSelection]="true"
+                    (ngModelChange)="ngModelChange(this.form.controls.pickupId, $event); this.form.controls.pickupBranchId.setValue(''); collectorId?.control.reset()"
+
+                    styleClass="w-full"
+
+                    [dropdown]="true"
+                    optionLabel="name">
+            </app-p-autoComplete>
+            <small app-form-error [formControl]="collector?.control" ></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="collectorId">ID gestor de recolección</label>
+            <app-p-autoComplete
+                    appendTo="body"
+                    placeholder="Seleccione el ID del gestor de recolección"
+                    id="collectorId"
+                    name="collectorId"
+                    [ngModel]="collectorIdValue"
+                    [suggestions]="collectorIdFiltered"
+                    [disabled]="!collector?.control?.value"
+                    (completeMethod)="filterCollectorId($event)"
+                    #collectorId="ngModel"
+                    (ngModelChange)="ngModelChange(this.form.controls.pickupBranchId, $event)"
+
+                    [forceSelection]="true"
+                    styleClass="w-full"
+
+                    [dropdown]="true"
+                    optionLabel="name">
+            </app-p-autoComplete>
+            <small app-form-error [formControl]="collectorId?.control" ></small>
+        </div>
+
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="pretreatment">Gestor de pretratamiento</label>
+            <app-p-autoComplete
+                    appendTo="body"
+                    placeholder="Seleccione el gestor de pretratamiento"
+                    id="pretreatment"
+                    name="pretreatment"
+                    [ngModel]="pretreatmentValue"
+                    [suggestions]="pretreatmentFiltered"
+
+                    (completeMethod)="filterPretreatment($event)"
+                    #pretreatment="ngModel"
+                    (ngModelChange)="ngModelChange(this.form.controls.pretreatmentId, $event); this.form.controls.pretreatmentBranchId.setValue(''); pretreatmentId?.control.reset()"
+
+                    [forceSelection]="true"
+                    styleClass="w-full"
+
+                    [dropdown]="true"
+                    optionLabel="name">
+            </app-p-autoComplete>
+            <small app-form-error [formControl]="pretreatment?.control" ></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="pretreatment">ID gestor de pretratamiento</label>
+            <app-p-autoComplete
+                    appendTo="body"
+                    placeholder="Seleccione el ID del gestor de pretratamiento"
+                    id="pretreatmentId"
+                    name="pretreatmentId"
+                    [ngModel]="pretreatmentIdValue"
+                    [suggestions]="pretreatmentIdFiltered"
+                    [disabled]="!pretreatment?.control?.value"
+                    (completeMethod)="filterPretreatmentId($event)"
+                    #pretreatmentId="ngModel"
+                    (ngModelChange)="ngModelChange(this.form.controls.pretreatmentBranchId, $event)"
+
+                    [forceSelection]="true"
+                    styleClass="w-full"
+
+                    [dropdown]="true"
+                    optionLabel="name">
+            </app-p-autoComplete>
+            <small app-form-error [formControl]="pretreatmentId?.control" ></small>
+        </div>
+
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="valorizer">Gestor de valorización</label>
+            <app-p-autoComplete
+                    appendTo="body"
+                    placeholder="Seleccione el gestor de valorización"
+                    id="valorizer"
+                    name="valorizer"
+                    [ngModel]="valorizerValue"
+                    [suggestions]="valorizerFiltered"
+                    (completeMethod)="filterValorizer($event)"
+                    #valorizer="ngModel"
+                    (ngModelChange)="ngModelChange(this.form.controls.valuerId, $event); this.form.controls.valuerBranchId.setValue(''); valorizerId?.control.reset()"
+
+                    [forceSelection]="true"
+                    styleClass="w-full"
+
+                    [dropdown]="true"
+                    optionLabel="name">
+            </app-p-autoComplete>
+            <small app-form-error [formControl]="valorizer?.control" ></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="valorizerId">ID gestor de valorización</label>
+            <app-p-autoComplete
+                    appendTo="body"
+                    placeholder="Seleccione el ID del gestor de valorización"
+                    id="valorizerId"
+                    name="valorizerId"
+                    [ngModel]="valorizerIdValue"
+                    [suggestions]="valorizerIdFiltered"
+                    [disabled]="!valorizer?.control?.value"
+                    [required]="valorizer?.control?.value"
+                    (completeMethod)="filterValorizerId($event)"
+                    #valorizerId="ngModel"
+                    (ngModelChange)="ngModelChange(this.form.controls.valuerBranchId, $event)"
+
+                    [forceSelection]="true"
+                    styleClass="w-full"
+
+                    [dropdown]="true"
+                    optionLabel="name">
+            </app-p-autoComplete>
+            <small app-form-error [formControl]="valorizerId?.control" ></small>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" label="Cancelar" (click)="ref.close(false)"></p-button>
+            <p-button label="Registrar" type="submit" [disabled]="this.form.status === 'PENDING'" [loading]="loaderService.loading[this.saveLoaderId]"></p-button>
+        </div>
+    </div>
+</form>
+

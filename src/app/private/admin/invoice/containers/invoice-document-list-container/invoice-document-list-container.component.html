@@ -1,0 +1,9 @@
+<app-document-list
+        [disableDownloadButton]="loaderService.loading[loaderId] | loaderHelperV2"
+        [disableDeleteButton]="loaderService.loading[loaderId] | loaderHelperV2"
+        [model]="model"
+        (deleteEvent)="deleteEvent($event)"
+        (downloadEvent)="downloadEvent($event)"
+        (pageEvent)="pageEvent($event)"
+        (newEvent)="newEvent()"
+></app-document-list>

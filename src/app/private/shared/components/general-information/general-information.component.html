@@ -1,0 +1,75 @@
+<ng-container *ngIf="loaderService.loading[this.loaderId];else loaded">
+    <p-skeleton height="338px" styleClass="mb-2"></p-skeleton>
+</ng-container>
+
+<ng-template #loaded>
+    <app-giro-data-view
+            (actionEmitter)="entityDataEdit()"
+            [content]="entityDataContent"
+            [displayActionButton]="[Roles.ADMIN] | hasAnyRole"
+            aTitle="Informaciones generales"
+            buttonLabel="Editar" class="col-12">
+    </app-giro-data-view>
+</ng-template>
+
+<ng-template #entityDataContent>
+    <div class="grid py-0 px-3">
+            <ng-container [ngSwitch]="BiddingType[model.biddingType]">
+
+                <ng-container *ngSwitchCase="BiddingType.PICKUP">
+                    <app-view-data class="col-12"          key="DESCRIPCIÓN"                                [value]="model.description"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="TIPO DE LICITACIÓN"                         [value]="BiddingType[model.biddingType]"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="ID BALI"                                    [value]="model.idBali"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE CREACIÓN"                          [value]="model.createdAt | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE INICIO DE PRESENTACIÓN DE OFERTAS" [value]="model.initialDate | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE FIN DE PRESENTACIÓN DE OFERTAS"    [value]="model.finalDate | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="PROVINCIA"                                  [value]="model.regionName"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="COMUNA"                                     [value]="model.cityName"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="EFICIENCIA DE RECOLECCIÓN"                  [value]="model.pcEfficiency + ' %'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="VIVIENDAS ATENDIDAS"                        [value]="model.populationServed"  ></app-view-data>
+                    <app-view-data class="col-12"          key="OBSERVACIONES"                              [value]="model.observation"  ></app-view-data>
+                </ng-container>
+
+<!--                // equals pick up-->
+                <ng-container *ngSwitchCase="BiddingType.OPERATION_IRA">
+                    <app-view-data class="col-12"          key="DESCRIPCIÓN"                                [value]="model.description"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="TIPO DE LICITACIÓN"                         [value]="BiddingType[model.biddingType]"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="ID BALI"                                    [value]="model.idBali"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE CREACIÓN"                          [value]="model.createdAt | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE INICIO DE PRESENTACIÓN DE OFERTAS" [value]="model.initialDate | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE FIN DE PRESENTACIÓN DE OFERTAS"    [value]="model.finalDate | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="PROVINCIA"                                  [value]="model.regionName"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="COMUNA"                                     [value]="model.cityName"  ></app-view-data>
+
+                    <app-view-data class="col-12"          key="OBSERVACIONES"                              [value]="model.observation"  ></app-view-data>
+                </ng-container>
+
+
+                <ng-container *ngSwitchCase="BiddingType.PRETREATMENT">
+                    <app-view-data class="col-12"          key="DESCRIPCIÓN"                                [value]="model.description"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="TIPO DE LICITACIÓN"                         [value]="BiddingType[model.biddingType]"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="ID BALI"                                    [value]="model.idBali"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE CREACIÓN"                          [value]="model.createdAt | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE INICIO DE PRESENTACIÓN DE OFERTAS" [value]="model.initialDate | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE FIN DE PRESENTACIÓN DE OFERTAS"    [value]="model.finalDate | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="PROVINCIA"                                  [value]="model.regionName"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="COMUNA"                                     [value]="model.cityName"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="EFICIENCIA DE RECOLECCIÓN"                  [value]="model.pcEfficiency + ' %'"  ></app-view-data>
+                    <app-view-data class="col-12"          key="OBSERVACIONES"                              [value]="model.observation"  ></app-view-data>
+                </ng-container>
+
+                <ng-container *ngSwitchCase="BiddingType.VALORIZATION">
+                    <app-view-data class="col-12"          key="DESCRIPCIÓN"                                [value]="model.description"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="TIPO DE LICITACIÓN"                         [value]="BiddingType[model.biddingType]"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="ID BALI"                                    [value]="model.idBali"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE CREACIÓN"                          [value]="model.createdAt | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE INICIO DE PRESENTACIÓN DE OFERTAS" [value]="model.initialDate | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="FECHA DE FIN DE PRESENTACIÓN DE OFERTAS"    [value]="model.finalDate | date : 'dd/MM/yyyy'"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="PROVINCIA"                                  [value]="model.regionName"  ></app-view-data>
+                    <app-view-data class="col-12 lg:col-4" key="COMUNA"                                     [value]="model.cityName"  ></app-view-data>
+                    <app-view-data class="col-12"          key="OBSERVACIONES"                              [value]="model.observation"  ></app-view-data>
+                </ng-container>
+
+            </ng-container>
+    </div>
+</ng-template>

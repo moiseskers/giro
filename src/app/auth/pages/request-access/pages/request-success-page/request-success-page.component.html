@@ -1,0 +1,19 @@
+<app-auth-basic-layout [content]="content"></app-auth-basic-layout>
+
+<ng-template #content>
+    <div class="flex flex-column gap-4 w-full text-center">
+        <div class="mb-4 ">
+            <div class="text-900 text-xl font-bold">Solicitud de acceso realizada</div>
+        </div>
+
+        <div>
+            <img src="assets/layout/images/pages/request-access-success.png">
+        </div>
+
+        <div class="text-600 font-medium">Revisaremos esta solicitud a la brevedad posible.</div>
+
+        <p-divider styleClass="w-full"></p-divider>
+
+        <p-button label="Volver al website" [text]="true" severity="secondary" (click)="returnToWebsite()"></p-button>
+    </div>
+</ng-template>

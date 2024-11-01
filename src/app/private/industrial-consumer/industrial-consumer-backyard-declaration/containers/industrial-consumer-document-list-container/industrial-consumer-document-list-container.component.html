@@ -1,0 +1,12 @@
+<app-giro-data-view [content]="content" aTitle="Documentos comprobatorios" buttonLabel="Nuevo" class="col-12"
+                    [displayActionButtonDisabled]="DeclarationStatus[declarationResponseDto?.status] === DeclarationStatus.APPROVED"
+                    (actionEmitter)="new()"></app-giro-data-view>
+
+<ng-template #content>
+    <app-backyard-document-list
+            [menuItems]="menuItems"
+            (downloadEvent)="download($event)"
+            (pageEvent)="page($event)"
+            [model]="model">
+    </app-backyard-document-list>
+</ng-template>

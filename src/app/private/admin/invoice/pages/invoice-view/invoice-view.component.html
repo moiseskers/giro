@@ -1,0 +1,50 @@
+<app-p-toolbar class="col-12 " styleClass="shadow-2">
+    <div class="p-toolbar-group-start custom-class">
+        <ng-container *ngIf="this.model?.status">
+            <ng-container [ngSwitch]="InvoiceStatus[this.model?.status]">
+                <app-invoice-statuses [bigger]="true" [status]="InvoiceStatus[modelIn(model)?.status]"></app-invoice-statuses>
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="p-toolbar-group-center">
+    </div>
+    <div class="p-toolbar-group-end">
+        <div class="flex gap-2">
+            <app-p-button [disabled]="!this.model" (onClick)="edit()" label="Editar" [outlined]="true" severity="contrast"/>
+            <app-p-button
+                    [disabled]="InvoiceStatus[modelIn(model)?.status] === InvoiceStatus.APPROVED"
+
+                    label="Cambiar estado" (click)="menu.toggle($event)" iconPos="right" [loading]="loaderService.loading[changeStatusLoaderId]">
+                <p-menu #menu [model]="modelIn(model)?.statuses" [popup]="true" appendTo="body">
+                    <ng-template pTemplate="item" let-item>
+                        <a (click)="action(item, modelIn(model).id)" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                            <div>
+                                <span [class]="item.icon"></span>
+                                <span> {{ item.label }}</span>
+                            </div>
+                            <div>
+                                <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                            </div>
+                        </a>
+                    </ng-template>
+                </p-menu>
+                <ng-template pTemplate="icon">
+                    <div class="flex">
+                        <ChevronDownIcon/>
+                    </div>
+                </ng-template>
+            </app-p-button>
+        </div>
+    </div>
+</app-p-toolbar>
+
+<app-card [content]="content"></app-card>
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter">
+            <app-invoice-data-container         class="col-12"  [invoiceId]="id" (modelEvent)="modelEvent($event)"></app-invoice-data-container>
+            <app-invoice-item-list-container     class="col-12" [invoiceId]="id"></app-invoice-item-list-container>
+            <app-invoice-document-list-container class="col-12" [invoiceId]="id"> </app-invoice-document-list-container>
+        </div>
+    </div>
+</ng-template>

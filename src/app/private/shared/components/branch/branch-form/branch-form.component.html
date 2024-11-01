@@ -1,0 +1,68 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid gap-3">
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="code">Código ID *</label>
+            <input class="p-inputtext w-full" formControlName="code" id="code" name="code" placeholder="Informe el código ID" type="text"/>
+            <small app-form-error formControlName="code"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="address">Dirección *</label>
+            <input class="p-inputtext w-full" formControlName="address" id="address" name="address" placeholder="Informe la calle y el número de la empresa" type="text"/>
+            <small app-form-error formControlName="address"></small>
+        </div>
+
+        <div class="col-12 field" *ngIf="OrganizationType[organizationType] == OrganizationType.PRODUCER">
+            <label appRedAsterisk for="producerType">Tipo *</label>
+            <p-dropdown [options]="branchProducerTypes" class="w-full" formControlName="producerType" id="producerType" optionLabel="key" optionValue="value" styleClass="w-full"></p-dropdown>
+            <small app-form-error formControlName="producerType"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="city">Comuna *</label>
+            <app-p-autoComplete
+                    [disabled]="this.loaderService.loading[this.loaderId]"
+                    [ngModel]="cityValue"
+                    (ngModelChange)="cityNgModelChange($event)"
+                    [ngModelOptions]="{standalone: true}"
+                    id="city"
+                    styleClass="w-full"
+                    placeholder="Seleccione la comuna de la empresa"
+                    (completeMethod)="filterCity($event)"
+                    [dropdown]="true"
+                    [suggestions]="filteredCities"
+                    optionLabel="name">
+            </app-p-autoComplete>
+            <small app-form-error formControlName="city"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="state">Región *</label>
+            <app-p-autoComplete
+                [disabled]="this.loaderService.loading[this.loaderId]"
+                    [ngModel]="regionValue"
+                    (ngModelChange)="regionNgModelChange($event)"
+                    [ngModelOptions]="{standalone: true}"
+                    id="state"
+                    styleClass="w-full"
+                    placeholder="Informe la región de la empresa"
+                    (completeMethod)="filterRegion($event)"
+                    [dropdown]="true"
+                    [suggestions]="filteredRegions"
+                    optionLabel="name">
+            </app-p-autoComplete>
+            <small app-form-error formControlName="state"></small>
+        </div>
+
+        <div class="col-12 w-full">
+            <p-divider></p-divider>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" (onClick)="closeEvent.emit()"  label="Cancelar"></p-button>
+            <p-button [disabled]="this.form.status === 'PENDING'" [loading]="this.buttonIsLoading" label="Registrar" type="submit"></p-button>
+        </div>
+    </div>
+</form>

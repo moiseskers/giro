@@ -1,0 +1,64 @@
+<app-default-column-separator-grid [content]="content"></app-default-column-separator-grid>
+
+<ng-template #cardBody>
+    <p-table #table [lazy]="true" [loading]="this.loaderService.loading[tableLoaderId] !== '2'" [value]="model?.items">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID de matching</th>
+                <th>Productores</th>
+                <th>Facturas/IDs de declaración</th>
+                <th>Categoría</th>
+                <th>Subcategoría</th>
+                <th pSortableColumn="complianceYear" class="white-space-nowrap">Año de la meta  <p-sortIcon field="complianceYear"></p-sortIcon></th>
+                <th pSortableColumn="matchingBeginAt" class="white-space-nowrap">Fecha de matching  <p-sortIcon field="matchingBeginAt"></p-sortIcon> </th>
+                <th pSortableColumn="tonsGoal" class="white-space-nowrap">Meta <p-sortIcon field="tonsGoal"></p-sortIcon> </th>
+                <th pSortableColumn="tonsAcquired" class="white-space-nowrap">Toneladas compensadas  <p-sortIcon field="tonsAcquired"></p-sortIcon></th>
+                <th>Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td>{{ modelIn(model)?.code }}</td>
+                <td class="white-space-nowrap">{{ modelIn(model)?.qtyOrganizations > 1 ? modelIn(model)?.qtyOrganizations + ' productores' : modelIn(model)?.qtyOrganizations + ' productor' }}</td>
+                <td>{{ modelIn(model)?.qtyAssociations }}</td>
+                <td>{{ CategoryTypeEnum[(model)?.category] }}</td>
+                <td>{{ modelIn(model)?.subcategory }}</td>
+                <td>{{ modelIn(model)?.complianceYear }}</td>
+                <td>{{ modelIn(model)?.matchingBeginAt | date: 'dd/MM/yyyy'}}</td>
+                <td class="white-space-nowrap">{{ modelIn(model)?.tonsGoal | milligrams | addSymbol:'t' }} </td>
+                <td class="white-space-nowrap">{{ modelIn(model)?.tonsAcquired | milligrams | addSymbol:'t' }}</td>
+                <td class="text-right white-space-nowrap">
+                    <button pButton
+                            [disabled]="viewButtonDisabled(modelIn(model)?.code, modelIn(model)?.subcategoryId)"
+                            (click)="view(modelIn(model))" class="mr-2" icon="pi pi-search"></button>
+                    <p-menu #menu [id]="modelIn(model).id" [model]="menuItems" [popup]="true" appendTo="body">
+                        <ng-template let-item pTemplate="item">
+                            <a (click)="download(rowIndex, modelIn(model))" [attr.tabindex]="-1" [routerLink]="item.routerLink" class="p-menuitem-link flex justify-content-between align-items-center p-3">
+                                <div>
+                                    <span [class]="item.icon"></span>
+                                    <span> {{ item.label }}</span>
+                                </div>
+                                <div>
+                                    <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                                </div>
+                            </a>
+                        </ng-template>
+                    </p-menu>
+                    <button pButton [disabled]="modelIn(model)?.status  !== 'COMPLETED' ||  !modelIn(model)?.attachmentId " [loading]="loaderService.loading[downloadLoaderId[rowIndex]] === '1'" (click)="menu.toggle($event)" [outlined]="true" icon="pi pi-ellipsis-h" severity="secondary"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-paginator (pageFunction)="page($event)" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+</ng-template>
+<ng-template #content>
+    <app-filters-container
+            [isLoadingDownloadButton]="loaderService.loading[downloadAllLoaderId] === '1'"
+            (downloadEvent)="downloadAll()"
+            (doMatchEvent)="match($event)"
+            (sortEvent)="sort($event)"
+            (filterEvent)="filter($event)"
+            [table]="table">
+    </app-filters-container>
+    <app-card [content]="cardBody"></app-card>
+</ng-template>

@@ -1,0 +1,6 @@
+<ng-container [ngSwitch]="status">
+    <p-tag *ngSwitchCase="'ACTIVE'" [value]="'Activo'" severity="success"></p-tag>
+    <p-tag *ngSwitchCase="'INACTIVE'" [value]="'Inactivo'"></p-tag>
+    <p-tag *ngSwitchCase="'PENDING'" [value]="'Aprobación pendiente'" severity="warning"></p-tag>
+</ng-container>
+

@@ -1,0 +1,58 @@
+<app-p-toolbar class="col-12" styleClass="shadow-2">
+    <div class="p-toolbar-group-start custom-class">
+        <ng-container *ngIf="this.model?.status">
+            <ng-container [ngSwitch]="DeclarationStatus[this.model?.status]">
+                <app-declaration-statuses [bigger]="true" [status]="DeclarationStatus[modelIn(model)?.status]"></app-declaration-statuses>
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="p-toolbar-group-center"></div>
+    <div class="p-toolbar-group-end">
+        <ng-container *ngIf="loaderService.loading[loaderId] === '2'">
+            <div class="flex gap-2" *ngIf="displayCreateAndEditButtons">
+                <app-p-button [disabled]="DeclarationRequestStatus[this.model?.declarationRequest?.status] === DeclarationRequestStatus.BLOCKED" *ngIf="this.model?.items?.length > 0" (onClick)="edit()" label="Editar"/>
+                <app-p-button
+                    [disabled]="DeclarationRequestStatus[this.model?.declarationRequest?.status] === DeclarationRequestStatus.BLOCKED"
+                    *ngIf="this.model?.items?.length === 0 && DeclarationStatus[this.model?.status] !== DeclarationStatus.FINALIZED"
+                    (click)="menu.toggle($event)"
+                    label="Declarar"
+                    iconPos="right">
+                    <p-menu #menu [model]="declarationOptions" [popup]="true" appendTo="body">
+                        <ng-template pTemplate="item" let-item>
+                            <div (click)="handleMenuItemClick(item, $event)" class="p-menuitem-link flex justify-content-between align-items-center p-3">
+                                <div>{{ item.label }}</div>
+                            </div>
+                        </ng-template>
+                    </p-menu>
+                    <ng-template pTemplate="icon">
+                        <div class="flex">
+                            <ChevronDownIcon/>
+                        </div>
+                    </ng-template>
+                </app-p-button>
+            </div>
+        </ng-container>
+    </div>
+</app-p-toolbar>
+
+<app-card [content]="content"></app-card>
+
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter">
+            <p-messages *ngIf="
+             (
+                 DeclarationRequestRecurrence[this.model?.declarationRequest?.recurrence] === DeclarationRequestRecurrence.ANNUAL
+                 &&
+                 DeclarationStatus[this.model?.status] === DeclarationStatus.FINALIZED
+                 &&
+                 DeclarationRequestStatus[this.model?.declarationRequest?.status] === DeclarationRequestStatus.COMPLETED
+             )"
+                        class="w-full" styleClass="w-full" [(value)]="messages1" [closable]="false" />
+            <app-producer-declaration-data class="col-12" [model]="model"></app-producer-declaration-data>
+            <app-producer-declaration-item-list-container class="col-12"
+
+                                                          *ngIf="loaderService.loading[loaderId] === '2'" [model]="model" [organizationId]="this.organizationId" [id]="id"></app-producer-declaration-item-list-container>
+        </div>
+    </div>
+</ng-template>

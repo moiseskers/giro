@@ -1,0 +1,14 @@
+<div>
+    <div class="col-12 xl:col-4 xl:col-offset-4 h-full flex flex-column justify-content-center  h-screen">
+        <div class="w-full text-center mb-6">
+            <img src="assets/layout/images/logo-giro-black.png" width="184.24" class="">
+        </div>
+        <div class="flex flex-column  justify-content-center py-6 px-4 bg-white	shadow-1">
+            <div class="text-4xl mb-5 font-bold text-center">{{componentTitle || 'Solicitud de acceso'}}</div>
+            <ng-container>
+                <ng-container *ngTemplateOutlet="content"></ng-container>
+            </ng-container>
+        </div>
+    </div>
+</div>
+

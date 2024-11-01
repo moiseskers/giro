@@ -1,0 +1,34 @@
+<app-auth-basic-layout [content]="content"></app-auth-basic-layout>
+
+<ng-template #content>
+    <form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" class="grid grid-nogutter bg-no-repeat bg-cover fadein  animation-duration-500" focusFirstInvalidField>
+
+        <div class="w-full flex flex-column gap-4">
+            <div class="text-center">
+                <span class="text-600 font-medium">Solicite el acceso a las bases de licitaciones.</span>
+            </div>
+
+            <div class="grid formgrid">
+                <div class="col-12 field">
+                    <label appRedAsterisk for="email">Correo *</label>
+                    <input class="p-inputtext w-full" formControlName="email" id="email" name="email" placeholder="correo@ejemplo.com" type="text"/>
+                    <small [customErrorMessages]="{ errorIdentifier: 'emailAlreadyExists', message: 'Correo Electrónico ya Existe' }" app-form-error formControlName="email"></small>
+                </div>
+            </div>
+
+            <span class="text-600">
+                Al inscribirme, acepto los <a  class="font-bold underline text-black-alpha-90" href="/auth/request-access/terms-of-use" target="_blank">términos y servicios</a> de GIRO.
+            </span>
+            <a class="text-600 text-right font-bold underline text-black-alpha-90" href="/private">Ya tengo una cuenta</a>
+
+            <p-divider></p-divider>
+
+            <div class="flex gap-2 justify-content-end">
+                <button [disabled]="this.form.status == 'PENDING'" [loading]="this.form.status == 'PENDING'" iconPos="right" label="Solicitar Acceso" pButton pRipple></button>
+            </div>
+
+        </div>
+    </form>
+</ng-template>
+
+

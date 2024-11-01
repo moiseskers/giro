@@ -1,0 +1,57 @@
+::ng-deep .p-menubar-button {
+  display: none !important;
+}
+
+::ng-deep  .p-sidebar-right {
+  top: 0;
+  right: 0;
+  width: 400px;
+  height: 100%;
+}
+
+@media (max-width: 600px) {
+  ::ng-deep .p-menubar {
+    flex-wrap: wrap !important;
+    gap: 2px !important;
+  }
+}
+
+::ng-deep .p-divider.p-divider-vertical {
+  padding: unset !important;
+}
+
+.the-before::before {
+  display: block;
+  margin-top: 12.6px;
+}
+
+
+::ng-deep .p-overlaypanel {
+  margin-right: 29px !important;
+}
+
+.display-none {
+  display: none !important;
+}
+
+.vertical-divider {
+  border: none;
+  border-left: 1px solid #ccc; /* Adjust the color and thickness as needed */
+  height: 20px; /* Adjust the height as needed */
+  margin: 0 10px; /* Adjust the margin as needed */
+}
+
+.custom-menubar {
+  padding: 0.5rem;
+  background: #fcfcfc;
+  color: #69707a;
+  border-radius: 10px;
+}
+
+.custom-menubar .ui-menuitem:first-child {
+  flex-grow: 1;
+}
+
+//.surface-200 {
+//  color: var(--surface-200)
+//}

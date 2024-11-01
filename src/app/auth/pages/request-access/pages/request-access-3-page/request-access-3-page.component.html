@@ -1,0 +1,65 @@
+<form (ngSubmit)="save()" [formGroup]="form" class="grid grid-nogutter bg-no-repeat bg-cover fadein  animation-duration-500 " focusFirstInvalidField>
+    <div class="w-full">
+        <div class="flex flex-column gap-5">
+
+            <div class="flex justify-content-between align-items-center">
+                <div class="w-7">Descarga aquí el modelo de declaración de confidencialidad</div>
+                <div>
+                    <p-button [outlined]="true"  (onClick)="downloadFile()" icon="pi pi-download" iconPos="right" label="Descargar modelos" styleClass="white-space-nowrap"></p-button>
+                </div>
+            </div>
+
+            <p-table [loading]="this.loaderService.loading[getDocumentLoaderId]" [value]="documents" styleClass="w-full">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Documento</th>
+                        <th>Status</th>
+                        <th class="text-center">Acciones</th>
+                    </tr>
+                </ng-template>
+                <ng-template let-document pTemplate="body">
+                    <tr>
+                        <td>{{ getDocumentLabel(document) }}</td>
+                        <td>
+                            <span [class]="'customer-badge ' + ((document.id | documentIdFinder:this.form['controls']['documents'].value) ? 'status-qualified' : 'status-negotiation')  ">
+                                {{((document.id | documentIdFinder:this.form['controls']['documents'].value) ? 'Enviado' : 'Pendiente')}}
+                            </span>
+                        </td>
+                        <td class="text-center ">
+                            <div class="flex gap-1 justify-content-center">
+                                <p-fileUpload
+                                    #fileUpload
+                                    (onSelect)="upload(document.id, fileUpload)"
+                                    [customUpload]="true"
+                                    [maxFileSize]="50000000"
+                                    [styleClass]="!(document.id | documentIdFinder:this.form['controls']['documents'].value) ? '' : 'hidden' "
+                                    accept=".doc,.docx,.xls,.xlsx,.ppt,.pptx,.pdf,.txt,.odt,.ods,.odp,.csv,.rtf,.html,.htm,.xml,.json"
+                                    chooseIcon="pi-upload" chooseLabel="" mode="basic" name="demo[]" pTooltip="Haz clic aquí para subir" tooltipPosition="bottom" uploadLabel="">
+                                </p-fileUpload>
+
+                                <p-button
+                                        (onClick)="download(document.id)"
+                                        *ngIf="(document.id | documentIdFinder:this.form['controls']['documents'].value)"
+                                        [pTooltip]="'Haz clic aquí para descargar ' + (document.id | documentIdFilter:this.form['controls']['documents'].value)?.name" icon="pi pi-download" severity="secondary" tooltipPosition="bottom"></p-button>
+                                <p-button
+                                        (onClick)="clearFileUpload(fileUpload, document.id)"
+                                        [styleClass]="(document.id | documentIdFinder:this.form['controls']['documents'].value) ? '' : 'hidden' "
+                                        icon="pi pi-trash"
+                                        pTooltip="Haz clic aquí para eliminar" severity="danger" tooltipPosition="bottom"></p-button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <p-divider></p-divider>
+
+            <div class="flex gap-2 justify-content-end">
+                <app-p-button materialIcon="arrow_back" (click)="previous()"  [outlined]="true" iconPos="left" label="Volver" severity="secondary"></app-p-button>
+                <app-p-button type="submit" [disabled]="this.form.status == 'PENDING'" [loading]="this.form.status == 'PENDING' || loaderService.loading[this.saveLoaderId]" materialIcon="arrow_forward" iconPos="right" label="Enviar" ></app-p-button>
+            </div>
+
+        </div>
+    </div>
+</form>
+<p-confirmDialog></p-confirmDialog>

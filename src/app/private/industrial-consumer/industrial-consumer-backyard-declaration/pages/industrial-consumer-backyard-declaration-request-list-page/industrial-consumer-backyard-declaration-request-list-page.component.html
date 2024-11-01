@@ -1,0 +1,34 @@
+<app-default-column-separator-grid  [content]="content"></app-default-column-separator-grid>
+
+<ng-template #cardBody>
+    <app-backyard-declaration-request-list
+            (sortEvent)="sort($event)"
+            (pageEvent)="page($event)"
+            (viewEvent)="view($event)"
+            [loading]="!(loaderService.loading[this.loaderId] | loaderHelper)"
+            [model]="model">
+    </app-backyard-declaration-request-list>
+
+</ng-template>
+
+<ng-template #content>
+    <app-filter *ngIf="(loaderService.loading[this.filerLoaderId] | loaderHelper)" (filterEvent)="filterProcess($event)" (sortEvent)="sort($event)" [filters]="filters" [table]="backyardDeclarationRequestListComponent?.table"></app-filter>
+    <app-card [content]="cardBody"></app-card>
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

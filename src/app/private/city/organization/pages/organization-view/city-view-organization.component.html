@@ -1,0 +1,13 @@
+<app-card [content]="content"></app-card>
+
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter">
+            <app-organization-data barTitle="Datos" *ngIf="(loaderService.loading[this.organizationDataLoaderId] | loaderHelper)" [model]="this.model"  class="col-12"></app-organization-data>
+            <app-legal-representative-list class="col-12"></app-legal-representative-list>
+            <app-organization-user-list class="col-12"></app-organization-user-list>
+            <app-organization-document-list-container class="col-12"></app-organization-document-list-container>
+        </div>
+    </div>
+</ng-template>
+

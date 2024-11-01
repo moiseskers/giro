@@ -1,0 +1,13 @@
+<app-giro-data-view [content]="content" aTitle="Datos de declaración" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <app-skeleton [isLoading]="isLoading" height="209px">
+        <div class="grid py-0 px-3">
+            <app-view-data class="col-12 lg:col-4" [value]="model?.code"                                                    key="Datos de declaración"></app-view-data>
+            <app-view-data class="col-12 lg:col-4" [value]="model?.declaredMonthYear | date:'MMMM yyyy' | titlecase" key="Mes"></app-view-data>
+            <app-view-data class="col-12 lg:col-4" [value]="model?.endDate | date:'dd/MM/yyyy'"                      key="FECHA FINAL"></app-view-data>
+        </div>
+    </app-skeleton>
+</ng-template>
+
+

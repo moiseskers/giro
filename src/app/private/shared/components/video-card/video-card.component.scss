@@ -1,0 +1,32 @@
+.video-card {
+  width: 300px; /* Set a specific width for the card */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin: 16px; /* Add some space around the card */
+}
+
+.video-iframe {
+  width: 100%;       /* Full width of the card */
+  height: 200px;    /* Adjust height as needed */
+  border: none;      /* Remove border */
+}
+
+:host ::ng-deep .p-card .p-card-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--neutral-950);
+
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+:host ::ng-deep .p-card .p-card .p-card-body {
+
+  padding-bottom: 0p;
+
+}

@@ -1,0 +1,103 @@
+<app-default-column-separator-grid [content]="content"></app-default-column-separator-grid>
+
+<ng-template #cardBody>
+    <p-table #table [loading]="this.loaderService.loading[loaderId]" [value]="model?.items || []" [lazy]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID CIG</th>
+                <th>Razón social consumidor</th>
+                <th>RUT consumidor</th>
+                <th>ID consumidor</th>
+
+                <th>Recolector</th>
+                <th>ID recolecctor</th>
+
+                <th>Pretratamiento</th>
+                <th>ID pretratamiento</th>
+
+                <th>Valorizadora</th>
+                <th>ID valorizadora</th>
+
+                <th>Estado</th>
+                <th class="text-right">Acción</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+<!--            white-space-nowrap-->
+            <tr class="">
+                <td>{{ modelIn(model)?.code }}</td>
+                <td>{{ modelIn(model)?.industrialConsumer.businessName }}</td>
+                <td>{{ modelIn(model)?.industrialConsumer.taxIdentificationNumber }}</td>
+                <td>
+                    <ng-container *ngTemplateOutlet="branchTemplate; context: { $implicit: modelIn(model)?.industrialConsumerBranch }"></ng-container>
+                </td>
+
+                <td>{{ modelIn(model)?.pickup?.businessName }}</td>
+
+                <td>
+                    <ng-container *ngTemplateOutlet="branchTemplate; context: { $implicit: modelIn(model)?.pickupBranch }"></ng-container>
+                </td>
+
+                <td>{{ modelIn(model)?.pretreatment?.businessName }}</td>
+                <td>
+                    <ng-container *ngTemplateOutlet="branchTemplate; context: { $implicit: modelIn(model)?.pretreatmentBranch }"></ng-container>
+                </td>
+
+                <td>{{ modelIn(model)?.valuer?.businessName }}</td>
+
+                <td>
+                    <ng-container *ngTemplateOutlet="branchTemplate; context: { $implicit: modelIn(model)?.valuerBranch }"></ng-container>
+                </td>
+
+                <td>
+                    <app-cig-statuses [status]="CigStatus[modelIn(model).status]"></app-cig-statuses>
+                </td>
+
+                <ng-template #branchTemplate let-branch>
+                    {{ branchModelIn(branch)?.code ? branchModelIn(branch).code + ' |' : '' }}
+                    {{ branchModelIn(branch)?.address ? branchModelIn(branch).address + ',' : '' }}
+                    {{ branchModelIn(branch)?.city ? branchModelIn(branch).city + ',' : '' }}
+                    {{ branchModelIn(branch)?.state ? branchModelIn(branch).state + '' : '' }}
+                </ng-template>
+
+                <td class="text-right white-space-nowrap">
+                    <p-menu #menu [model]="modelIn(model).statuses" [popup]="true" appendTo="body">
+                        <ng-template pTemplate="item" let-item>
+                            <a (click)="action(item, modelIn(model))" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                                <div>
+                                    <span [class]="item.icon"></span>
+                                    <span> {{ item.label }}</span>
+                                </div>
+                                <div>
+                                    <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                                </div>
+                            </a>
+                        </ng-template>
+                    </p-menu>
+                    <button pButton icon="pi pi-ellipsis-h" severity="success" [outlined]="true" (click)="menu.toggle($event)" [loading]="loaderService.loading[changeStatusLoader[modelIn(model).id]]"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-paginator (pageFunction)="page($event)" [pageParamName]="'pageIndex'" [pageSizeParamName]="'itemsPerPage'" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+</ng-template>
+
+<ng-template #content>
+    <app-filter (actionButtonEvent)="actionButtonEvent()" addButtonTitle="Nuevo CIG" (filterEvent)="filter($event)" (sortEvent)="sort($event)" [filters]="filters" [table]="table"></app-filter>
+    <app-card [content]="cardBody"></app-card>
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

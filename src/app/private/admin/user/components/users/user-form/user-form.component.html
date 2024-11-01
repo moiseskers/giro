@@ -1,0 +1,67 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid">
+        <div class="col-12 field">
+            <label appRedAsterisk for="organizationId">Entidad *</label>
+            <app-p-autoComplete
+
+                    [autofocus]="true"
+                    [disabled]="isEditing"
+                    [ngModel]="organizationIdAutoCompleteValue"
+                    (ngModelChange)="ngModelChange($event)"
+                    [ngModelOptions]="{standalone: true}"
+                    id="organizationId"
+                    [forceSelection]="true"
+                    styleClass="w-full"
+                    placeholder="Busque y seleccione la entidad por RUT o razón social"
+                    (completeMethod)="filter($event)"
+                    [dropdown]="true"
+                    [suggestions]="filteredOrganizations"
+                    optionLabel="businessName"
+            >
+            </app-p-autoComplete>
+            <small app-form-error formControlName="organizationId"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="name">Nombre *</label>
+            <input class="p-inputtext w-full" formControlName="name" id="name" name="name" placeholder="Nombre del usuario" type="text"/>
+            <small app-form-error formControlName="name"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="email">Correo *</label>
+            <input class="p-inputtext w-full" formControlName="email" id="email" name="email" placeholder="correo@ejemplo.com" type="email"/>
+            <small app-form-error formControlName="email"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="phone">Teléfono</label>
+            <input class="p-inputtext w-full" formControlName="phone" id="phone" name="phone" placeholder="(00) 00000-0000" mask="(00) 00000-0000" [validation]="false"/>
+            <small [customErrorMessages]="{errorIdentifier: 'mask', message: 'El número de teléfono no es válido.'}" app-form-error formControlName="phone"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="responsibility">Rol *</label>
+            <p-dropdown placeholder="Informe el rol del usuario" [options]="['Financiero','Jurídico','Contraparte principal REP','Otro']" class="w-full" formControlName="responsibility" id="responsibility" styleClass="w-full"></p-dropdown>
+            <small app-form-error formControlName="responsibility"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk >Tipo *</label>
+            <div *ngFor="let type of types" class="field-checkbox">
+                <p-radioButton [inputId]="type.key" [value]="type.key" formControlName="role"></p-radioButton>
+                <label [for]="type.key" class="ml-2">{{ type.value }}</label>
+            </div>
+        </div>
+
+        <div class="col-12 w-full">
+            <p-divider></p-divider>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" (onClick)="closeEvent.emit()"  label="Cancelar"></p-button>
+            <p-button [disabled]="this.form.status === 'PENDING'" [loading]="this.buttonIsLoading" label="Registrar" type="submit"></p-button>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,14 @@
+form
+    form: FormGroup<ControlsOfType<CreateDeclarationRequestRequestForm>>;
+
+
+    // this.form = this.fb.group({
+    //     industrialConsumerId: new FormControl('', {validators: Validators.required, nonNullable: true}),
+    //     industrialConsumerBranchId: new FormControl('', {validators: Validators.required, nonNullable: true}),
+    //     pickupId: new FormControl('',),
+    //     pickupBranchId: new FormControl('',),
+    //     pretreatmentId: new FormControl('',),
+    //     pretreatmentBranchId: new FormControl('',),
+    //     valuerId: new FormControl('',),
+    //     valuerBranchId: new FormControl('',),
+    // });

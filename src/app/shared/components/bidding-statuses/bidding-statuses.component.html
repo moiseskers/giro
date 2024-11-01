@@ -1,0 +1,9 @@
+<ng-container [ngSwitch]="statuses[status]">
+    <p-tag *ngSwitchCase="statuses.ACTIVATED" [value]="statuses[status]" severity="info"></p-tag>
+    <p-tag *ngSwitchCase="statuses.ABANDONED" [value]="statuses[status]" ></p-tag>
+    <p-tag *ngSwitchCase="statuses.AWARDED" [value]="statuses[status]" severity="success"></p-tag>
+    <p-tag *ngSwitchCase="statuses.CANCELLED" [value]="statuses[status]" severity="danger"></p-tag>
+    <p-tag *ngSwitchCase="statuses.FINALIZED" [value]="statuses[status]" severity="success"></p-tag>
+    <p-tag *ngSwitchCase="statuses.OPENED" [value]="statuses[status]" severity="info"></p-tag>
+</ng-container>
+

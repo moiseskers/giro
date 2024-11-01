@@ -1,0 +1,47 @@
+<form (ngSubmit)="this.form.valid ?  save() : markAllAsTouched(form)"  [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid gap-2">
+
+        <ng-container>
+            <div class="col-12 field">
+                <label appRedAsteriskV2 for="category" formControlName="category">Categoría</label>
+                <p-dropdown
+                        [autofocus]="true"
+                        [options]="categories"
+                            class="w-full"
+                            formControlName="category"
+                            id="category"
+                            optionLabel="name"
+                            optionValue="id"
+                            styleClass="w-full">
+                </p-dropdown>
+            </div>
+            <div class="col-12 field">
+                <label appRedAsteriskV2 for="complianceYear">Año de metas declaradas</label>
+                    <app-p-calendar
+                            [ngModelOptions]="{standalone: true}"
+                            [ngModel]="matchingDate"
+                            (ngModelChange)="matchingDateNgModelChange($event)"
+                            view="year"
+                            class="w-full"
+                            styleClass="w-full"
+                            appendTo="body"
+                            id="complianceYear"
+                            dateFormat="yy"
+                    >
+                    </app-p-calendar>
+
+            </div>
+
+            <div class="col-12 w-full my-2">
+            </div>
+        </ng-container>
+
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" label="Cancelar" ></p-button>
+            <p-button label="Registrar" type="submit" [loading]="this.buttonIsLoading"></p-button>
+        </div>
+    </div>
+</form>
+

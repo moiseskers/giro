@@ -1,0 +1,53 @@
+<app-giro-data-view
+        [displayActionButton]="[Roles.ADMIN] | hasAnyRole"
+        (actionEmitter)="entityDataEdit()"
+        [content]="entityDataContent"
+        [aTitle]="barTitle"
+        buttonLabel="Editar"
+        class="col-12">
+</app-giro-data-view>
+
+<ng-template #entityDataContent>
+    <div class="grid py-0 px-3">
+
+        <ng-container [ngSwitch]="OrganizationTypes[model?.organizationType]">
+
+            <ng-container *ngSwitchCase="OrganizationTypes.MANAGER">
+                <app-view-data class="col-12 lg:col-4" key="Tipo de entidad" [value]="OrganizationTypes[model?.organizationType]"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Razón social" [value]="model.businessName"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Nombre de fantasía" [value]="model.tradeName"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="RUT" [value]="model.taxIdentificationNumber"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Tipo de gestor" [value]="model.managerTypes | separationArray:', '"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Encargado licitación" [value]="model.bidManager"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Estado contratación" [value]="HiringStatus[model.hiringStatus]"></app-view-data>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="OrganizationTypes.PRODUCER">
+                <app-view-data class="col-12 lg:col-4" key="Tipo de entidad" [value]="OrganizationTypes[model.organizationType]"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Razón social" [value]="model.businessName"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Nombre fantasía" [value]="model.tradeName"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="RUT" [value]="model.taxIdentificationNumber"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Categoría" [value]="ProducerType[model.producerType]"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Rubro" [value]="model.sector"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Tipo de socio" [value]="PartnerType[model.partnerType]"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Consumidor Industrial" [value]="model?.producerIsIndustrialConsumer === true ? 'Sí' : 'No'"></app-view-data>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="OrganizationTypes.INDUSTRIAL_CONSUMER">
+                <app-view-data class="col-12 lg:col-4" key="Tipo de entidad" [value]="OrganizationTypes[model.organizationType]"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Razón social" [value]="model.businessName"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Nombre fantasía" [value]="model.tradeName"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="RUT" [value]="model.taxIdentificationNumber"></app-view-data>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="OrganizationTypes.CITY">
+                <app-view-data class="col-12 lg:col-4" key="Tipo de entidad" [value]="OrganizationTypes[model.organizationType]"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="Nombre municipio" [value]="model.businessName"></app-view-data>
+                <app-view-data class="col-12 lg:col-4" key="RUT" [value]="model.taxIdentificationNumber"></app-view-data>
+            </ng-container>
+
+        </ng-container>
+
+
+    </div>
+</ng-template>

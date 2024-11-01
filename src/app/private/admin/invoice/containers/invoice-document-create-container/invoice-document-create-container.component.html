@@ -1,0 +1,4 @@
+<app-document-form (saveEvent)="save($event)"
+                   [buttonIsLoading]="this.loaderService.loading[this.loaderId]"
+                   (closeEvent)="dynamicDialogRef.close()">
+</app-document-form>

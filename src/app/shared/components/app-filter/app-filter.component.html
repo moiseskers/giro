@@ -1,0 +1,88 @@
+<div class="flex flex-column gap-2">
+    <div *ngIf="loaded" class="custom-menubar flex justify-content-between card shadow-2 p-3">
+
+        <ng-container *ngIf="baseFilterLoaded">
+            <div class="flex gap-1" style="flex: 0 0 50%;">
+                <p-inputGroup>
+                    <input (keyup.enter)="fromBase()" [formControl]="baseFilterFormControl" [placeholder]="'' + _baseFilter?.label" pInputText placeholder="Buscar" type="text">
+                    <p-inputGroupAddon *ngIf="baseFilterFormControl?.value" (click)="baseFilterFormControl.setValue(''); fromBase()">
+                        <i class="pi pi-times cursor-pointer"></i>
+                    </p-inputGroupAddon>
+                    <button (click)="fromBase()" icon="pi pi-search" pButton type="button"></button>
+                </p-inputGroup>
+            </div>
+
+        </ng-container>
+
+        <div class="flex gap-1">
+            <app-prime-ng-table-sort-helper (sortEvent)="sortEventFunction($event)" [table]="table" (clearAllFilterEvent)="clearOutside()"></app-prime-ng-table-sort-helper>
+
+            <p-button severity="secondary" [outlined]="true" (click)="this.resetForm(); this.clearFields(); sidebarVisible = true" *ngIf="_filters?.length > 0">
+                <ng-template pTemplate="iconTemplate">
+                    <div class="flex gap-2 align-items-center">
+                        <span class="material-symbols-outlined">tune</span> Filtrar
+                    </div>
+                </ng-template>
+            </p-button>
+
+<!--            <button [disabled]="addButtonTitleDisable" *ngIf="addButtonTitle" [loading]="addButtonLoading" iconPos="right" (click)="action()" [label]="addButtonTitle" pButton></button>-->
+            <button [disabled]="addButtonTitleDisable" *ngIf="addButtonTitle" [loading]="addButtonLoading" iconPos="right" (click)="action()" [label]="addButtonTitle" pButton></button>
+        </div>
+    </div>
+
+    <!--    <p-menubar *ngIf="activatedFilters.length > 0">-->
+    <!--        <ng-template pTemplate="start">-->
+    <!--            <div class="flex align-items-center " style="max-height: 20px;">-->
+    <!--                Filtros Ativos:&nbsp;-->
+    <!--                <ng-container *ngFor="let item of activatedFilters; let i = index">-->
+    <!--                    <div class="flex align-items-center">-->
+    <!--                        <strong>{{item?.term}}:&nbsp; {{ value(item?.value, item) }} </strong> &nbsp;-->
+    <!--                        <i (click)="removeFilter(item)" class="pi pi-times" pTooltip="Clique para remover esse filtro" style="margin-bottom: -1px" tooltipPosition="bottom"></i>-->
+    <!--                    </div>-->
+    <!--                    <div *ngIf="activatedFilters.length > 1 && i !== activatedFilters.length - 1" class="vertical-divider"></div>-->
+    <!--                </ng-container>-->
+    <!--            </div>-->
+    <!--        </ng-template>-->
+    <!--    </p-menubar>-->
+</div>
+
+<!--<p-overlayPanel #op *ngIf="loaded" [dismissable]="false">-->
+
+<!--    <ng-template pTemplate>-->
+<!--        <div *ngFor="let item of _filters">-->
+<!--            <div class="text-sm font-normal mb-2">{{item.title}}</div>-->
+<!--            <app-dynamic-form-builder #appDynamicFormBuilderComponentFilters [fields]="item.fields"></app-dynamic-form-builder>-->
+<!--        </div>-->
+<!--        <div class="flex flex-column gap-1 mt-5">-->
+<!--            <p-button class="w-full" styleClass="w-full" (click)="submit()" label="Filtrar" pRipple type="submit"></p-button>-->
+<!--            <p-button class="w-full" styleClass="w-full" [outlined]="true"  (click)="op.hide()" label="Cancelar" pRipple></p-button>-->
+<!--        </div>-->
+<!--    </ng-template>-->
+<!--</p-overlayPanel>-->
+
+
+<p-sidebar [(visible)]="sidebarVisible" position="right" title="Filtro">
+
+    <ng-template pTemplate="header">
+            <span class="text-xl font-semibold" style="color: var(--lima-950) ">
+                Filtro
+            </span>
+    </ng-template>
+
+    <ng-template pTemplate>
+        <div class="flex flex-column justify-content-between h-full">
+            <div>
+                <div *ngFor="let item of _filters">
+                    <div class="text-sm font-normal mb-2">{{ item.title }}</div>
+                    <app-dynamic-form-builder #appDynamicFormBuilderComponentFilters [fields]="item.fields"></app-dynamic-form-builder>
+                </div>
+            </div>
+            <div class="flex flex-column gap-1 mt-5">
+                <p-button class="w-full" styleClass="w-full"  [disabled]="invalid" (click)="submit()" label="Filtrar" pRipple type="submit"></p-button>
+                <p-button class="w-full" styleClass="w-full"  severity="secondary" [outlined]="true" (click)="close()" label="Cancelar" pRipple></p-button>
+            </div>
+        </div>
+
+    </ng-template>
+</p-sidebar>
+

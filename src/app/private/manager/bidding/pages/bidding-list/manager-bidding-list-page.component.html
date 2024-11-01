@@ -1,0 +1,48 @@
+<app-default-column-separator-grid [content]="content"></app-default-column-separator-grid>
+
+<ng-template #cardBody>
+    <p-table #table [loading]="this.loaderService.loading[biddingLoaderId]" [value]="model?.items"  [lazy]="true" >
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID BALI</th>
+                <th>Tipo</th>
+                <th>Comuna</th>
+                <th pSortableColumn="initialDate">Fecha de inicio <p-sortIcon field="initialDate"></p-sortIcon></th>
+                <th pSortableColumn="finalDate">Fecha de termino <p-sortIcon field="finalDate"></p-sortIcon></th>
+                <th>Materiales</th>
+                <th>Estado</th>
+                <th class="text-right">Acción</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model).idBali }}</td>
+                <td>{{ biddingType[modelIn(model).biddingType] }}</td>
+                <td>{{ modelIn(model).cityName }}</td>
+                <td>{{ modelIn(model).initialDate | date:'dd/MM/yyyy' }}</td>
+                <td>{{ modelIn(model).finalDate | date:'dd/MM/yyyy'}} </td>
+                <td>{{ modelIn(model).materials }}</td>
+                <td>
+                    <app-bidding-statuses [status]="modelIn(model).status"></app-bidding-statuses>
+                </td>
+                <td class="text-right white-space-nowrap">
+                    <p-button class="mr-2" icon="pi pi-search" (click)="view(modelIn(model).id)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <app-paginator (pageFunction)="page($event)" [pageParamName]="'pageIndex'" [pageSizeParamName]="'itemsPerPage'" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+</ng-template>
+
+<ng-template #content>
+    <app-filter *ngIf="!loaderService.loading[this.filterLoaderId]" (filterEvent)="filterProcess($event)" (sortEvent)="sort($event)" [filters]="filters" [table]="table"></app-filter>
+    <app-card [content]="cardBody"></app-card>
+</ng-template>
+
+
+
+
+
+
+

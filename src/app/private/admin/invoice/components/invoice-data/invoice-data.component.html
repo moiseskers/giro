@@ -1,0 +1,24 @@
+<ng-container *ngIf="isLoading;else loaded">
+    <p-skeleton height="338px" styleClass="mb-2"></p-skeleton>
+</ng-container>
+
+<ng-template #loaded>
+    <app-giro-data-view [content]="entityDataContent" aTitle="Datos" class="col-12"></app-giro-data-view>
+</ng-template>
+
+<ng-template #entityDataContent>
+    <div class="grid py-0 px-3">
+        <app-view-data class="col-12 lg:col-4" key="RUT emisor"          [value]="model?.issuer?.taxIdentificationNumber"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="Emisor"              [value]="model?.issuer?.businessName"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="RUT receptor"        [value]="model?.receiver?.taxIdentificationNumber"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="Receptor"            [value]="model?.receiver?.businessName"  ></app-view-data>
+
+        <app-view-data class="col-12 lg:col-4" key="Fecha de envío"      [value]="(model?.createdAt | date: 'dd/MM/yyyy' | checkEmpty:'--/--/----')"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="Número de factura"   [value]="model?.invoiceNumber"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="Fecha de emisión"    [value]="(model?.issueDate | date: 'dd/MM/yyyy' | checkEmpty:'--/--/----')"  ></app-view-data>
+
+        <app-view-data class="col-12 lg:col-4" key="GIRO"                [value]="model?.economicActivities"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="Dirección"           [value]="getAddress"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="Comuna"              [value]="model?.city"  ></app-view-data>
+    </div>
+</ng-template>

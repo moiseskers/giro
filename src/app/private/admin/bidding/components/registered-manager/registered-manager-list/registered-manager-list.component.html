@@ -1,0 +1,37 @@
+<app-giro-data-view [content]="content" aTitle="Gestores inscritos" buttonLabel="Descargar correos" class="col-12" (actionEmitter)="download()"></app-giro-data-view>
+
+<ng-template #content>
+    <app-filter (filterEvent)="filterProcess($event)" (sortEvent)="sort($event)" [filters]="filters" [table]="table"></app-filter>
+
+    <p-table [loading]="!loaderService.loading[this.loaderUserServiceGet] | loaderHelper" [lazy]="true" #table [tableStyle]="{ 'min-width': '50rem' }" [value]="model?.items" styleClass="p-datatable-striped">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID de inscripción</th>
+                <th>Gestor</th>
+                <th pSortableColumn="applicationDate" class="white-space-nowrap">Fecha de inscripción<p-sortIcon field="applicationDate"></p-sortIcon></th>
+                <th>Estado</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model)?.code ?? '-' }}</td>
+                <td>{{ modelIn(model)?.manager?.name ?? '-' }}</td>
+                <td>{{ (modelIn(model)?.applicationDate | date : 'dd/MM/yyyy') ?? '-' }}</td>
+                <td>
+                    <app-registered-manager-statuses [status]="modelIn(model)?.status"></app-registered-manager-statuses>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <app-paginator
+            (pageFunction)="page($event)"
+            *ngIf="model?.meta?.totalItems > 10 && this.filterHelper.displayPaginator"
+            [pageParamName]="'pageIndex'"
+            [pageSizeParamName]="'itemsPerPage'"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            [totalElements]="model?.meta?.totalItems">
+    </app-paginator>
+
+</ng-template>

@@ -1,0 +1,88 @@
+image: node:18
+
+definitions:
+    steps:
+        - step: &build-and-push-dev
+              name: Building Image - DEV
+              script:
+                  - npm install --legacy-peer-deps
+                  - npx ng build --configuration=development
+                  - cd "$BITBUCKET_CLONE_DIR"
+                  - docker build -t giro-frontend -f Dockerfile .
+                  - docker tag giro-frontend giro-frontend:dev-${BITBUCKET_BUILD_NUMBER}
+                  - pipe: atlassian/aws-ecr-push-image:2.2.0
+                    variables:
+                        IMAGE_NAME: giro-frontend
+                        TAGS: "dev-${BITBUCKET_BUILD_NUMBER}"
+
+        - step: &build-and-push-ux-review
+              name: Building Image - UX-Review
+              script:
+                  - npm install --legacy-peer-deps
+                  - npx ng build --configuration=review
+                  - cd "$BITBUCKET_CLONE_DIR"
+                  - docker build -t giro-frontend-ux -f Dockerfile .
+                  - docker tag giro-frontend-ux giro-frontend-ux:ux-review-${BITBUCKET_BUILD_NUMBER}
+                  - pipe: atlassian/aws-ecr-push-image:2.2.0
+                    variables:
+                        IMAGE_NAME: giro-frontend-ux
+                        TAGS: "ux-review-${BITBUCKET_BUILD_NUMBER}"
+
+        - step: &build-and-push-prd
+              name: Building Image - PRD
+              script:
+                  - npm install --legacy-peer-deps
+                  - npx ng build --configuration=production
+                  - cd "$BITBUCKET_CLONE_DIR"
+                  - docker build -t giro-frontend -f Dockerfile .
+                  - docker tag giro-frontend giro-frontend:prd-${BITBUCKET_BUILD_NUMBER}
+                  - pipe: atlassian/aws-ecr-push-image:2.2.0
+                    variables:
+                        IMAGE_NAME: giro-frontend
+                        TAGS: "prd-${BITBUCKET_BUILD_NUMBER}"
+
+        # DEPLOY
+        - step: &deploy-argocd-dev
+              name: Deploy ArgoCD - DEV
+              script:
+                  - pipe: redeciclo/pipe-kustomize-argocd:main
+                    variables:
+                        BITBUCKET_SERVICE_CREDENTIAL: $BITBUCKET_SERVICE_CREDENTIAL
+                        PROJECT: giro
+                        APP_NAME: giro-frontend
+                        OVERLAY_ENV: "dev" # "dev", "hml" ou "prd"
+                        IMAGE_TAG: "dev-${BITBUCKET_BUILD_NUMBER}"
+
+        - step: &deploy-argocd-ux-review
+              name: Deploy ArgoCD - UX-Review
+              script:
+                  - pipe: redeciclo/pipe-kustomize-argocd:main
+                    variables:
+                        BITBUCKET_SERVICE_CREDENTIAL: $BITBUCKET_SERVICE_CREDENTIAL
+                        PROJECT: giro
+                        APP_NAME: giro-frontend-ux
+                        OVERLAY_ENV: "dev" # "dev", "hml" ou "prod"
+                        IMAGE_TAG: "ux-review-${BITBUCKET_BUILD_NUMBER}"
+
+        - step: &deploy-argocd-prd
+              name: Deploy ArgoCD - PRD
+              script:
+                  - pipe: redeciclo/pipe-kustomize-argocd:main
+                    variables:
+                        BITBUCKET_SERVICE_CREDENTIAL: $BITBUCKET_SERVICE_CREDENTIAL
+                        PROJECT: giro
+                        APP_NAME: giro-frontend
+                        OVERLAY_ENV: "prod" # "dev", "hml" ou "prod"
+                        IMAGE_TAG: "prd-${BITBUCKET_BUILD_NUMBER}"
+pipelines:
+    branches:
+        develop:
+            - step: *build-and-push-dev
+            - step: *deploy-argocd-dev
+        ux-review:
+            - step: *build-and-push-ux-review
+            - step: *deploy-argocd-ux-review
+        main:
+            - step: *build-and-push-prd
+            - step: *deploy-argocd-prd
+

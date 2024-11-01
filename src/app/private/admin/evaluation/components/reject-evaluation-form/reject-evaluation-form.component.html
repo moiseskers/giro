@@ -1,0 +1,25 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid">
+        <div class="col-12 field">
+            <label appRedAsterisk for="description">Descripción *</label>
+            <textarea [autofocus]="true" placeholder="Deje el motivo del rechazo de este gestor" id="description" class="w-full" rows="5" cols="30" pInputTextarea formControlName="description"></textarea>
+            <small app-form-error formControlName="description"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="allowToAppeal">Permitir apelar *</label>
+            <p-dropdown [options]="allowToAppealOptions" class="w-full" formControlName="allowToAppeal" id="allowToAppeal" optionLabel="key" optionValue="value" styleClass="w-full"></p-dropdown>
+            <small app-form-error formControlName="allowToAppeal"></small>
+        </div>
+
+        <div class="col-12 w-full">
+            <p-divider></p-divider>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" (onClick)="cancel()" label="Cancelar"></p-button>
+            <p-button [disabled]="this.form.status === 'PENDING'" [loading]="this.buttonIsLoading" label="Registrar" type="submit"></p-button>
+        </div>
+    </div>
+</form>

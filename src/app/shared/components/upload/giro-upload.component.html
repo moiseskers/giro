@@ -1,0 +1,68 @@
+<div class="flex flex-column gap-3 " >
+    <div
+            (filesChange)="upload($event)"
+            [(dragFiles)]="__dragFiles"
+            [(files)]="__files"
+            [(lastInvalids)]="lastInvalids"
+            (lastInvalidsChange)="lastInvalidsChange($event)"
+            [accept]="accept"
+            [class.invalid-drag]="validComboDrag === false"
+            [class.valid-drag]="validComboDrag"
+            [fileDropDisabled]="this.loaderService.loading[this.loaderId]"
+            [maxSize]="maxSize"
+            class="well my-drop-zone flex flex-column gap-2 default-padding justify-content-between align-items-center border-round-sm border-dashed border-1 surface-ground"
+            ngfDrop
+            ngfSelect
+            style="height: 304px;"
+    >
+
+        <div class="flex flex-column gap-5 text-center justify-content-between" >
+            <div>
+                <svg width="70" height="96" viewBox="0 0 70 96" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_5488_31287)">
+                        <path d="M0.333984 89.441C0.333984 93.0186 3.30841 96 6.87772 96H63.3918C66.9611 96 69.9355 93.0186 69.9355 89.441V6.55901C69.9355 2.98137 66.9611 0 63.3918 0H24.3277L0.333984 24.0497V89.441Z" fill="#FFCC00FF" fill-opacity="0.1"/>
+                        <path d="M22.1464 21.8645L0.333984 43.3303V24.0508L2.51523 21.8645H22.1464Z" fill="#FFCC00FF"/>
+                        <path d="M24.3277 0V17.4907C24.3277 21.0683 21.3532 24.0497 17.7839 24.0497H0.333984L24.3277 0Z" fill="#FFCC00FF" fill-opacity="0.4"/>
+                    </g>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M35.5928 44.1312H16.7188V41.2017H35.5928V44.1312Z" fill="#FFCC00FF" fill-opacity="0.4"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M60.6303 58.1312H16.334V55.2017H60.6303V58.1312Z" fill="#FFCC00FF" fill-opacity="0.4"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M60.6303 66.131H16.334V63.2014H60.6303V66.131Z" fill="#FFCC00FF" fill-opacity="0.4"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M60.6303 74.1315H16.334V71.2019H60.6303V74.1315Z" fill="#FFCC00FF" fill-opacity="0.4"/>
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M52.9266 82.1315H16.334V79.2019H52.9266V82.1315Z" fill="#FFCC00FF" fill-opacity="0.4"/>
+                    <defs>
+                        <clipPath id="clip0_5488_31287">
+                            <rect width="69.3333" height="96" fill="white" transform="translate(0.333984)"/>
+                        </clipPath>
+                    </defs>
+                </svg>
+
+
+            </div>
+
+            <div>
+                <button [type]="'button'" [disabled]="this.loaderService.loading[this.loaderId]" [loading]="this.loaderService.loading[this.loaderId]" class="primary-color" icon="pi pi-cloud-upload" iconPos="left" label="Seleccionar archivo" pButton pRipple></button>
+            </div>
+
+            <div class="flex justify-content-center flex-column gap-1 text-center">
+                <div class="text-base" style="color: var(--neutral-950)">
+                    {{ uploadTitle }}
+                </div>
+
+                <div class="text-sm">
+                    {{ uploadDescription }}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div *ngIf="files?.length" class="border-round-sm border-dashed border-1 default-padding-1  flex flex-column">
+        <div *ngFor="let item of files; let i = index" class=" flex justify-content-between align-items-center w-full">
+            <div>{{item.name}}</div>
+            <div>
+                <p-button (click)="remove(i)" [text]="true" icon="pi pi-trash" severity="secondary"></p-button>
+            </div>
+        </div>
+    </div>
+</div>
+

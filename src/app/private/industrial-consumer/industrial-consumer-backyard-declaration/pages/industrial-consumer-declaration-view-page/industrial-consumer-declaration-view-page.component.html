@@ -1,0 +1,30 @@
+<app-p-toolbar class="col-12 " styleClass="shadow-2">
+    <div class="p-toolbar-group-start custom-class">
+        <ng-container *ngIf="this.model?.status">
+            <ng-container [ngSwitch]="DeclarationStatus[this.model?.status]">
+                <app-declaration-statuses [bigger]="true" [status]="DeclarationStatus[modelIn(model)?.status]"></app-declaration-statuses>
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="p-toolbar-group-center">
+
+    </div>
+    <div class="p-toolbar-group-end">
+            <div class="flex gap-2" *ngIf="!(DeclarationRequestType[this.model?.declarationRequest?.recurrence] === DeclarationRequestType.ANNUAL && DeclarationStatus[this.model?.status] === DeclarationStatus.FINALIZED)">
+<!--                <app-p-button [disabled]="DeclarationRequestStatus[this.model?.declarationRequest?.status] === DeclarationRequestStatus.BLOCKED" *ngIf="this.model?.items?.length > 0"   (onClick)="edit()"   label="Editar"/>-->
+                <app-p-button [disabled]="DeclarationRequestStatus[this.model?.declarationRequest?.status] === DeclarationRequestStatus.BLOCKED" *ngIf="this.model?.items?.length === 0" (onClick)="create()" label="Declarar"/>
+            </div>
+    </div>
+</app-p-toolbar>
+
+<app-card [content]="content"></app-card>
+
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter">
+            <app-backyard-declaration-data class="col-12" [model]="model"></app-backyard-declaration-data>
+            <app-industrial-consumer-declaration-item-list-container *ngIf="!(loaderService.loading[loaderId] | loaderHelperV2)" class="col-12" [model]="model" [id]="id" ></app-industrial-consumer-declaration-item-list-container>
+            <app-industrial-consumer-document-list-container class="col-12" *ngIf="!(loaderService.loading[loaderId] | loaderHelperV2)" [declarationResponseDto]="model"></app-industrial-consumer-document-list-container>
+        </div>
+    </div>
+</ng-template>

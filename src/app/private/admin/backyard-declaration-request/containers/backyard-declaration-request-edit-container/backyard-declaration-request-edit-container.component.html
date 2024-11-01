@@ -1,0 +1,8 @@
+<app-declaration-request-form
+        [isBackyard]="true"
+        [organizationType]="organizationType"
+        [model]="model"
+        [editing]="true"
+        [saveLoader]="loaderService.loading[saveLoaderId]"
+        (onSave)="save($event)">
+</app-declaration-request-form>

@@ -1,0 +1,45 @@
+<div class="grid app-gap grid-nogutter">
+    <app-p-toolbar class="col-12" styleClass="shadow-2">
+        <div>
+            <app-p-autoComplete
+                [required]="true"
+                [ngModel]="industrialConsumerValue"
+                (ngModelChange)="industrialConsumerNgModelChange($event)"
+                [ngModelOptions]="{ standalone: true }"
+                id="state"
+                [ngStyle]="{ 'min-width': '350px' }"
+                styleClass="w-96"
+                placeholder="Seleccione la provincia"
+                (completeMethod)="filter($event)"
+                [dropdown]="true"
+                [suggestions]="organizationFiltered"
+                optionLabel="businessName"
+            >
+            </app-p-autoComplete>
+        </div>
+        <div class="p-toolbar-group-start custom-class"></div>
+        <div class="p-toolbar-group-center"></div>
+        <div class="p-toolbar-group-end">
+            <p-button
+                (click)="download()"
+                [loading]="loaderService.loading[loaderId] === '1'"
+                label="Descargar"
+                pRipple
+            ></p-button>
+        </div>
+    </app-p-toolbar>
+    <app-card [content]="content" class="col-12"></app-card>
+</div>
+
+<ng-template #content>
+    <div class="grid gap-3">
+        <div class="col-12">
+            <app-management-backyard-container
+                *ngIf="displayManagementBackyardContainer"
+                [organizationId]="organizationId"
+                [hasSelectedOrganization]="hasSelectedOrganization"
+            >
+            </app-management-backyard-container>
+        </div>
+    </div>
+</ng-template>

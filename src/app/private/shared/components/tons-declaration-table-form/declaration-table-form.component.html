@@ -1,0 +1,406 @@
+<app-skeleton [isLoading]="!loaded">
+    <form #f="ngForm" (ngSubmit)="f.valid ?  this.ts.addNewRow() : this.ts.markAllAsTouchedHelper(f)" id="x" focusFirstInvalidField>
+
+            <div class="grid p-fluid">
+                <ng-container *ngIf="this.ts.declarationTableFormType !== DeclarationTableFormType.ANNUALLY">
+                    <div class="col-12">
+                        <label appRedAsterisk for="type">Tipo *</label>
+                        <p-dropdown
+                                [disabled]="(DeclarationRequestStatus[this.declarationResponseDto?.declarationRequest?.status] === DeclarationRequestStatus.COMPLETED)
+                                            && !(DeclarationStatus[this.declarationResponseDto?.status] === DeclarationStatus.OVERDUE)
+                                "
+                                #declarationTypeNgModel="ngModel"
+                                [(ngModel)]="this.ts.declarationResponseDtoRef.declarationType"
+                                (onChange)="this.ts.typeNgModelChange($event.value)"
+                                name="declarationType" styleClass="w-full mt-2"
+                                class="w-full"
+                                id="type"
+                                optionValue="key"
+                                optionLabel="value"
+                                [options]="this.declarationTypes">
+                        </p-dropdown>
+                        <small app-form-error [formControl]="declarationTypeNgModel.control"></small>
+                    </div>
+
+                    <div class="col-12 py-0 mt-3">
+                        <p-divider></p-divider>
+                    </div>
+                </ng-container>
+
+                <div class="col-12">
+                    <ng-container [ngSwitch]="this.ts.declarationTableFormType">
+                        <ng-container *ngSwitchCase="DeclarationTableFormType.MONTHLY_CONSOLIDATED">
+                            <ng-container *ngTemplateOutlet="monthlyConsolidatedFinishedTemplate"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="DeclarationTableFormType.MONTHLY_DETAILED">
+                            <ng-container *ngTemplateOutlet="monthlyDetailedFinishedTemplate"></ng-container>
+                        </ng-container>
+                        <ng-container *ngSwitchCase="DeclarationTableFormType.ANNUALLY">
+                            <ng-container *ngTemplateOutlet="annualFinishedTemplate"></ng-container>
+                        </ng-container>
+                    </ng-container>
+
+                    <ng-template #monthlyConsolidatedFinishedTemplate>
+                        <p-table [value]="this.ts.declarationResponseDtoRef.items" styleClass="mt-3" responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                                <tr class="font-bold white-space-nowrap">
+                                    <th>Categoría</th>
+                                    <th>Subcategoría</th>
+                                    <th>Material</th>
+                                    <th>Tipo</th>
+                                    <th>Consumidor</th>
+                                    <th>Toneladas</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                                <tr>
+                                    <td class="font-bold" style="min-width: 254px">
+
+                                        <p-dropdown [(ngModel)]="modelIn(row).category"
+                                                    (onChange)="this.ts.categoryNgModelChange($event.value, rowIndex)"
+                                                    [required]="true"
+                                                    [name]="'category-' + rowIndex" class="w-full" appendTo="body"
+                                                    [options]="this.ts.categories[rowIndex]"
+                                                    optionValue="id" optionLabel="name"></p-dropdown>
+                                    </td>
+                                    <td class="font-bold" style="min-width: 168px">
+                                        <p-dropdown
+                                                [loading]="this.loaderService.loading[this.ts.subCategoryLoaderId[rowIndex]]"
+                                                [disabled]="this.ts.disableDropDownHelper(rowIndex)"
+                                                [(ngModel)]="modelIn(row).subcategoryId"
+                                                (onChange)="this.ts.subcategoryNgModelChange($event.value, rowIndex)"
+                                                [required]="true"
+                                                [name]="'subcategory' + rowIndex"
+                                                class="w-full"
+                                                appendTo="body"
+                                                [options]="this.ts.subcategories[rowIndex]"
+                                                optionValue="id"
+                                                optionLabel="name"></p-dropdown>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 251px">
+                                        <p-dropdown
+                                                (onChange)="this.ts.materialNgModelChange($event.value, rowIndex)"
+                                                [(ngModel)]="modelIn(row).materialId"
+                                                [disabled]="this.ts.disableDropDownHelper(rowIndex)"
+                                                [loading]="this.loaderService.loading[this.ts.materialLoaderId[rowIndex]]"
+                                                [name]="'material-' + rowIndex"
+                                                [options]="this.ts.materials[rowIndex]"
+                                                [required]="true"
+                                                appendTo="body"
+                                                class="w-full"
+                                                optionLabel="name"
+                                                optionValue="id"
+                                                placeholder="Seleccione el material"></p-dropdown>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 251px">
+                                        <p-dropdown
+                                                [readonly]="this.ts.declarationItemTypes[rowIndex]?.length  === 0"
+                                                [(ngModel)]="modelIn(row).declarationItemType" [required]="true" [name]="'declarationItemType' + rowIndex" placeholder="Seleccione el tipo" class="w-full" appendTo="body" [options]="this.ts.declarationItemTypes[rowIndex]" optionLabel="key" optionValue="value"></p-dropdown>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 300px">
+                                        <input [required]="true" [name]="'consumer' + rowIndex" placeholder="Informe el consumidor" [(ngModel)]="modelIn(row).consumer" class="p-inputtext w-full" type="text"/>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 300px">
+                                        <input
+                                                appMaxFloatValidator
+                                                [options]="{
+                                                    align: 'right',
+                                                    allowNegative: false,
+                                                    allowZero: true,
+                                                    decimal: ',',
+                                                    precision: 9,
+                                                    prefix: '',
+                                                    suffix: '',
+                                                    thousands: '',
+                                                    nullable: true,
+                                                    min: null,
+                                                    max: null,
+                                                    inputMode: NgxCurrencyInputMode.Natural
+                                                 }"
+                                                currencyMask
+                                                [required]="true"
+                                                [name]="'totalDangerousTons' + rowIndex"
+                                                placeholder="0,000000000 t" [(ngModel)]="modelIn(row).tons" class="p-inputtext w-full" type="text"/>
+                                    </td>
+
+                                    <td>
+                                        <p-button icon="pi pi-trash" [outlined]="true" (click)="this.ts.removeRow(rowIndex)"></p-button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="footer" >
+                                <tr *ngIf="this.ts.declarationResponseDtoRef?.items?.length > 0">
+                                    <td colspan="5" class="text-right"></td>
+                                    <td>{{ this.ts.totalTons | milligrams }} t</td>
+                                    <td></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-template>
+
+                    <ng-template #monthlyDetailedFinishedTemplate>
+                        <p-table [value]="this.ts.declarationResponseDtoRef.items" styleClass="mt-3" responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                                <tr class="font-bold white-space-nowrap">
+                                    <th>SKU</th>
+                                    <th>Descripción</th>
+                                    <th>Categoría</th>
+                                    <th>Subcategoría</th>
+                                    <th>Material</th>
+                                    <th>Tipo</th>
+                                    <th>Equivalencia (toneladas envase)</th>
+                                    <th>Unidades introducidas</th>
+<!--                                    <th>Toneladas totales</th>-->
+                                    <th>Fecha operación comercial</th>
+                                    <th>Consumidor</th>
+                                    <th>Clasificación industrial</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+
+                                <tr>
+                                    <td class="font-bold" style="min-width: 184px">
+                                        <input [(ngModel)]="modelIn(row).sku" [required]="true" [name]="'sku-' + rowIndex" placeholder="Informe el SKU" class="p-inputtext w-full" type="text"/>
+                                    </td>
+                                    <td class="font-bold" style="min-width: 254px">
+                                        <input [(ngModel)]="modelIn(row).description" [required]="true" [name]="'description-' + rowIndex" placeholder="Describe la envase o embalaje"  class="p-inputtext w-full" type="text"/>
+                                    </td>
+                                    <td class="font-bold" style="min-width: 168px">
+                                        <p-dropdown
+                                                [(ngModel)]="modelIn(row).category"
+                                                (onChange)="this.ts.categoryNgModelChange($event.value, rowIndex)"
+                                                [required]="true" [name]="'category-' + rowIndex" class="w-full" appendTo="body" [options]="this.ts.categories[rowIndex]" optionValue="id" optionLabel="name"></p-dropdown>
+                                    </td>
+                                    <td class="font-bold" style="min-width: 254px">
+                                        <p-dropdown
+                                                [loading]="this.loaderService.loading[this.ts.subCategoryLoaderId[rowIndex]]"
+                                                [disabled]="this.ts.disableDropDownHelper(rowIndex)"
+                                                [(ngModel)]="modelIn(row).subcategoryId"
+                                                (onChange)="this.ts.subcategoryNgModelChange($event.value, rowIndex)"
+                                                [required]="true" [name]="'subcategory' + rowIndex"
+                                                class="w-full"
+                                                appendTo="body" [options]="this.ts.subcategories[rowIndex]" optionValue="id" optionLabel="name"></p-dropdown>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 251px">
+                                        <p-dropdown
+                                                [(ngModel)]="modelIn(row).materialId"
+                                                [disabled]="this.ts.disableDropDownHelper(rowIndex)"
+                                                [loading]="this.loaderService.loading[this.ts.materialLoaderId[rowIndex]]"
+                                                [options]="this.ts.materials[rowIndex]"
+                                                (onChange)="this.ts.materialNgModelChange($event.value, rowIndex)"
+                                                [required]="true" [name]="'material-' + rowIndex" placeholder="Seleccione el material" class="w-full" appendTo="body" optionValue="id" optionLabel="name"></p-dropdown>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 251px">
+                                        <p-dropdown
+                                                [(ngModel)]="modelIn(row).declarationItemType"
+                                                [readonly]="this.ts.declarationItemTypes[rowIndex]?.length  === 0" [name]="'declarationItemType' + rowIndex" [options]="this.ts.declarationItemTypes[rowIndex]" [required]="true" appendTo="body" class="w-full" optionLabel="key" optionValue="value" placeholder="Seleccione el tipo"></p-dropdown>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 175px">
+                                        <input [required]="true"
+                                               [options]="{
+                                                    align: 'right',
+                                                    allowNegative: false,
+                                                    allowZero: true,
+                                                    decimal: ',',
+                                                    precision: 9,
+                                                    prefix: '',
+                                                    suffix: '',
+                                                    thousands: '',
+                                                    nullable: true,
+                                                    min: null,
+                                                    max: null,
+                                                    inputMode: NgxCurrencyInputMode.Natural
+                                               }"
+                                               currencyMask
+                                               appMaxFloatValidator
+                                               [name]="'tons' + rowIndex" placeholder="0,000000000 t"
+                                               [(ngModel)]="modelIn(row).tons" class="p-inputtext w-full" type="text"/>
+                                    </td>
+
+
+                                    <td class="font-bold" style="min-width: 175px">
+                                        <input [required]="true"
+                                               [name]="'unities' + rowIndex" placeholder="0" [(ngModel)]="modelIn(row).quantity" class="p-inputtext w-full" type="number"/>
+                                    </td>
+
+
+                                    <td class="font-bold" style="min-width: 212px">
+                                        <app-p-calendar
+                                                [required]="true"
+                                                [name]="'commercialOperationDate' + rowIndex"
+                                                appendTo="body"
+                                                dateFormat="dd/mm/yy"
+                                                [(ngModel)]="modelIn(row).businessEndDate"
+                                                [showIcon]="true"
+                                                inputId="icon">
+                                        </app-p-calendar>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 300px">
+                                        <input [required]="true" [name]="'consumer' + rowIndex" placeholder="Informe el consumidor" [(ngModel)]="modelIn(row).consumer" class="p-inputtext w-full" type="text"/>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 300px">
+                                        <input [required]="true" [name]="'industrialClassification' + rowIndex" placeholder="Informe la calificación industrial" [(ngModel)]="modelIn(row).industrialQualification" class="p-inputtext w-full" type="text"/>
+                                    </td>
+
+                                    <td>
+                                        <p-button icon="pi pi-trash" [outlined]="true" (click)="this.ts.removeRow(rowIndex)"></p-button>
+                                    </td>
+
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="footer" >
+                                <tr *ngIf="this.ts.declarationResponseDtoRef?.items?.length > 0">
+                                    <td colspan="6" class="text-right"></td>
+                                    <td>{{ this.ts.totalTons | milligrams }} t</td>
+                                    <td>{{ this.ts.totalQuantitySum > 0 ? this.ts.totalQuantitySum + ' unidades' : this.ts.totalQuantitySum + ' unidade' }}</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </ng-template>
+
+                    <ng-template #annualFinishedTemplate>
+                        <p-table *ngIf="this.ts.displayTable" [value]="this.ts.declarationResponseDtoRef.items" styleClass="mt-3" responsiveLayout="scroll">
+                            <ng-template pTemplate="header">
+                                <tr class="font-bold white-space-nowrap">
+                                    <th>Categoría</th>
+                                    <th>Subcategoría</th>
+                                    <th>Material</th>
+                                    <th>Tipo</th>
+                                    <th>Toneladas</th>
+                                    <th>Acción</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                                <tr>
+                                    <td class="font-bold" style="min-width: 168px">
+                                        <p-dropdown
+                                                [(ngModel)]="modelIn(row).category"
+                                                (onChange)="this.ts.categoryNgModelChange($event.value, rowIndex)"
+                                                [required]="true" [name]="'category-' + rowIndex" class="w-full"  appendTo="body" [options]="this.ts.categories[rowIndex]" optionValue="id" optionLabel="name"></p-dropdown>
+                                    </td>
+                                    <td class="font-bold" style="min-width: 168px">
+                                        <p-dropdown
+                                                [loading]="this.loaderService.loading[this.ts.subCategoryLoaderId[rowIndex]]"
+                                                [disabled]="this.ts.disableDropDownHelper(rowIndex)"
+                                                [(ngModel)]="modelIn(row).subcategoryId"
+                                                (onChange)="this.ts.subcategoryNgModelChange($event.value, rowIndex)"
+                                                [required]="true" [name]="'subcategory' + rowIndex"
+                                                class="w-full"
+                                                appendTo="body"
+                                                [options]="this.ts.subcategories[rowIndex]"
+                                                optionValue="id" optionLabel="name"></p-dropdown>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 168px">
+                                        <p-dropdown
+                                                (onChange)="this.ts.materialNgModelChange($event.value, rowIndex)"
+                                                [disabled]="this.ts.disableDropDownHelper(rowIndex)"
+                                                [(ngModel)]="modelIn(row).materialId"
+                                                [loading]="this.loaderService.loading[this.ts.materialLoaderId[rowIndex]]"
+                                                [name]="'material-' + rowIndex" [options]="this.ts.materials[rowIndex]" [required]="true" appendTo="body" class="w-full" optionLabel="name" optionValue="id" placeholder="Seleccione el material"></p-dropdown>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 251px">
+                                        <p-dropdown [(ngModel)]="modelIn(row).declarationItemType"
+                                                    [readonly]="this.ts.declarationItemTypes[rowIndex]?.length  === 0"
+                                                    [name]="'declarationItemType-' + rowIndex" [options]="this.ts.declarationItemTypes[rowIndex]" [required]="true" appendTo="body" class="w-full" optionLabel="key" optionValue="value" placeholder="Seleccione el material"></p-dropdown>
+                                    </td>
+
+                                    <td class="font-bold" style="min-width: 251px">
+                                        <input
+                                                [(ngModel)]="modelIn(row).tons"
+                                                [name]="'totalTonsWithoutFat-' + rowIndex" [options]="{
+                                                    align: 'right',
+                                                    allowNegative: false,
+                                                    allowZero: true,
+                                                    decimal: ',',
+                                                    precision: 9,
+                                                    prefix: '',
+                                                    suffix: '',
+                                                    thousands: '',
+                                                    nullable: true,
+                                                    min: null,
+                                                    max: null,
+                                                    inputMode: NgxCurrencyInputMode.Natural
+                                                 }" [required]="true" appMaxFloatValidator class="p-inputtext w-full"
+                                                currencyMask
+                                                placeholder="0,000000000 t" type="text"/>
+                                    </td>
+
+                                    <td>
+                                        <p-button icon="pi pi-trash" [outlined]="true" (click)="this.ts.removeRow(rowIndex)"></p-button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="footer">
+                                <tr *ngIf="this.ts.declarationResponseDtoRef?.items?.length > 0">
+                                    <td colspan="4" class="text-right"></td>
+                                    <td>{{ this.ts.totalTons | milligrams }} t</td>
+                                    <td></td>
+                                </tr>
+                            </ng-template>
+
+                        </p-table>
+                    </ng-template>
+                </div>
+
+                <div class="col-12">
+                    <button
+                            *ngIf="this.ts.declarationResponseDtoRef.items?.length === 0"
+                            icon="pi pi-plus-circle"
+                            label="Agregar embalaje"
+                            pButton
+                            pRipple
+                            type="button"
+                            iconPos="right"
+                            [loading]="this.ts?.isAddNewRowLoading"
+                            (click)="this.ts.addNewRow()"
+                            class="p-button-outlined p-button-secondary mr-2 w-full"
+                    ></button>
+
+                    <button
+                            iconPos="right"
+                            [loading]="this.ts?.isAddNewRowLoading"
+                            *ngIf="this.ts.declarationResponseDtoRef.items?.length !== 0"
+                            icon="pi pi-plus-circle"
+                            label="Agregar embalaje"
+                            pButton
+                            pRipple
+                            type="submit"
+                            class="p-button-outlined p-button-secondary mr-2 w-full"
+                    ></button>
+                </div>
+
+                <!-- Additional buttons -->
+                <div class="col-12 flex justify-content-end gap-3 ">
+                    <p-button [outlined]="true" label="Cancelar" (click)="this.ref.close(false)"></p-button>
+                    <p-button [loading]="isRegisterButtonLoading" label="Registrar" (onClick)="this.ts.save(f)" [disabled]="
+                        ts.isThereSomethingLoading ||
+                        f?.form?.invalid || this.ts.declarationResponseDtoRef.items.length === 0
+                    "></p-button>
+                </div>
+
+            </div>
+        </form>
+</app-skeleton>
+
+
+
+

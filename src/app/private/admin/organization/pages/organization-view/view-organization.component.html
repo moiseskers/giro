@@ -1,0 +1,62 @@
+<app-p-toolbar class="col-12 " styleClass="shadow-2">
+    <div class="p-toolbar-group-start">
+        <ng-container *ngIf="this.model?.status">
+            <ng-container [ngSwitch]="this.model?.status">
+                <div *ngSwitchCase="'PENDING'" class="p-button border-0 text-lg font-semibold" [ngStyle]="{'background-color': 'var(--yellow-500-t-16)' }">
+                    <span [ngStyle]="{'color': 'var(--yellow-700)' }" class="text-base">Aprobación pendiente</span>
+                </div>
+                <div *ngSwitchCase="'REFUSED'" class="p-button border-0 text-lg font-semibold" [ngStyle]="{'background-color': 'var(--red-500-t-16)', }">
+                    <span [ngStyle]="{'color': 'var(--red-500)' }" class="text-base">Rechazado</span>
+                </div>
+                <div *ngSwitchCase="'ACTIVE'" class="p-button border-0 text-lg font-semibold" [ngStyle]="{'background-color': 'rgba(119, 186, 31, 0.16)' }">
+                    <span [ngStyle]="{'color': 'var(--lima-600)' }" class="text-base">Activo</span>
+                </div>
+                <div *ngSwitchCase="'INACTIVE'" class="p-button border-0 text-lg font-semibold" [ngStyle]="{'background-color': 'var(--neutral-500-t-16)' }">
+                    <span [ngStyle]="{'color': 'var(--neutral-500)' }" class="text-base">Inactivo</span>
+                </div>
+            </ng-container>
+        </ng-container>
+    </div>
+
+    <div class="p-toolbar-group-center"></div>
+
+    <div class="p-toolbar-group-end">
+        <p-menu #menu [model]="this?.model?.statuses" [popup]="true" appendTo="body">
+            <ng-template pTemplate="item" let-item>
+                <a (click)="menuAction(item)" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                    <div>
+                        <span [class]="item.icon"></span>
+                        <span> {{ item.label }}</span>
+                    </div>
+                    <div>
+                        <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                    </div>
+                </a>
+            </ng-template>
+        </p-menu>
+
+        <app-p-button
+                [disabled]="this?.model?.statuses?.length === 0 || this?.model?.statuses?.length === null"
+                [loading]="this.loaderService.loading[this.organizationDataLoaderId]" label="Cambiar estado" (click)="menu.toggle($event)" iconPos="right" >
+            <ng-template pTemplate="icon">
+                <div class="flex">
+                    <ChevronDownIcon/>
+                </div>
+            </ng-template>
+        </app-p-button>
+    </div>
+</app-p-toolbar>
+
+<app-card [content]="content"></app-card>
+
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter">
+            <app-organization-data                       (closed)="ngInitAllChildComponents()" barTitle="Datos" *ngIf="(loaderService.loading[this.organizationDataLoaderId] | loaderHelper)" [model]="this.model" class="col-12"></app-organization-data>
+            <app-legal-representative-list               *ngIf="organizationTypes[this.model?.organizationType] !== organizationTypes?.CITY" class="col-12"></app-legal-representative-list>
+            <app-organization-user-list                  [blockedPanel]="model?.status === 'INACTIVE'" class="col-12"></app-organization-user-list>
+            <app-branches-list                           [blockedPanel]="model?.status === 'INACTIVE'" *ngIf="organizationTypes[this.model?.organizationType] !== organizationTypes?.CITY" [organization]="model" class="col-12"></app-branches-list>
+            <app-organization-document-list-container    [blockedPanel]="model?.status === 'INACTIVE'" class="col-12"></app-organization-document-list-container>
+        </div>
+    </div>
+</ng-template>

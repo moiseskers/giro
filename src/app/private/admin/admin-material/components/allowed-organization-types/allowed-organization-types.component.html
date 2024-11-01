@@ -1,0 +1,5 @@
+<ng-container [ngSwitch]="status">
+    <p-tag class="min-height" *ngSwitchCase="AllowedOrganizationTypesEnum.PRODUCER"            [value]="statusAsString"  severity="info"></p-tag>
+    <p-tag class="min-height" *ngSwitchCase="AllowedOrganizationTypesEnum.INDUSTRIAL_CONSUMER" [value]="statusAsString"  severity="warning"  ></p-tag>
+</ng-container>
+

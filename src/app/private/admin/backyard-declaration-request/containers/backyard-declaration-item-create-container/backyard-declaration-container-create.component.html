@@ -1,0 +1,7 @@
+<app-backyard-declaration-item-table-form
+        [saveButtonLoading]="(loaderService.loading[this.loaderId] | loaderHelperV2)"
+        (filterAutocompleteEvent)="filterAutocompleteEvent($event)"
+        [declarationResponseDto]="model"
+        [organizationsFiltered]="organizationsFiltered"
+        (saveEvent)="save($event)">
+</app-backyard-declaration-item-table-form>

@@ -1,0 +1,19 @@
+<form (submit)="save()" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid">
+
+        <div class="col-12 field" *ngFor="let item of input.documents; let i = index">
+            <label class="font-semibold">{{item.name}}</label>
+            <app-giro-upload maxSize="50000000" [base64]="true" [formControlName]="item.id" accept=".pdf,.csv"></app-giro-upload>
+        </div>
+
+        <div class="col-12 w-full">
+            <p-divider></p-divider>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" (onClick)="closeEvent.emit()" label="Cancelar"></p-button>
+            <p-button [disabled]="this.form.status === 'PENDING'" [loading]="this.buttonIsLoading" label="Registrar" type="submit"></p-button>
+        </div>
+    </div>
+</form>

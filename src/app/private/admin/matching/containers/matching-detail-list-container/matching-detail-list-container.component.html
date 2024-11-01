@@ -1,0 +1,10 @@
+<app-matching-detail-list
+        [category]="category"
+        [model]="model"
+        (sortEvent)="sortEvent($event)"
+        (pageEvent)="pageEvent($event)"
+        [isLoading]="loaderService.loading[loaderId] === '1'">
+</app-matching-detail-list>
+
+
+

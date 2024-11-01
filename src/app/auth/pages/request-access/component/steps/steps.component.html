@@ -1,0 +1,9 @@
+<app-auth-basic-layout [content]="content"></app-auth-basic-layout>
+
+<ng-template #content>
+    <div class="w-full flex flex-column gap-3">
+        <app-p-steps [model]="items" [readonly]="false"></app-p-steps>
+        <router-outlet></router-outlet>
+    </div>
+</ng-template>
+

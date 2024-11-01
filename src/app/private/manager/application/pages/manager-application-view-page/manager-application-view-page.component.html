@@ -1,0 +1,43 @@
+<app-p-toolbar class="col-12 " styleClass="shadow-2">
+    <div class="p-toolbar-group-start custom-class">
+        <ng-container *ngIf="this.model?.status">
+
+            <ng-container [ngSwitch]="applicationStatus[this.model?.status]">
+
+                <app-tag-statuses>
+                    <p-tag *ngSwitchCase="applicationStatus.APPROVED" [value]="applicationStatus[this.model?.status]" severity="success"></p-tag>
+                    <p-tag *ngSwitchCase="applicationStatus.REFUSED" [value]="applicationStatus[this.model?.status]" severity="danger"></p-tag>
+                    <p-tag *ngSwitchCase="applicationStatus.PENDING" [value]="applicationStatus[this.model?.status]" severity="warning"></p-tag>
+                </app-tag-statuses>
+
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="p-toolbar-group-center"></div>
+
+    <div class="p-toolbar-group-end">
+        <app-p-button  [disabled]="!this.model?.canAppeal" label="Apelar postulación" (click)="appealOffer()"></app-p-button>
+    </div>
+</app-p-toolbar>
+
+<app-card [content]="content"></app-card>
+
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter" *ngIf="(loaderService.loading[this.loaderId] | loaderHelper)">
+            <app-general-information [model]="this.model.bidding"  class="col-12" ></app-general-information>
+            <app-process-files-list [id]="this.model.bidding.id" class="col-12"></app-process-files-list>
+            <app-manager-information [managerId]="this.model.managerId" [organizationId]="this.model.organizationId" class="col-12"></app-manager-information>
+            <app-evaluation [evaluations]="this.model.evaluations" class="col-12"></app-evaluation>
+
+            <app-manager-document-list
+                    [loaderId]="this.managerDocumentListLoaderId"
+                    (sortEvent)="managerDocumentListSort($event)"
+                    (downloadEvent)="managerDocumentListDownload($event)"
+                    (pageEvent)="managerDocumentListPage($event)"
+                    [model]="biddingDocumentInModel" [downloadLoaderId]="downloadLoaderId" class="col-12">
+            </app-manager-document-list>
+
+        </div>
+    </div>
+</ng-template>

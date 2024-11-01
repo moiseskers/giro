@@ -1,0 +1,22 @@
+<div class="flex flex-column app-gap">
+    <ng-container *ngIf="!toolbarTemplate;else toolbarTemplateRef" >
+        <p-toolbar styleClass="bg-yellow-50">
+            <div class="p-toolbar-group-start text-base font-bold" style="min-height: 40px">
+                {{aTitle}}
+            </div>
+            <div class="p-toolbar-group-center">
+            </div>
+            <div class="p-toolbar-group-end">
+                <ng-container *ngIf="displayActionButton">
+                    <p-button *ngIf="buttonLabel" [label]="buttonLabel" (click)="action()" [disabled]="displayActionButtonDisabled"></p-button>
+                </ng-container>
+            </div>
+        </p-toolbar>
+    </ng-container>
+
+    <ng-template #toolbarTemplateRef>
+        <ng-container *ngTemplateOutlet="toolbarTemplate"></ng-container>
+    </ng-template>
+
+    <ng-content></ng-content>
+</div>

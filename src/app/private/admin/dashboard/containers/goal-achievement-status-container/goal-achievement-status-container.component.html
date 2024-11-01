@@ -1,0 +1,35 @@
+<app-giro-data-view-v2>
+    <ng-template pTemplate="toolbar-content">
+        <app-date-and-action-button
+            aTitle="ESTADO DE AVANCE DE METAS GIRO"
+            [uploadButtonIsLoading]="this.loaderService.loading[this.uploadButtonLoaderId] === '1'"
+            [date]="updatedAt | date : 'dd/MM/yyyy'"
+            (uploadBase64)="uploadBase64($event)"
+        >
+        </app-date-and-action-button>
+    </ng-template>
+    <div class="grid">
+        <div class="col-6">
+            <app-skeleton [isLoading]="loaderService.loading[domiciliaryChartLoaderId] === '1'" height="508px">
+                <ng-container *ngIf="displayDomiciliaryChartContainer">
+                    <app-bar-chart
+                            (yearEvent)="domiciliaryChartYearChange($event)"
+                            [data]="domiciliaryChart" [info]="domiciliaryChartMessage" styleClass="border-solid border-1 surface-border p-5 border-round-sm"></app-bar-chart>
+                </ng-container>
+            </app-skeleton>
+        </div>
+        <div class="col-6">
+            <app-skeleton [isLoading]="loaderService.loading[noDomiciliaryChartLoaderId] === '1'" height="508px">
+                <ng-container *ngIf="displayNoDomiciliaryChartContainer">
+                    <app-bar-chart
+
+                            (yearEvent)="noDomiciliaryChartYearChange($event)"
+                            [data]="noDomiciliaryChart" [info]="noDomiciliaryChartMessage" styleClass="border-solid border-1 surface-border p-5 border-round-sm"></app-bar-chart>
+                </ng-container>
+            </app-skeleton>
+        </div>
+    </div>
+</app-giro-data-view-v2>
+
+
+

@@ -1,0 +1,29 @@
+@import '../colors_variables';
+
+$primaryLightColor: $colors-yellow-400;
+$primaryColor: $colors-yellow-500;
+$primaryDarkColor: $colors-yellow-600;
+$primaryDarkerColor: $colors-yellow-700;
+
+$primaryTextColor: #293241;
+$primaryLighterColor: rgba($primaryLightColor, 0.1);
+
+$primaryContrast: #231F20FF;
+
+$highlightBg: $colors-yellow-200;
+$highLightColor: $colors-yellow-700;
+
+$highlightTextColor: $primaryDarkerColor;
+$paginatorElementBg: transparent !important;
+$inputHoverBorderColor: $colors-yellow-500;
+
+$buttonHoverBg: $colors-yellow-400;
+
+$secondaryButtonBg: $colors-neutral-500;
+$linkButtonColor: $colors-neutral-500;
+$outlinedButtonTextColor: $primaryTextColor;
+
+@import '../_variables';
+@import '../../theme-base/_components';
+@import '../_extensions';
+

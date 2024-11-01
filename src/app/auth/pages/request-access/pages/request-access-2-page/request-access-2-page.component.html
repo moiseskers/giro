@@ -1,0 +1,42 @@
+<form (ngSubmit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" class="grid grid-nogutter bg-no-repeat bg-cover fadein  animation-duration-500 " focusFirstInvalidField>
+
+    <div class="w-full">
+        <div class="grid formgrid">
+
+            <div class="col-12 field">
+                <label appRedAsterisk for="organizationAddress">Dirección *</label>
+                <input class="p-inputtext w-full" formControlName="organizationAddress" id="organizationAddress" name="organizationAddress" placeholder="Av las Condes 12345, of, 20, Las Condes, Santiago." type="text"/>
+                <small app-form-error formControlName="organizationAddress"></small>
+            </div>
+            <div class="col-12 field">
+                <label appRedAsterisk for="managerName">Encargado licitación *</label>
+                <input class="p-inputtext w-full" formControlName="managerName" id="managerName" name="managerName" placeholder="Juana Perez Ramirez" type="text"/>
+                <small app-form-error formControlName="managerName"></small>
+            </div>
+            <div class="col-12 field">
+                <label appRedAsterisk for="legalRepresentativeName">Representante Legal *</label>
+                <input
+                        class="p-inputtext w-full"
+                        formControlName="legalRepresentativeName" id="legalRepresentativeName" name="legalRepresentativeName" placeholder="María Pereira Díaz" type="text"/>
+                <small app-form-error formControlName="legalRepresentativeName"></small>
+            </div>
+            <div class="col-12 field">
+                <label appRedAsterisk for="legalRepresentativeTaxIdentificationNumber">RUT del representante legal *</label>
+                <input class="p-inputtext w-full" mask="AA.AAA.AAA-A" appToUpperCase formControlName="legalRepresentativeTaxIdentificationNumber" id="legalRepresentativeTaxIdentificationNumber" name="legalRepresentativeTaxIdentificationNumber" placeholder="00.000.000-0" type="text"/>
+                <small [customErrorMessages]="[{ errorIdentifier: 'mask', message: 'RUT no es válido.' }]" app-form-error formControlName="legalRepresentativeTaxIdentificationNumber"></small>
+            </div>
+        </div>
+
+        <p-divider></p-divider>
+
+        <div class="flex gap-2 justify-content-end">
+            <app-p-button materialIcon="arrow_back" (click)="previous()"  [outlined]="true" iconPos="left" label="Volver" severity="secondary"></app-p-button>
+            <app-p-button
+                    type="submit"
+                    [disabled]="this.form.status == 'PENDING'" [loading]="this.form.status == 'PENDING'"
+                    materialIcon="arrow_forward"  iconPos="right" label="Enviar" ></app-p-button>
+
+        </div>
+
+    </div>
+</form>

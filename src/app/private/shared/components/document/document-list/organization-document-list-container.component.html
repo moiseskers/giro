@@ -1,0 +1,40 @@
+<app-giro-data-view [content]="content"
+                    aTitle="Documentos"
+                    buttonLabel="Nuevo"
+                    class="col-12"
+                    [displayActionButton]="!blockedPanel && organizationViewByRoleHelper"
+                    (actionEmitter)="new()">
+</app-giro-data-view>
+
+<ng-template #content>
+
+    <p-blockUI [target]="pnl" [blocked]="blockedPanel && model?.items.length !== 0"></p-blockUI>
+
+    <p-table  #pnl [tableStyle]="{ 'min-width': '50rem' }" [value]="model?.items" styleClass="p-datatable-striped"  [lazy]="true" >
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Documento</th>
+                <th class="text-right"> {{buttonCount > 1  ? 'Acciones' : 'Acción'}}</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model)?.name ?? '-' }}</td>
+                <td class="text-right white-space-nowrap" #actionsTd>
+                    <p-button [disabled]="loaderService.loading[this.downloadLoaderId]" class="mr-2" icon="pi pi-download" (onClick)="download(modelIn(model)?.id)"></p-button>
+                    <p-button *ngIf="[Role.ADMIN]  | hasAnyRole" [outlined]="true" icon="pi pi-trash" severity="secondary" (onClick)="delete(modelIn(model)?.id)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <app-paginator
+            (pageFunction)="page($event)"
+            *ngIf="model?.meta?.totalItems > 10 && !blockedPanel"
+            [pageParamName]="'pageIndex'"
+            [pageSizeParamName]="'itemsPerPage'"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            [totalElements]="model?.meta?.totalItems">
+    </app-paginator>
+
+</ng-template>

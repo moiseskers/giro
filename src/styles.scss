@@ -1,0 +1,274 @@
+/* You can add global styles to this file, and also import other style files */
+$gutter: 1rem; //for primeflex grid system
+
+/* Layout */
+@import 'assets/layout/styles/layout/layout.scss';
+
+
+/* PrimeNG */
+@import '../node_modules/primeng/resources/primeng.min.css';
+@import '../node_modules/primeflex/primeflex.scss';
+@import '../node_modules/primeicons/primeicons.css';
+
+
+/* Quill Text Editor for p-editor */
+@import '../node_modules/quill/dist/quill.core.css';
+@import '../node_modules/quill/dist/quill.snow.css';
+
+
+/* Demos */
+@import 'assets/demo/styles/flags/flags.css';
+@import 'assets/demo/styles/badges.scss';
+@import 'assets/demo/styles/code.scss';
+
+//https://www.npmjs.com/package/material-symbols
+@import 'material-symbols';
+
+.app-gap {
+  gap: 1.3rem !important;
+}
+
+/* fix p-splitbutton styles- */
+.p-splitbutton .p-splitbutton-defaultbutton {
+  flex: 1 1 auto;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-right: 0 none;
+}
+
+.p-splitbutton-menubutton {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.field {
+  margin-bottom: 2rem !important;
+}
+
+.text-subtle {
+  color: var(--surface-600);
+}
+
+@include generate-class($custom-properties, true, true);
+
+// lime
+.lima-950 {
+  color: var(--lima-950) !important;
+}
+.bg-lima-50 {
+  background-color: var(--lima-50) !important;
+}
+.bg-lima-100 {
+  background-color: var(--lima-100) !important;
+}
+.bg-lima-200 {
+  background-color: var(--lima-200) !important;
+}
+.bg-lima-300 {
+  background-color: var(--lima-300) !important;
+}
+.bg-lima-400 {
+  background-color: var(--lima-400) !important;
+}
+.bg-lima-500 {
+  background-color: var(--lima-500) !important;
+}
+.bg-lima-600 {
+  background-color: var(--lima-600) !important;
+}
+.bg-lima-700 {
+  background-color: var(--lima-700) !important;
+}
+.bg-lima-800 {
+  background-color: var(--lima-800) !important;
+}
+.bg-lima-900 {
+  background-color: var(--lima-900) !important;
+}
+
+.focus\:bg-lima-50:focus {
+  background-color: var(--lima-50) !important;
+}
+.focus\:bg-lima-100:focus {
+  background-color: var(--lima-100) !important;
+}
+.focus\:bg-lima-200:focus {
+  background-color: var(--lima-200) !important;
+}
+.focus\:bg-lima-300:focus {
+  background-color: var(--lima-300) !important;
+}
+.focus\:bg-lima-400:focus {
+  background-color: var(--lima-400) !important;
+}
+.focus\:bg-lima-500:focus {
+  background-color: var(--lima-500) !important;
+}
+.focus\:bg-lima-600:focus {
+  background-color: var(--lima-600) !important;
+}
+.focus\:bg-lima-700:focus {
+  background-color: var(--lima-700) !important;
+}
+.focus\:bg-lima-800:focus {
+  background-color: var(--lima-800) !important;
+}
+.focus\:bg-lima-900:focus {
+  background-color: var(--lima-900) !important;
+}
+
+.hover\:bg-lima-50:hover {
+  background-color: var(--lima-50) !important;
+}
+.hover\:bg-lima-100:hover {
+  background-color: var(--lima-100) !important;
+}
+.hover\:bg-lima-200:hover {
+  background-color: var(--lima-200) !important;
+}
+.hover\:bg-lima-300:hover {
+  background-color: var(--lima-300) !important;
+}
+.hover\:bg-lima-400:hover {
+  background-color: var(--lima-400) !important;
+}
+.hover\:bg-lima-500:hover {
+  background-color: var(--lima-500) !important;
+}
+.hover\:bg-lima-600:hover {
+  background-color: var(--lima-600) !important;
+}
+.hover\:bg-lima-700:hover {
+  background-color: var(--lima-700) !important;
+}
+.hover\:bg-lima-800:hover {
+  background-color: var(--lima-800) !important;
+}
+.hover\:bg-lima-900:hover {
+  background-color: var(--lima-900) !important;
+}
+
+.active\:bg-lima-50:active {
+  background-color: var(--lima-50) !important;
+}
+.active\:bg-lima-100:active {
+  background-color: var(--lima-100) !important;
+}
+.active\:bg-lima-200:active {
+  background-color: var(--lima-200) !important;
+}
+.active\:bg-lima-300:active {
+  background-color: var(--lima-300) !important;
+}
+.active\:bg-lima-400:active {
+  background-color: var(--lima-400) !important;
+}
+.active\:bg-lima-500:active {
+  background-color: var(--lima-500) !important;
+}
+.active\:bg-lima-600:active {
+  background-color: var(--lima-600) !important;
+}
+.active\:bg-lima-700:active {
+  background-color: var(--lima-700) !important;
+}
+.active\:bg-lima-800:active {
+  background-color: var(--lima-800) !important;
+}
+.active\:bg-lima-900:active {
+  background-color: var(--lima-900) !important;
+}
+
+input {
+  &:disabled {
+    border-color: var(--neutral-200);
+    background:  var(--neutral-50);
+    color:  var(--neutral-300);
+  }
+}
+
+input::placeholder {
+  color: var(--neutral-300); /* Change the color to your desired color */
+}
+
+.p-autocomplete-dd .p-autocomplete-dropdown {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.p-autocomplete-dd .p-autocomplete-input, .p-autocomplete-dd .p-autocomplete-multiple-container {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.p-calendar-w-btn .p-datepicker-trigger {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+//.p-calendar-w-btn .p-inputtext {
+//  border-top-left-radius: 0;
+//  border-bottom-left-radius: 0;
+//}
+
+.p-datepicker:not(.p-datepicker-inline) {
+  min-width: unset !important;
+}
+.p-inputnumber-buttons-stacked .p-button.p-inputnumber-button-up {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  padding: 0;
+  background-color: var(--surface-500);
+  border-color: var(--surface-500);
+  color: white;
+}
+
+.p-inputnumber-buttons-stacked .p-button.p-inputnumber-button-down {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-bottom-left-radius: 0;
+  padding: 0;
+  background-color: var(--surface-500);
+  border-color: var(--surface-500);
+  color: white;
+}
+
+.p-inputnumber-buttons-stacked .p-inputnumber-input {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.border-left-0 {
+  border-left: none;
+}
+
+.border-right-0 {
+  border-right: none;
+}
+
+.border-top-0 {
+  border-top: none;
+}
+
+.border-bottom-0 {
+  border-bottom: none;
+}
+
+.p-disabled-outlined {
+    opacity: 0.6;
+    background-color: var(--surface-100);
+    color: var(--surface-400);
+    border-color: var(--surface-300);
+    border-radius: 5px;
+
+  cursor: default !important;
+  pointer-events: none;
+}
+
+.material-symbols-outlined {
+
+
+  font-size: 20px;
+
+}

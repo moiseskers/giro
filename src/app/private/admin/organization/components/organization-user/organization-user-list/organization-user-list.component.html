@@ -1,0 +1,83 @@
+<app-giro-data-view [content]="content"
+                    aTitle="Usuarios"
+                    buttonLabel="Nuevo"
+                    class="col-12"
+                    [displayActionButton]="!blockedPanel && organizationViewByRoleHelper"
+                    (actionEmitter)="new()">
+</app-giro-data-view>
+
+<ng-template #content>
+
+    <p-blockUI [target]="pnl" [blocked]="blockedPanel && model?.items.length !== 0">
+    </p-blockUI>
+
+    <p-table #pnl [lazy]="true"  [tableStyle]="{ 'min-width': '50rem' }" [value]="model?.items" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Rol</th>
+                <th>Estado</th>
+                <th class="text-right" *ngIf="organizationViewByRoleHelper">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model)?.name ?? '-' }}</td>
+                <td>{{ modelIn(model)?.email ?? '-' }}</td>
+                <td>{{ modelIn(model)?.phone ?? '-' }}</td>
+                <td>{{ modelIn(model)?.responsibility ?? '-'}}</td>
+                <td>
+                    <app-organization-statuses [status]="modelIn(model)?.status"></app-organization-statuses>
+                </td>
+
+                <td class="text-right white-space-nowrap" *ngIf="organizationViewByRoleHelper">
+
+                <p-button [disabled]="loaderService.loading[this.loaderUserServiceGetById]" class="mr-2" icon="pi pi-pencil" (onClick)="edit(modelIn(model)?.id)"></p-button>
+
+                <p-menu [model]="items" #menu  [popup]="true" appendTo="body">
+                    <ng-template pTemplate="item" let-item>
+                        <a
+                                [id]="modelIn(model).id"
+                                *ngIf="item.label === 'Enviar nuevamente' &&  modelIn(model).status === 'PENDING'"
+                                [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                            <div>
+                                <span [class]="item.icon"></span>
+                                <span> {{ item.label }}</span>
+                            </div>
+                            <div>
+                                <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                            </div>
+                        </a>
+
+                        <a
+                                [id]="modelIn(model).id"
+                                *ngIf="item.label === 'Borrar'"
+                                [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                            <div>
+                                <span [class]="item.icon"></span>
+                                <span> {{ item.label }}</span>
+                            </div>
+                            <div>
+                                <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                            </div>
+                        </a>
+                    </ng-template>
+                </p-menu>
+                <button pButton icon="pi pi-ellipsis-h" severity="secondary" [outlined]="true" (click)="menu.toggle($event)"  ></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <app-paginator
+            (pageFunction)="page($event)"
+            *ngIf="model?.meta?.totalItems > 10 && !blockedPanel"
+            [pageParamName]="'pageIndex'"
+            [pageSizeParamName]="'itemsPerPage'"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            [totalElements]="model?.meta?.totalItems">
+    </app-paginator>
+
+</ng-template>

@@ -1,0 +1,27 @@
+<app-default-column-separator-grid [content]="content"></app-default-column-separator-grid>
+
+<ng-template #cardBody>
+    <app-declaration-request-list (actionEvent)="actionEvent($event)" [totalTons]="model?.meta?.totalTons" [loaderId]="loaderId" [model]="model?.items" (viewEvent)="view($event)"></app-declaration-request-list>
+    <app-paginator (pageFunction)="page($event)" [pageParamName]="'pageIndex'" [pageSizeParamName]="'itemsPerPage'" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+</ng-template>
+
+<ng-template #content>
+    <app-filter
+            (clearFilterEvent)="clearFilterEvent()"
+            [addButtonLoading]="loaderService.loading[this.saveLoaderId]"
+            addButtonTitle="Solicitar declaración"
+            (actionButtonEvent)="actionButtonEvent()"
+            *ngIf="(loaderService.loading[this.filerLoaderId] | loaderHelper)"
+            (filterEvent)="filterProcess($event)"
+            (sortEvent)="sort($event)"
+            [filters]="filters"
+            [table]="massListComponent?.table"></app-filter>
+    <app-card [content]="cardBody"></app-card>
+</ng-template>
+
+
+
+
+
+
+

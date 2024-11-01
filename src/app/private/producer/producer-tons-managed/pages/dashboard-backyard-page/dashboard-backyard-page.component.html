@@ -1,0 +1,29 @@
+<div class="grid app-gap grid-nogutter">
+    <app-p-toolbar class="col-12" styleClass="shadow-2">
+        <div class="p-toolbar-group-start custom-class"></div>
+        <div class="p-toolbar-group-center"></div>
+        <div class="p-toolbar-group-end">
+            <p-button
+                (click)="download()"
+                [loading]="loaderService.loading[loaderId] === '1'"
+                label="Descargar"
+                pRipple
+            ></p-button>
+        </div>
+    </app-p-toolbar>
+    <app-card [content]="content" class="col-12"></app-card>
+</div>
+
+<ng-template #content>
+    <div class="grid gap-3">
+        <div class="col-12">
+            <app-management-backyard-container
+                [producerId]="selectedProducerId"
+                *ngIf="displayManagementBackyardContainer"
+                [organizationId]="organizationId"
+                [hasSelectedOrganization]="hasSelectedOrganization"
+            >
+            </app-management-backyard-container>
+        </div>
+    </div>
+</ng-template>

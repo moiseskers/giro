@@ -1,0 +1,27 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" >
+    <div class="flex justify-content-between">
+        <div class="w-9">Descarga aquí el modelo de declaración de confidencialidad</div>
+        <p-button
+            class="ml-auto mt-1"
+            label="Descargar"
+            severity="secondary"
+            [outlined]="true"
+            icon="pi pi-download"
+            iconPos="right"
+            (click)="downloadTemplate()"
+            [loading]="loaderService.loading['massDeclarationLoader']"
+        ></p-button>
+    </div>
+    <div class="col-12">
+        <label>Carga Masiva <span class="p-error">*</span></label>
+        <app-giro-upload
+            [base64]="true"
+            accept=".pdf,.csv"
+            formControlName="file"
+        ></app-giro-upload>
+    </div>
+    <div class="col-12 field flex justify-content-end gap-3">
+        <p-button [outlined]="true" (onClick)="closeEvent.emit()" label="Cancelar"></p-button>
+        <p-button [disabled]="this.form.status === 'PENDING'" [loading]="this.buttonIsLoading" label="Registrar" type="submit"></p-button>
+    </div>
+</form>

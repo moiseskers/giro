@@ -1,0 +1,9 @@
+<app-submit-offer-form
+        [organizationId]="this.organizationId"
+        [input]="this.model"
+        *ngIf="!loaderService.loading[this.getApplicationsAttachmentsLoaderId]"
+        (saveEvent)="save($event)"
+       [buttonIsLoading]="this.loaderService.loading[this.serviceSaveLoaderId]" (closeEvent)="ref.close()">
+</app-submit-offer-form>
+
+

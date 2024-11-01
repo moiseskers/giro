@@ -1,0 +1,10 @@
+export type MatchingStatus =
+    | 'PENDING'
+    | 'GETTING_ORDERS'
+    | 'ORDERS_COMPLETED'
+    | 'GETTING_INVOICES'
+    | 'INVOICES_COMPLETED'
+    | 'IN_MATCHING'
+    | 'MATCHING_COMPLETED'
+    | 'GENERATING_ATTACHMENT'
+    | 'COMPLETED';

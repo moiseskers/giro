@@ -1,0 +1,141 @@
+<form (ngSubmit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid gap-3">
+
+        <ng-container *ngIf="!isEditing">
+            <div class="col-12 field">
+                <label appRedAsterisk for="organizationType">Tipo de entidad *</label>
+                <p-dropdown [autofocus]="true" (onChange)="organizationTypeOnChange($event)" [options]="organizationType" class="w-full" formControlName="organizationType" id="organizationType" optionLabel="key" optionValue="value" styleClass="w-full"></p-dropdown>
+                <small app-form-error formControlName="organizationType"></small>
+            </div>
+
+            <div class="col-12 w-full my-2">
+                <p-divider></p-divider>
+            </div>
+        </ng-container>
+
+        <ng-container *ngIf="this.form.controls['organizationType']?.value !== 'CITY'">
+            <div class="col-12 field">
+                <label  appRedAsterisk for="businessName">Razón social *</label>
+                <input  class="p-inputtext w-full" formControlName="businessName" id="businessName" name="businessName" type="text" placeholder="Razón social (Ej: Salmones S.A)"/>
+                <small app-form-error formControlName="businessName"></small>
+            </div>
+
+            <div class="col-12 field">
+                <label appRedAsterisk for="tradeName">Nombre de fantasía *</label>
+                <input class="p-inputtext w-full" formControlName="tradeName" id="tradeName" name="tradeName" type="text" placeholder="Nombre de fantasía (Ej: Salmones)"/>
+                <small app-form-error formControlName="tradeName"></small>
+            </div>
+
+            <div class="col-12 field">
+                <div class="flex flex-column">
+                    <label appRedAsterisk class="mb-1" for="taxIdentificationNumber">RUT *</label>
+                    <span class="p-input-icon-right">
+                    <i class="pi pi-spin pi-spinner" *ngIf="form.status == 'PENDING'"></i>
+                    <input mask="AA.AAA.AAA-A" appToUpperCase placeholder="000.000.000" class="p-inputtext w-full" formControlName="taxIdentificationNumber" id="taxIdentificationNumber" name="taxIdentificationNumber" type="text"/>
+                    </span>
+                    <small [customErrorMessages]="[{ errorIdentifier: 'mask', message: 'RUT no es válido.' }, { errorIdentifier: 'identityAlreadyExists', message: 'RUT ya Existe!' }]" app-form-error formControlName="taxIdentificationNumber"></small>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container [ngSwitch]="this.form.controls['organizationType']?.value">
+            <ng-container *ngSwitchCase="'MANAGER'">
+                <div class="col-12 field">
+                    <label appRedAsterisk for="managerTypes">Tipo de gestor *</label>
+                    <p-multiSelect
+                            placeholder="Seleccione los tipos de gestor"
+                            [filter]="false" [options]="managerTypes" class="w-full" formControlName="managerTypes" id="managerTypes" optionLabel="key" optionValue="value" styleClass="w-full"></p-multiSelect>
+                    <small app-form-error formControlName="managerTypes"></small>
+                </div>
+
+                <div class="col-12 field">
+                    <label appRedAsterisk for="bidManager">Encargado licitación *</label>
+                    <input class="p-inputtext w-full" formControlName="bidManager" id="bidManager" name="bidManager" type="text" placeholder="Informe el encargado de licitación"/>
+                    <small app-form-error formControlName="bidManager"></small>
+                </div>
+
+                <div class="col-12 field">
+                    <label appRedAsterisk for="hiringStatus">Estado de contratación *</label>
+                    <p-dropdown [options]="hiringStatuses" class="w-full" formControlName="hiringStatus" id="hiringStatus" optionLabel="key" optionValue="value" styleClass="w-full"></p-dropdown>
+                    <small app-form-error formControlName="hiringStatus"></small>
+                </div>
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'PRODUCER'">
+                <div class="col-12 field">
+                    <label appRedAsterisk for="producerType">Categoría del productor *</label>
+                    <p-dropdown [options]="producerTypes" class="w-full" formControlName="producerType" id="producerType" optionLabel="key" optionValue="value" styleClass="w-full"></p-dropdown>
+                    <small app-form-error formControlName="producerType"></small>
+                </div>
+
+                <div class="col-12 field">
+                    <label appRedAsterisk for="sector">Rubro *</label>
+                    <input class="p-inputtext w-full" formControlName="sector" id="sector" name="sector" type="text"/>
+                    <small app-form-error formControlName="sector"></small>
+                </div>
+
+                <div class="col-12 field">
+                    <label appRedAsterisk for="partnerType">Tipo de socio *</label>
+                    <p-dropdown
+                        [filter]="false"
+                        [options]="partnerType"
+                        class="w-full"
+                        formControlName="partnerType" id="partnerType" optionLabel="key" optionValue="value" styleClass="w-full"></p-dropdown>
+                    <small app-form-error formControlName="partnerType"></small>
+                </div>
+
+
+                <div class="col-12 field">
+                    <label appRedAsterisk for="partnerType">Consumidor industrial *</label>
+                    <p-dropdown
+                            [filter]="false"
+                            [options]="[{key: 'Sí', value: true}, {key: 'No', value: false}]"
+                            class="w-full"
+                            formControlName="producerIsIndustrialConsumer" id="producerIsIndustrialConsumer" optionLabel="key" optionValue="value" styleClass="w-full"></p-dropdown>
+                    <small app-form-error formControlName="producerIsIndustrialConsumer"></small>
+                </div>
+
+
+            </ng-container>
+
+            <ng-container *ngSwitchCase="'CITY'">
+
+                <div class="col-12 field">
+                    <label appRedAsterisk for="businessName1">Nombre municipio *</label>
+                    <input class="p-inputtext w-full" formControlName="businessName" id="businessName1" name="businessName" type="text" placeholder="Informe el nombre del municipio"/>
+                    <small app-form-error formControlName="businessName"></small>
+                </div>
+
+                <div class="col-12 field">
+                    <div class="flex flex-column">
+                        <label appRedAsterisk class="mb-1" for="taxIdentificationNumber1">RUT *</label>
+                        <span class="p-input-icon-right">
+                    <i class="pi pi-spin pi-spinner" *ngIf="form.status == 'PENDING'"></i>
+                    <input mask="AA.AAA.AAA-A" appToUpperCase class="p-inputtext w-full" formControlName="taxIdentificationNumber" id="taxIdentificationNumber1" name="taxIdentificationNumber" type="text" placeholder="000.000.000"/>
+                    </span>
+                        <small [customErrorMessages]="{ errorIdentifier: 'identityAlreadyExists', message: 'RUT ya Existe!' }"  app-form-error formControlName="taxIdentificationNumber"></small>
+                    </div>
+                </div>
+
+            </ng-container>
+
+        </ng-container>
+
+        <!-- Document upload field -->
+        <div class="col-12 field" *ngIf="!isEditing">
+            <label>Documentos</label>
+            <app-giro-upload formControlName="documents" [base64]="true" accept=".pdf,.csv"></app-giro-upload>
+        </div>
+
+        <div class="col-12 w-full">
+            <p-divider></p-divider>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" label="Cancelar" (click)="cancel.emit()"  ></p-button>
+            <p-button label="Registrar" type="submit" [disabled]="this.form.status === 'PENDING'" [loading]="this.buttonIsLoading"></p-button>
+        </div>
+    </div>
+</form>
+

@@ -1,0 +1,38 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid gap-3">
+        <div class="col-12 field">
+            <label>Documentos</label>
+            <app-giro-upload maxSize="50000000"
+                             [multiple]="multiple"
+                             [base64]="true"
+                             formControlName="file"
+                             accept=".pdf,.csv">
+            </app-giro-upload>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsteriskV2 for="allowedOrganizationTypes">Remitientes</label>
+
+            <app-multiselect-checkbox
+                    id="allowedOrganizationTypes"
+                    formControlName="allowedOrganizationTypes"
+                    [options]="options"
+                    optionLabel="label"
+                    optionValue="key">
+            </app-multiselect-checkbox>
+
+            <small app-form-error
+                   formControlName="allowedOrganizationTypes"></small>
+        </div>
+
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" (onClick)="cancelEvent.emit()" label="Cancelar"></p-button>
+            <p-button [disabled]="
+
+            this.form.status === 'PENDING'
+            || !this.form['controls']['file'].value?.length"
+                      [loading]="this.buttonIsLoading" label="Registrar" type="submit"></p-button>
+        </div>
+    </div>
+</form>
+

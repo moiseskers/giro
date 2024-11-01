@@ -1,0 +1,18 @@
+<app-giro-data-view [content]="content" aTitle="Datos del matching" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <app-skeleton [isLoading]="isLoading" height="397px">
+        <div class="grid py-0 px-3">
+            <app-view-data [value]="model?.code" class="col-12 lg:col-4" key="ID de matching"></app-view-data>
+            <app-view-data [value]="model?.qtyOrganizations > 1 ? model?.qtyOrganizations + ' productores' : model?.qtyOrganizations + ' productor'" class="col-12 lg:col-4" key="Productores"></app-view-data>
+            <app-view-data [value]="model?.qtyAssociations + ' facturas'" class="col-12 lg:col-4" key="Facturas"></app-view-data>
+            <app-view-data [value]="CategoryTypeEnum[model?.category]" class="col-12 lg:col-4" key="Categoría"></app-view-data>
+            <app-view-data [value]="model?.subcategory" class="col-12 lg:col-4" key="Subcategoría"></app-view-data>
+<!--            <app-view-data [value]="model?.material" class="col-12 lg:col-4" key="Material"></app-view-data>-->
+            <app-view-data [value]="model?.matchingBeginAt | date : 'dd/MM/yyyy'" class="col-12 lg:col-4" key="Fecha de matching"></app-view-data>
+            <app-view-data [value]="model?.tonsGoal | milligrams| addSymbol:'t'" class="col-12 lg:col-4" key="Meta"></app-view-data>
+            <app-view-data [value]="model?.complianceYear" class="col-12 lg:col-4" key="Año de la meta"></app-view-data>
+            <app-view-data [value]="model?.tonsAcquired | milligrams | addSymbol:'t'" class="col-12 lg:col-4" key="Toneladas compensadas"></app-view-data>
+        </div>
+    </app-skeleton>
+</ng-template>

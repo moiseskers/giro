@@ -1,0 +1,54 @@
+<app-default-column-separator-grid [content]="content"></app-default-column-separator-grid>
+
+<ng-template #cardBody>
+    <p-table #table [loading]="this.loaderService.loading[biddingLoaderId]" [value]="model?.items"  [lazy]="true" >
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID de inscripción</th>
+                <th>Gestor</th>
+                <th pSortableColumn="applicationDate">Fecha de inscripción <p-sortIcon field="applicationDate"></p-sortIcon></th>
+                <th>Estado</th>
+                <th class="text-right">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model).code }}</td>
+                <td>{{ modelIn(model).manager?.name }}</td>
+                <td>{{ modelIn(model).applicationDate | date:'dd/MM/yyyy' }}</td>
+                <td>
+                    <app-application-statuses [status]="modelIn(model).status"></app-application-statuses>
+                </td>
+                <td class="text-right white-space-nowrap">
+                    <p-button class="mr-2" icon="pi pi-search" (click)="view(modelIn(model))"></p-button>
+                    <p-menu #menu [model]="modelIn(model)?.statuses" [popup]="true" appendTo="body" >
+                        <ng-template pTemplate="item" let-item>
+                            <a (click)="action(item, modelIn(model))" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                                <div>
+                                    <span [class]="item.icon"></span>
+                                    <span> {{ item.label }}</span>
+                                </div>
+                                <div>
+                                    <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                                </div>
+                            </a>
+                        </ng-template>
+                    </p-menu>
+                    <app-p-button [disabledOutlined]="modelIn(model)?.statuses?.length === 0 || modelIn(model)?.statuses?.length === null" icon="pi pi-ellipsis-h" [outlined]="true" (click)="menu.toggle($event)"></app-p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <app-paginator (pageFunction)="page($event)" [pageParamName]="'pageIndex'" [pageSizeParamName]="'itemsPerPage'" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+</ng-template>
+
+<ng-template #content>
+    <app-filter addButtonTitle="Agregar informe" (actionButtonEvent)="addDocument()" *ngIf="!loaderService.loading[this.filterLoaderId]" (filterEvent)="filterProcess($event)" (sortEvent)="sort($event)" [filters]="filters" [table]="table"></app-filter>
+    <app-card [content]="cardBody"></app-card>
+</ng-template>
+
+
+
+
+

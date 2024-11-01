@@ -1,0 +1,13 @@
+.app-card-header {
+  display: flex;
+  justify-content: space-between;
+
+  h6 {
+    margin-bottom: 2px;
+  }
+
+  .subtitle {
+    font-weight: 600;
+    color: var(--text-color-secondary);
+  }
+}

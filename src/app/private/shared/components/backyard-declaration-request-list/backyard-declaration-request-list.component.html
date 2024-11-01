@@ -1,0 +1,56 @@
+<ng-container>
+
+    <p-table #table [loading]="loading" [value]="model?.items"  [lazy]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID de declaración </th>
+                <th>Identificación (ID)</th>
+                <th>Mes declarado</th>
+
+                <th pSortableColumn="declarationRequest.endDate">Fecha final <p-sortIcon field="declarationRequest.endDate"></p-sortIcon></th>
+                <th pSortableColumn="declarationRequest.declaredMonthYear">Fecha de declaración  <p-sortIcon field="declarationRequest.declaredMonthYear"></p-sortIcon></th>
+
+                <th pSortableColumn="totalTons">Peso total <p-sortIcon field="totalTons"></p-sortIcon></th>
+                <th>Estado</th>
+                <th class="text-right"> Acción </th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model).code }}</td>
+                <td>{{ modelIn(model)?.branch?.code }}</td>
+                <td *ngIf="DeclarationRequestRecurrence[modelIn(model).declarationRequest?.recurrence] === DeclarationRequestRecurrence.MONTHLY;else annualTemplate">{{ (modelIn(model).declarationRequest.declaredMonthYear | date :'MMMM yyyy') | titlecase }}</td>
+                <ng-template #annualTemplate>
+                    <td>
+                        {{ modelIn(model).declarationRequest.declaredMonthYear | date:'yyyy' }}
+                    </td>
+                </ng-template>
+                <td>{{ modelIn(model).declarationRequest.endDate | date:'dd/MM/yyyy' }}</td>
+
+                <td>
+                    {{ modelIn(model).declarationDate | date:'dd/MM/yyyy' | checkEmpty:'--/--/----' }}
+                </td>
+
+                <td class="white-space-nowrap">   {{ modelIn(model).totalTons | milligrams }} t
+
+                <td>
+                    <app-declaration-statuses [status]="DeclarationStatus[modelIn(model).status]"></app-declaration-statuses>
+                </td>
+
+                <td class="text-right white-space-nowrap">
+                    <p-button class="mr-2" icon="pi pi-search" (click)="view(modelIn(model).id)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="5" class="text-right"></td>
+                <td class="white-space-nowrap"> {{totalTons}} </td>
+                <td></td>
+                <td></td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-paginator (pageFunction)="page($event)"    [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+</ng-container>

@@ -1,0 +1,18 @@
+<router-outlet></router-outlet>
+<p-confirmDialog></p-confirmDialog>
+<app-p-toast [isHtml]="true"></app-p-toast>
+<ngx-ui-loader [bgsTemplate]="backgroundSpinner"
+               [fgsColor]="primaryColor"
+               [pbColor]="primaryColor"
+               [pbThickness]="1"
+               fgsType="ball-scale-multiple"></ngx-ui-loader>
+
+<ng-template #foregroundSpinner>
+    <!-- Your awesome foreground spinner defined here -->
+</ng-template>
+
+<ng-template #backgroundSpinner>
+    <!-- Your awesome background spinner defined here -->
+</ng-template>
+
+

@@ -1,0 +1,8 @@
+<app-declaration-table-form
+        [producerType]="organization?.producerType"
+        [isRegisterButtonLoading]="loaderService.loading[loaderId]"
+        [declarationTableFormType]="declarationTableFormType"
+        [declarationResponseDto]="model"
+        [isEditing]="true"
+        (saveEvent)="save($event)">
+</app-declaration-table-form>

@@ -1,0 +1,56 @@
+<app-giro-data-view [content]="content" aTitle="Detalle de la factura" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <p-table [lazy]="true" [loading]="isLoading" #table [tableStyle]="{ 'min-width': '50rem' }" [value]="model?.items" styleClass="p-datatable-striped" (onSort)="sort($event)">
+        <ng-template pTemplate="header">
+            <tr>
+                <th> Código   </th>
+                <th> Descripción   </th>
+                <th> Subcategoría   </th>
+                <th> Material   </th>
+                <th> Año de cumplimiento   </th>
+                <th> Cantidad (kg)</th>
+                <th> Precio   </th>
+                <th> IVA   </th>
+                <th> IVA retenido   </th>
+                <th> Valor total   </th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr class="white-space-nowrap">
+                <td>{{ modelIn(model)?.code ?? '-' }}</td>
+                <td>{{ modelIn(model)?.description ?? '-' }}</td>
+                <td>{{ modelIn(model)?.subcategory ?? '-' }}</td>
+                <td>{{ modelIn(model)?.material }}</td>
+                <td>{{ modelIn(model)?.complianceYear  | date: 'yyyy'  }}</td>
+                <td>{{ (modelIn(model)?.quantity |  number:'1.0-2' ) ?? '-' }} kg</td>
+                <td>{{ modelIn(model)?.netValue | number:'1.2-2' ?? '-' }} CLP</td>
+                <td>{{ modelIn(model)?.taxes| number:'1.2-2'?? '-'  ?? '-' }} CLP</td>
+                <td>{{ modelIn(model)?.withholdingTaxes | number:'1.2-2' }} CLP</td>
+                <td>{{ modelIn(model)?.totalAmount | number:'1.2-2' }} CLP</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr class="white-space-nowrap">
+                <td colspan="5" class="text-right"></td>
+                <td>{{ quantity }}</td>
+                <td>{{ netValue }} </td>
+                <td>{{ iva }}</td>
+                <td>{{ withholdingTaxes }}</td>
+                <td>{{ totalAmount }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+

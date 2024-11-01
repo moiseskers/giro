@@ -1,0 +1,44 @@
+<app-default-column-separator-grid [content]="content"></app-default-column-separator-grid>
+
+<ng-template #cardBody>
+    <p-table #table [loading]="this.loaderService.loading[loaderId] === '1'" [value]="model?.items || []" [lazy]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID de factura</th>
+                <th pSortableColumn="createdAt" class="white-space-nowrap">Fecha de envío <p-sortIcon field="createdAt"></p-sortIcon> </th>
+                <th class="text-right">Acción</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr class="">
+                <td>{{ modelIn(model)?.code }}</td>
+                <td>{{ modelIn(model)?.createdAt  | date: 'dd/MM/yyyy'  }}</td>
+                <td class="text-right white-space-nowrap">
+                    <p-button [loading]="loaderService.loading[this.downloadLoaderId[rowIndex]] === '1'" class="mr-2" icon="pi pi-download" (onClick)="download(modelIn(model)?.id, rowIndex)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-paginator (pageFunction)="page($event)" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems">
+    </app-paginator>
+</ng-template>
+
+<ng-template #content>
+    <app-filter [table]="table" (actionButtonEvent)="actionButtonEvent()" addButtonTitle="Nueva factura" (filterEvent)="filter($event)" (sortEvent)="sort($event)" [filters]="filters"></app-filter>
+    <app-card [content]="cardBody"></app-card>
+</ng-template>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

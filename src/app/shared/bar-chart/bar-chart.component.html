@@ -1,0 +1,29 @@
+<div class="flex flex-column gap-5 h-full " [ngClass]="styleClass"  *ngIf="this.display">
+    <div class="flex justify-content-between align-items-start">
+        <div class="flex flex-column gap-3">
+            <ng-container *ngFor="let item of legendItems; let i = index">
+                <div class="flex gap-1 align-items-center" >
+                    <button
+                            [disabled]="legendItems?.length <= 1"
+                            (click)="click(i)" class="indicator border-none" pRipple [ngStyle]="{'background-color': item.fillStyle}" [id]="i"></button>
+                    <div>{{ item.text }}</div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="flex gap-2 align-items-center" >
+            <p-button
+                    *ngIf="displayBackButton"
+                    (onClick)="back()" icon="pi pi-arrow-up"  severity="contrast" />
+
+            <app-year-picker [ngModel]="year" (ngModelChange)="onYearChange($event)"  style="width: 200px"></app-year-picker>
+            <div [pTooltip]="info" tooltipPosition="bottom" *ngIf="info">
+                <svg  width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11 7H13V9H11V7ZM11 11H13V17H11V11ZM12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="#5E5E63"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+    <p-chart [type]="'bar'" [data]="data" [options]="options"/>
+</div>
+
+

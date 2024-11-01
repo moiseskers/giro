@@ -1,0 +1,60 @@
+<div class="flex flex-column gap-4">
+
+    <app-filter-with-loader
+            [isLoading]="filterIsLoading"
+            (filterEvent)="filter($event)"
+            (sortEvent)="sort($event)" [filters]="filters" [table]="table"></app-filter-with-loader>
+
+    <p-table
+            [loading]="loading"
+            [lazy]="true" #table [tableStyle]="{ 'min-width': '50rem' }" [value]="model?.items" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>ID de declaración</th>
+                <th>Razón social</th>
+                <th>RUT</th>
+
+                <th class="white-space-nowrap">
+                    Identificación (ID)
+                </th>
+
+                <th pSortableColumn="declarationDate" class="white-space-nowrap">
+                    Fecha de declaración<p-sortIcon field="declarationDate"></p-sortIcon>
+                </th>
+
+                <th pSortableColumn="totalTons" class="white-space-nowrap">Peso total
+                    <p-sortIcon field="totalTons"></p-sortIcon>
+                </th>
+                <th>Estado</th>
+                <th class="text-right">Acción</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model)?.code ?? '-' }}</td>
+                <td>{{ modelIn(model)?.producer?.businessName ?? '-' }}</td>
+                <td>{{ modelIn(model)?.producer?.taxIdentificationNumber ?? '-' }}</td>
+                <!--                // TODO get the real variable here  Identificación (ID) okay-->
+                <td>{{ modelIn(model)?.branch?.code ?? '-' }}</td>
+                <td>{{ (modelIn(model)?.createdAt | date : 'dd/MM/yyyy') ?? '--/--/----' }}</td>
+                <td class="white-space-nowrap">{{ (modelIn(model)?.totalTons || 0) | milligrams }} t</td>
+                <td>
+                    <app-declaration-statuses [status]="DeclarationStatus[modelIn(model)?.status]"> </app-declaration-statuses>
+                </td>
+                <td class="text-right">
+                    <p-button class="mr-2" icon="pi pi-search" (click)="view(modelIn(model).id)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer" >
+            <tr>
+                <td colspan="5" class="text-right"></td>
+                <td class="white-space-nowrap">{{ totalWeightSum }}   </td>
+                <td></td>
+                <td></td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-paginator (pageFunction)="page($event)" *ngIf="this.model?.meta?.totalItems > 10" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="this.model?.meta?.totalItems"></app-paginator>
+</div>

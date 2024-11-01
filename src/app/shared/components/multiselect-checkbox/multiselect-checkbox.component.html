@@ -1,0 +1,6 @@
+<div class="flex flex-column gap-1">
+    <div class="flex align-items-center gap-1" *ngFor="let item of options; let i = index">
+        <p-checkbox [(ngModel)]="checked[i]" [value]="item[optionValue]" (ngModelChange)="ngModelChange($event)"/>
+        <label class="font-normal text-sm" style="color: var(--neutral-950)">{{ item[optionLabel] }}</label>
+    </div>
+</div>

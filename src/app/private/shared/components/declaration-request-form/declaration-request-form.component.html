@@ -1,0 +1,80 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid">
+
+        <ng-container *ngIf="!isBackyard">
+            <div class="col-12 field" *ngIf="!isBackyard">
+                <label appRedAsterisk for="recurrence">Tipo *</label>
+                <p-dropdown [required]="true"
+                            styleClass="w-full" class="w-full" id="recurrence" [options]="options"
+                            optionLabel="key"
+                            optionValue="value"
+                            formControlName="recurrence"></p-dropdown>
+                <small app-form-error formControlName="recurrence"></small>
+            </div>
+
+            <div class="col-12 mb-3">
+                <p-divider></p-divider>
+            </div>
+        </ng-container>
+
+        <div class="col-12 field" *ngIf="reload">
+            <label appRedAsterisk for="declaredMonthYear">{{ DeclarationRequestRecurrence[this.form.controls.recurrence?.value] === DeclarationRequestRecurrence.MONTHLY ? 'Mês'  : 'Año' }} a declarar *</label>
+            <app-p-calendar
+                    tabindex="-1"
+                    id="declaredMonthYear"
+                    styleClass="w-full" class="w-full"
+                    inputId="declaredMonthYear"
+                    formControlName="declaredMonthYear"
+                    [dateFormat]="DeclarationRequestRecurrence[this.form.controls.recurrence?.value] === DeclarationRequestRecurrence.MONTHLY ? 'MM yy'  : 'yy'"
+                    [view]="DeclarationRequestRecurrence[this.form.controls?.recurrence?.value] === DeclarationRequestRecurrence.MONTHLY ? 'month'  : 'year'"
+                    appendTo="body"
+            >
+            </app-p-calendar>
+            <small app-form-error formControlName="declaredMonthYear"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="endDate">Fecha final *</label>
+            <app-p-calendar
+                    tabindex="-1"
+                    id="endDate"
+                    [minDate]="endDateMin"
+                    styleClass="w-full" class="w-full"
+                    inputId="endDate"
+                    formControlName="endDate"
+                    dateFormat="dd/mm/yy"
+                    appendTo="body">
+            </app-p-calendar>
+            <small app-form-error formControlName="endDate"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="organizations">
+                {{ isBackyard ? 'Consumidores industriales *' : 'Productores *'}}
+            </label>
+            <p-multiSelect
+                    tabindex="-1"
+                    [loading]="loaderService.loading[dropdownSearchLoaderId]"
+                    [options]="dropdownValueIn"
+                    [ngModel]="dropdownValue"
+                    class="w-full"
+                    styleClass="w-full"
+                    optionLabel="name"
+                    placeholder=" {{ isBackyard ? 'Seleccione los consumidores que debén declarar' : 'Seleccione los productores que debén declarar'}}  "
+                    appendTo="body"
+                    id="organizations"
+                    #producersNgModelChangeRef="ngModel"
+                    (ngModelChange)="producersValueNgModelChange($event)"
+                    [ngModelOptions]="{standalone: true}
+                "/>
+            <small app-form-error [formControl]="producersNgModelChangeRef?.control"></small>
+
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" (onClick)="cancel()" label="Cancelar"></p-button>
+            <p-button [disabled]="this.form?.status === 'PENDING' || this.form.invalid || !formValueWasChanged" label="Registrar" type="submit" [loading]="saveLoader"></p-button>
+        </div>
+    </div>
+</form>

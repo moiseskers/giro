@@ -1,0 +1,43 @@
+<div
+        *ngIf="displayPage"
+        class="col-12 lg:col-10 lg:col-offset-1 h-full flex flex-column justify-content-center">
+
+    <div class="w-full text-center my-8">
+        <img src="assets/layout/images/logo-giro-black.png" width="184.24" class="">
+    </div>
+
+    <div class="flex flex-column  justify-content-center  mb-8  ">
+
+        <div class="flex text-2xl mb-3 ">
+            <a [routerLink]="['/auth/request-access/email']"
+               routerLinkActive="active-route"
+               style="color: var(--neutral-950)"
+               class="font-semibold "
+               [queryParams]="{ activeOnly: false }"
+               [routerLinkActiveOptions]="{ paths: 'exact', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' }"
+               pRipple>
+                Pre Registro
+            </a>
+
+            <span class="material-symbols-outlined layout-menuitem-icon material-font-size align-self-center">arrow_forward_ios</span>
+
+            <a
+                    [routerLink]="['/auth/request-access/terms-of-use']"
+                    routerLinkActive="active-route"
+                    [queryParams]="{ activeOnly: false }"
+                    [routerLinkActiveOptions]="{ paths: 'exact', queryParams: 'ignored', matrixParams: 'ignored', fragment: 'ignored' }"
+                    pRipple>
+                Términos y Servicios
+            </a>
+        </div>
+
+        <ng-container>
+            <object [data]="termOfUseUrl | safe:'resourceUrl'" width="100%" height="900px" type="application/pdf"></object>
+        </ng-container>
+    </div>
+</div>
+
+
+
+
+

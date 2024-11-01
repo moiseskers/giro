@@ -1,0 +1,12 @@
+<app-giro-data-view [content]="content" aTitle="Historial de declaración" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <div class="">
+<!--        <div *ngIf="data?.items?.length > 0;else emptyContainer">-->
+            <app-backyard-declaration-history-list [data]="data"  (sortEvent)="sortEvent($event)" (pageEvent)="pageEvent($event)"  (downloadEvent)="downloadEvent($event)" > </app-backyard-declaration-history-list>
+<!--        </div>-->
+<!--        <ng-template #emptyContainer>-->
+<!--            <app-empty-image message="Aún no se ha realizado una declaración o modificación en la declaración."></app-empty-image>-->
+<!--        </ng-template>-->
+    </div>
+</ng-template>

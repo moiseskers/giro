@@ -1,0 +1,55 @@
+<app-default-column-separator-grid [content]="content"></app-default-column-separator-grid>
+
+<ng-template #cardBody>
+    <p-table #table [loading]="this.loaderService.loading[tableLoaderId]" [value]="model?.items" [lazy]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Razón social</th>
+                <th>Nombre de fantasía</th>
+                <th>RUT</th>
+                <th>Tipo de entidad</th>
+                <th>Estado</th>
+                <th class="text-right">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template let-organization pTemplate="body">
+            <tr>
+                <td>{{ modelIn(organization).businessName }}</td>
+                <td>{{ modelIn(organization).tradeName }}</td>
+                <td>{{ modelIn(organization).taxIdentificationNumber }}</td>
+                <td>{{ organizationTypes[modelIn(organization).organizationType] }}</td>
+                <td>
+                    <app-organization-statuses [status]="organization.status"></app-organization-statuses>
+                </td>
+                <td class="text-right white-space-nowrap">
+                    <p-button class="mr-2" icon="pi pi-search" (click)="view(modelIn(organization).id)"></p-button>
+                    <p-menu #menu [model]="modelIn(organization)?.statuses" [popup]="true" appendTo="body" [id]="modelIn(organization).id">
+                        <ng-template pTemplate="item" let-item>
+                            <a (click)="action(item, modelIn(organization).id)" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                                <div>
+                                    <span [class]="item.icon"></span>
+                                    <span> {{ item.label }}</span>
+                                </div>
+                                <div>
+                                    <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                                </div>
+                            </a>
+                        </ng-template>
+                    </p-menu>
+                    <button pButton [disabled]="modelIn(organization).statuses?.length === 0 || modelIn(organization).statuses?.length === null" icon="pi pi-ellipsis-h" severity="secondary" [outlined]="true" (click)="menu.toggle($event)"></button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-paginator (pageFunction)="page($event)" [pageParamName]="'pageIndex'" [pageSizeParamName]="'itemsPerPage'" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+</ng-template>
+
+<ng-template #content>
+    <app-filter addButtonTitle="Nueva entidad" (actionButtonEvent)="add()" (filterEvent)="filter($event)" (sortEvent)="sort($event)" [filters]="filters" [table]="table"></app-filter>
+    <app-card [content]="cardBody"></app-card>
+</ng-template>
+
+
+
+
+

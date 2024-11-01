@@ -1,0 +1,125 @@
+<div class="layout-topbar">
+    <div class="topbar-start">
+        <button
+                *ngIf="
+                this.layoutService.state.staticMenuDesktopInactive
+                && this.layoutService.isDesktop()"
+                (click)="onMenuButtonClick()" class="topbar-menubutton p-link p-trigger transition-duration-300" type="button">
+            <i class="pi pi-bars"></i>
+        </button>
+
+        <button
+                *ngIf="!this.layoutService.state.staticMenuMobileActive && !this.layoutService.isDesktop()"
+                (click)="onMenuButtonClick()" class="topbar-menubutton p-link p-trigger transition-duration-300" type="button">
+            <i class="pi pi-bars"></i>
+        </button>
+
+    </div>
+
+<!--    -->
+    <div class="layout-topbar-menu-section">
+        <app-sidebar></app-sidebar>
+    </div>
+    <div class="topbar-end">
+        <ul class="topbar-menu">
+            <!--            <li [class]="layoutService.isHorizontal() ? 'topbar-search hidden' : 'topbar-search hidden sm:block'">-->
+            <!--                <span class="p-input-icon-left">-->
+            <!--                    <i class="pi pi-search"></i>-->
+            <!--                    <input type="text" pInputText placeholder="Search" class="w-12rem sm:w-full" />-->
+            <!--                </span>-->
+            <!--            </li>-->
+            <!--            <li [class]="layoutService.isHorizontal() ? 'block topbar-item' : 'block sm:hidden topbar-item'">-->
+            <!--                <a [hideOnOutsideClick]="true" enterActiveClass="px-scalein" enterClass="ng-hidden" leaveActiveClass="px-fadeout" leaveToClass="ng-hidden" pRipple pStyleClass="@next">-->
+            <!--                    <i class="pi pi-search"></i>-->
+            <!--                </a>-->
+            <!--                <ul [class]="'ng-hidden topbar-menu active-topbar-menu p-3 w-15rem  z-5'" style="bottom: -5.8rem">-->
+            <!--                    <span class="p-input-icon-left w-full">-->
+            <!--                        <i class="pi pi-search"></i>-->
+            <!--                        <input class="w-full" pInputText placeholder="Search" type="text"/>-->
+            <!--                    </span>-->
+            <!--                </ul>-->
+            <!--            </li>-->
+            <li class="topbar-item">
+                <!--                <a (click)="menu.toggle($event)" [hideOnOutsideClick]="true" class="cursor-pointer" enterActiveClass="px-scalein" enterClass="ng-hidden" leaveActiveClass="px-fadeout" leaveToClass="ng-hidden" pRipple pStyleClass="@next">-->
+                <!--                    <img alt="Profile" class="border-round-xl" src="assets/demo/images/avatar/square/avatar.png"/>-->
+                <!--                </a>-->
+                <div class="flex gap-5 align-items-center mr-5">
+                    <p-dropdown appendTo="body"
+
+                                (onChange)="organizationSelectedEvent($event)"
+
+                                *ngIf="this.organizations?.length > 1" [(ngModel)]="organizationSelected" [options]="organizations"
+
+                               optionValue="id" optionLabel="businessName"></p-dropdown>
+                    <div class="flex gap-2 align-items-center">
+                        <p-avatar [label]="user?.name[0]" styleClass="mr-2 cursor-pointer" shape="circle" size="large"></p-avatar>
+                        <div class="text-lg " style="color: var(--neutral-950)">{{ user?.name }}</div>
+                        <i class="pi pi-chevron-down cursor-pointer" (click)="op.toggle($event)"></i>
+                    </div>
+                    <p-overlayPanel #op>
+                        <div class="flex justify-content-center ">
+
+                            <div class="flex flex-column align-items-center gap-4 w-15rem">
+
+                                <p-avatar [label]="user?.name[0]" styleClass="cursor-pointer" shape="circle" size="large"></p-avatar>
+
+                                <div class="flex flex-column align-items-center gap-2 text-center" style="width: 224px">
+                                    <div class="text-lg font-normal w-full" style="color: var(--neutral-950); overflow-wrap: break-word;">{{ user?.name }}</div>
+                                    <div class="text-base font-normal text-subtle w-full" style="overflow-wrap: break-word;">{{ user?.email }}</div>
+                                </div>
+
+
+                                <ng-container *ngIf="this.organizations?.length === 1">
+                                    <p-divider class="w-full" styleClass="my-0"></p-divider>
+
+                                    <div class="flex flex-column align-items-center gap-2 text-base font-normal text-subtle">
+                                        <!--                                    <div class="cursor-pointer" >Mí perfil</div>-->
+                                        <div (click)="company()" class="cursor-pointer" *ngIf="this.organizations?.length === 1">Empresa</div>
+                                    </div>
+                                </ng-container>
+
+                                <p-divider class="w-full" styleClass="my-0"></p-divider>
+                                <div class="flex gap-1 align-items-center cursor-pointer text-base font-normal text-subtle" (click)="logout()">
+                                    <i class="pi pi-sign-out"></i>
+                                    <div>Salir</div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </p-overlayPanel>
+                </div>
+
+                <!--                <p-button icon="pi pi-ellipsis-h" severity="secondary" [outlined]="true" (click)="menu.toggle($event)"  ></p-button>-->
+
+                <!--                <ul [class]="'topbar-menu active-topbar-menu p-4 w-15rem   z-5 ng-hidden'">-->
+                <!--                    <li role="menuitem" class="m-0 mb-3">-->
+                <!--                        <a href="#" class="flex align-items-center hover:text-primary-500 transition-duration-200" pStyleClass="@grandparent" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout">-->
+                <!--                            <i class="pi pi-fw pi-cog mr-2"></i>-->
+                <!--                            <span>Configuraciones</span>-->
+                <!--                        </a>-->
+                <!--                    </li>-->
+                <!--                </ul>-->
+                <!--                    <li role="menuitem" class="m-0 mb-3">-->
+                <!--                        <a href="#" class="flex align-items-center hover:text-primary-500 transition-duration-200" pStyleClass="@grandparent" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout">-->
+                <!--                            <i class="pi pi-fw pi-lock mr-2"></i>-->
+                <!--                            <span>Sair</span>-->
+                <!--                        </a>-->
+                <!--                    </li>-->
+                <!--&lt;!&ndash;                    <li role="menuitem" class="m-0">&ndash;&gt;-->
+                <!--&lt;!&ndash;                        <a href="#" class="flex align-items-center hover:text-primary-500 transition-duration-200" pStyleClass="@grandparent" enterClass="ng-hidden" enterActiveClass="px-scalein" leaveToClass="ng-hidden" leaveActiveClass="px-fadeout">&ndash;&gt;-->
+                <!--&lt;!&ndash;                            <i class="pi pi-fw pi-sign-out mr-2"></i>&ndash;&gt;-->
+                <!--&lt;!&ndash;                            <span>Logout</span>&ndash;&gt;-->
+                <!--&lt;!&ndash;                        </a>&ndash;&gt;-->
+                <!--&lt;!&ndash;                    </li>&ndash;&gt;-->
+                <!--                </ul>-->
+            </li>
+            <!--            <li class="">-->
+            <!--                <button pButton type="button" icon="pi pi-cog" class="p-button-text p-button-secondary flex-shrink-0" (click)="onConfigButtonClick()"></button>-->
+            <!--            </li>-->
+            <!--            <li class="">-->
+            <!--                <button (click)="onSidebarButtonClick()" class="p-button-text p-button-secondary flex-shrink-0" icon="pi pi-arrow-left" pButton type="button"></button>-->
+            <!--            </li>-->
+        </ul>
+    </div>
+</div>

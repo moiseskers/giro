@@ -1,0 +1,26 @@
+<p-toolbar styleClass="bg-yellow-50" >
+    <div class="p-toolbar-group-start text-base font-bold" style="min-height: 40px">
+        {{aTitle}}
+    </div>
+    <div class="p-toolbar-group-center">
+    </div>
+    <div class="p-toolbar-group-end">
+        <div class="flex gap-3" *ngIf="([Role.ADMIN] | hasAnyRole) || ([Role.PRODUCER] | hasAnyRole)">
+            <div class="flex align-items-center gap-1 text-sm text-subtle">
+                <div class="material-symbols-outlined  align-self-center" *ngIf="date">update</div>
+                <div>{{date}}</div>
+            </div>
+            <button
+                    *ngIf="[Role.ADMIN] | hasAnyRole"
+                    #fileInput
+                    [loading]="uploadButtonIsLoading"
+                    (filesChange)="upload($event)"
+                    [fileDropDisabled]="fileDropDisabled"
+                    accept=".csv"
+                    ngfSelect
+                    pButton pRipple
+                    label="Cargar datos">
+            </button>
+        </div>
+    </div>
+</p-toolbar>

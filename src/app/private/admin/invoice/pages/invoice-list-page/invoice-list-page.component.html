@@ -1,0 +1,67 @@
+<app-default-column-separator-grid [content]="content"></app-default-column-separator-grid>
+
+<ng-template #content>
+    <app-filter-with-loader [isLoading]="filerIsLoading" (actionButtonEvent)="actionButtonEvent()" [addButtonTitle]="addButtonTitle" (filterEvent)="filter($event)" (sortEvent)="sort($event)" [filters]="filters" [table]="table"></app-filter-with-loader>
+    <app-card  [content]="cardBody"></app-card>
+</ng-template>
+
+<ng-template #cardBody>
+    <p-table #table [loading]="this.loaderService.loading[loaderId] === '1'" [value]="model?.items || []" [lazy]="true">
+        <ng-template pTemplate="header">
+            <tr class="white-space-nowrap">
+                <th >ID de factura</th>
+                <th>Número de factura</th>
+                <th>Emisor</th>
+                <th>Receptor</th>
+                <th pSortableColumn="netValue" class="text-right"> Valor <p-sortIcon field="netValue"></p-sortIcon> </th>
+                <th pSortableColumn="issueDate">Fecha de emisión <p-sortIcon field="issueDate"></p-sortIcon> </th>
+                <th>Material</th>
+                <th>Estado</th>
+                <th class="text-right">Acciones</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body" let-row let-rowIndex="rowIndex">
+            <tr>
+                <td>{{ modelIn(model)?.code }}</td>
+                <td>{{ modelIn(model)?.invoiceNumber }}</td>
+                <td>{{ modelIn(model)?.issuer?.businessName }}</td>
+                <td>{{ modelIn(model)?.receiver?.businessName }}</td>
+                <td class="text-right white-space-nowrap">{{ modelIn(model)?.netValue | number:'1.2-2' }} {{ modelIn(model)?.currency }} </td>
+                <td>{{ modelIn(model)?.issueDate | date:'dd/MM/yyyy' || '--/--/----' }}</td>
+                <td>{{ modelIn(model)?.materials }}</td>
+                <td>
+                    <app-invoice-statuses [status]="InvoiceStatus[modelIn(model).status]"></app-invoice-statuses>
+                </td>
+                <td class="text-right white-space-nowrap">
+                    <p-button class="mr-2" icon="pi pi-search" (click)="view(modelIn(model).id)"></p-button>
+                    <button pButton
+                            (click)="menu.toggle($event)"
+
+                            [disabled]="modelIn(model).statuses.length === 0" icon="pi pi-ellipsis-h" severity="success" [outlined]="true" [loading]="loaderService.loading[changeStatusLoader[rowIndex]] === '1'">
+                        <p-menu #menu [model]="modelIn(model).statuses" [popup]="true" appendTo="body">
+                            <ng-template pTemplate="item" let-item>
+                                <a (click)="action(item, modelIn(model), rowIndex)" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                                    <div>
+                                        <span [class]="item.icon"></span>
+                                        <span> {{ item.label }}</span>
+                                    </div>
+                                    <div>
+                                        <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                                    </div>
+                                </a>
+                            </ng-template>
+                        </p-menu>
+                    </button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-paginator (pageFunction)="page($event)" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+</ng-template>
+
+
+
+
+
+
+

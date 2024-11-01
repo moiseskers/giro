@@ -1,0 +1,6 @@
+<ng-container [ngSwitch]="registeredManagerEvaluationStatus[status]">
+    <p-tag *ngSwitchCase="registeredManagerEvaluationStatus.REFUSED" [value]="registeredManagerEvaluationStatus[status]" severity="danger"></p-tag>
+    <p-tag *ngSwitchCase="registeredManagerEvaluationStatus.APPROVED" [value]="registeredManagerEvaluationStatus[status]" severity="success"></p-tag>
+    <p-tag *ngSwitchCase="registeredManagerEvaluationStatus.PENDING" [value]="registeredManagerEvaluationStatus[status]" severity="warning"></p-tag>
+</ng-container>
+

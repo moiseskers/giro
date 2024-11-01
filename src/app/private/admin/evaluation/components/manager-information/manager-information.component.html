@@ -1,0 +1,20 @@
+<ng-container *ngIf="loading;else loadedTemplate">
+    <p-skeleton height="338px" styleClass="mb-2"></p-skeleton>
+</ng-container>
+
+<ng-template #loadedTemplate>
+    <app-giro-data-view [content]="entityDataContent" aTitle="Informaciones del gestor" class="col-12"></app-giro-data-view>
+</ng-template>
+
+<ng-template #entityDataContent >
+    <div class="grid py-0 px-3">
+        <app-view-data class="col-12 lg:col-4" key="Tipo de entidad"      [value]="OrganizationTypes[model.organization.organizationType]"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="Razón social"         [value]="model.organization.businessName"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="Nombre de fantasía"   [value]="model.organization.tradeName"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="RUT"                  [value]="model.organization.taxIdentificationNumber"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="Tipo de gestor"       [value]="UserType[model.role]"  ></app-view-data>
+        <app-view-data class="col-12 lg:col-4" key="Encargado licitación" [value]="model.organization.bidManager"  ></app-view-data>
+        <app-view-data class="col-12"          key="Estado contratación"  [value]="HiringStatus[model.organization.hiringStatus]"  ></app-view-data>
+    </div>
+</ng-template>
+

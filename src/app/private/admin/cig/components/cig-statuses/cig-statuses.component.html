@@ -1,0 +1,5 @@
+<ng-container [ngSwitch]="status">
+    <p-tag [styleClass]="bigger ?  'min-height' : ''" *ngSwitchCase="CigStatus.ACTIVE"   [value]="statusAsString" severity="info"></p-tag>
+    <p-tag [styleClass]="bigger ?  'min-height' : ''" *ngSwitchCase="CigStatus.INACTIVE" [value]="statusAsString" ></p-tag>
+</ng-container>
+

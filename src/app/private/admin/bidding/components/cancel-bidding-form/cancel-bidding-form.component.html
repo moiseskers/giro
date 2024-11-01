@@ -1,0 +1,19 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid">
+        <div class="col-12 field">
+            <label appRedAsterisk for="description">Descripción *</label>
+            <textarea placeholder="Informe acá el motivo de la cancelación" id="description" class="w-full" rows="5" cols="30" pInputTextarea formControlName="description"></textarea>
+            <small app-form-error formControlName="description"></small>
+        </div>
+
+        <div class="col-12 w-full">
+            <p-divider></p-divider>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" (onClick)="cancel()" label="Cancelar"></p-button>
+            <p-button [disabled]="this.form.status === 'PENDING'" [loading]="this.buttonIsLoading" label="Registrar" type="submit"></p-button>
+        </div>
+    </div>
+</form>

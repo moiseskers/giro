@@ -1,0 +1,17 @@
+<app-giro-data-view [content]="content" aTitle="Datos" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <app-skeleton [isLoading]="isLoading" height="209px">
+        <div class="grid py-0 px-3">
+            <app-view-data [value]="OrganizationTypes[model?.organizationType]" class="col-12 lg:col-4" key="Tipo de entidad"></app-view-data>
+            <app-view-data [value]="model?.businessName" class="col-12 lg:col-4" key="Razón social"></app-view-data>
+            <app-view-data [value]="model?.tradeName" class="col-12 lg:col-4" key="Nombre de fantasía"></app-view-data>
+            <app-view-data [value]="model?.taxIdentificationNumber" class="col-12 lg:col-4" key="RUT"></app-view-data>
+            <app-view-data [value]="ProducerType[model?.producerType]" class="col-12 lg:col-4" key="Categoría"></app-view-data>
+            <app-view-data [value]="model?.sector" class="col-12 lg:col-4" key="Rubro"></app-view-data>
+            <app-view-data [value]="PartnerType[model?.partnerType]" class="col-12 lg:col-4" key="Tipo de socio"></app-view-data>
+            <app-view-data [value]="model?.producerIsIndustrialConsumer === true ? 'Sí' : 'No'" class="col-12 lg:col-4" key="Consumidor Industrial"></app-view-data>
+        </div>
+    </app-skeleton>
+</ng-template>
+

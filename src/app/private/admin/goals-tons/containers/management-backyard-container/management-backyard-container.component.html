@@ -1,0 +1,12 @@
+<app-giro-data-view-v2 aTitle="SUS DECLARACIONES MENSUALES: CUMPLIMENTO RESOLUCIÓN 2084">
+    <div class="grid">
+        <div class="col-12">
+            <app-skeleton [isLoading]="loaderService.loading[loaderId] === '1'" height="512px">
+                <ng-container  *ngIf="loaderService.loading[loaderId] === '2'">
+                    <app-bar-chart [data]="data1"  [yearAtual]="year"
+                    (yearEvent)="onYearChange($event)" styleClass="border-solid border-1 surface-border p-5 border-round-sm"></app-bar-chart>
+                </ng-container>
+            </app-skeleton>
+        </div>
+    </div>
+</app-giro-data-view-v2>

@@ -1,0 +1,3 @@
+<app-branch-form
+        [isEditing]="true"
+        [model]="model" (saveEvent)="save($event)" [buttonIsLoading]=" this.loaderService.loading[this.serviceUpdateLoaderId]" (closeEvent)="ref.close()"></app-branch-form>

@@ -1,0 +1,7 @@
+<ng-container *ngIf="isLoading;else loadedTemplate">
+    <p-skeleton [height]="height"></p-skeleton>
+</ng-container>
+
+<ng-template #loadedTemplate>
+    <ng-content></ng-content>
+</ng-template>

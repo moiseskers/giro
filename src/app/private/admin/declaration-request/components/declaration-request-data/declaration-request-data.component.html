@@ -1,0 +1,19 @@
+<app-giro-data-view [content]="content" aTitle="Datos de declaración" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <div class="grid py-0 px-3">
+        <app-view-data class="col-12 lg:col-4" [value]="model?.code"  key="ID DE SOLICITUD"></app-view-data>
+        <app-view-data class="col-12 lg:col-4" [value]="DeclarationRequestType[model?.recurrence]" key="TIPO"></app-view-data>
+
+        <ng-container *ngIf="DeclarationRequestType[model?.recurrence] === DeclarationRequestType.MONTHLY;else annualTemplate">
+            <app-view-data class="col-12 lg:col-4" [value]="(model?.declaredMonthYear | date:'MMMM yyyy') | titlecase" key="MES/AÑO"></app-view-data>
+        </ng-container>
+
+        <ng-template #annualTemplate>
+            <app-view-data class="col-12 lg:col-4" [value]="model?.declaredMonthYear | date:'yyyy'" key="MES/AÑO"></app-view-data>
+        </ng-template>
+
+        <app-view-data class="col-12 lg:col-4" [value]="model?.endDate | date:'dd/MM/yyyy'  "  key="FECHA FINAL"></app-view-data>
+    </div>
+</ng-template>
+

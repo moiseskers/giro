@@ -1,0 +1,36 @@
+<app-p-toolbar class="col-12 " styleClass="shadow-2">
+    <div class="p-toolbar-group-start custom-class">
+
+        <ng-container *ngIf="this.model?.status">
+            <ng-container [ngSwitch]="biddingStatusEnum[this.model?.status]">
+                <app-tag-statuses>
+                    <p-tag *ngSwitchCase="biddingStatusEnum.ACTIVATED" [value]="biddingStatusEnum[this.model?.status]" severity="info"></p-tag>
+                    <p-tag *ngSwitchCase="biddingStatusEnum.ABANDONED" [value]="biddingStatusEnum[this.model?.status]"></p-tag>
+                    <p-tag *ngSwitchCase="biddingStatusEnum.AWARDED" [value]="biddingStatusEnum[this.model?.status]" severity="success"></p-tag>
+                    <p-tag *ngSwitchCase="biddingStatusEnum.CANCELLED" [value]="biddingStatusEnum[this.model?.status]" severity="danger"></p-tag>
+                    <p-tag *ngSwitchCase="biddingStatusEnum.FINALIZED" [value]="biddingStatusEnum[this.model?.status]" severity="success"></p-tag>
+                    <p-tag *ngSwitchCase="biddingStatusEnum.OPENED" [value]="biddingStatusEnum[this.model?.status]" severity="info"></p-tag>
+                </app-tag-statuses>
+            </ng-container>
+        </ng-container>
+
+    </div>
+    <div class="p-toolbar-group-center">
+    </div>
+    <div class="p-toolbar-group-end">
+        <app-p-button [disabled]="!this.model?.canApply" [loading]="this.loaderService.loading[this.updateLoaderId]" label="Presentar oferta" (click)="submitOffer()" iconPos="right"></app-p-button>
+    </div>
+</app-p-toolbar>
+
+<app-card [content]="content"></app-card>
+
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter">
+            <p-messages *ngIf="this.model?.alreadyApplied" class="w-full" styleClass="w-full" [(value)]="messages1" [closable]="false" />
+            <app-general-information *ngIf="!loaderService.loading[this.loaderId]" [model]="this.model"  class="col-12" ></app-general-information>
+            <app-question-and-answers-form  *ngIf="this.model?.formLink && !loaderService.loading[this.loaderId]" [formLink]="this.model?.formLink" class="col-12"></app-question-and-answers-form>
+            <app-process-files-list [id]="id"  class="col-12"></app-process-files-list>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,60 @@
+<p-table #table [loading]="this.loaderService.loading[loaderId]" [value]="model" [lazy]="true">
+    <ng-template pTemplate="header">
+        <tr>
+            <th>ID de solicitud </th>
+            <th>Mes declarado</th>
+            <th pSortableColumn="endDate">Fecha final <p-sortIcon field="endDate"></p-sortIcon></th>
+<!--            <th pSortableColumn="declaredMonthYear">Fecha de declaración  <p-sortIcon field="declaredMonthYear"></p-sortIcon></th>-->
+            <th pSortableColumn="totalTons">Toneladas declaradas <p-sortIcon field="totalTons"></p-sortIcon></th>
+            <th>Estado</th>
+            <th class="text-right">Acciones</th>
+        </tr>
+    </ng-template>
+    <ng-template let-model pTemplate="body">
+        <tr>
+            <td>{{ modelIn(model).code }}</td>
+            <td *ngIf="DeclarationRequestRecurrence[modelIn(model).recurrence] === DeclarationRequestRecurrence.MONTHLY;else annualTemplate">
+                {{ modelIn(model).declaredMonthYear | date:'MMMM yyyy' | titlecase }}
+            </td>
+            <td>{{ modelIn(model).endDate | date:'dd/MM/yyyy' }}</td>
+<!--            <td>{{ modelIn(model)?.declaredMonthYear | date:'dd/MM/yyyy' }}</td>-->
+            <td>{{ modelIn(model).totalTons | milligrams }} t </td>
+            <td><app-declaration-request-statuses [status]="DeclarationRequestStatus[modelIn(model).status]"></app-declaration-request-statuses></td>
+            <td class="text-right white-space-nowrap">
+                <p-button class="mr-2" icon="pi pi-search" (click)="view(modelIn(model).id)"></p-button>
+                <p-menu #menu [model]="modelIn(model).statuses" [popup]="true" appendTo="body">
+                    <ng-template pTemplate="item" let-item>
+                        <a (click)="action(item, modelIn(model))" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                            <div>
+                                <span [class]="item.icon"></span>
+                                <span> {{ item.label }}</span>
+                            </div>
+                            <div>
+                                <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                            </div>
+                        </a>
+                    </ng-template>
+                </p-menu>
+                <button pButton icon="pi pi-ellipsis-h" severity="secondary" [outlined]="true" (click)="menu.toggle($event)"></button>
+            </td>
+
+            <ng-template #annualTemplate>
+                <td>
+                    {{ modelIn(model).declaredMonthYear | date:'yyyy' }}
+                </td>
+            </ng-template>
+
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <tr>
+            <td colspan="3" class="text-right"></td>
+            <td>{{ declaredTonsSum  }} </td>
+            <td></td>
+            <td></td>
+        </tr>
+    </ng-template>
+
+</p-table>
+

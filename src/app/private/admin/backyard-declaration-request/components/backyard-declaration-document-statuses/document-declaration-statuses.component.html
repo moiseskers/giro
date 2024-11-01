@@ -1,0 +1,6 @@
+<ng-container [ngSwitch]="status">
+    <p-tag [styleClass]=" bigger ?  'min-height' : ''" *ngSwitchCase="BackyardDeclarationDocumentStatusEnum.REFUSED"   [value]="statusAsString"  severity="danger"></p-tag>
+    <p-tag [styleClass]=" bigger ?  'min-height' : ''" *ngSwitchCase="BackyardDeclarationDocumentStatusEnum.ACTIVE" [value]="statusAsString" severity="success"  ></p-tag>
+    <p-tag [styleClass]=" bigger ?  'min-height' : ''" *ngSwitchCase="BackyardDeclarationDocumentStatusEnum.PENDING" [value]="statusAsString"  severity="warning"  ></p-tag>
+</ng-container>
+

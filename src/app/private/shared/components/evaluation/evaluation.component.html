@@ -1,0 +1,27 @@
+<app-giro-data-view [content]="content" aTitle="Evaluación" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <div class="flex flex-column gap-2">
+
+        <ng-container *ngIf="evaluations?.length;else noDataTemplate">
+            <div class="border-1 border-solid border-round surface-border p-3" *ngFor="let item of evaluations; let i = index">
+                <div class="flex flex-column gap-3">
+                    <div>Fecha de evaluación: {{ item.evaluationDate| date:'dd/MM/yyyy' || '--/--/----' }}</div>
+                    <div class="font-bold">DESCRIPCIÓN</div>
+                    <div>{{ item.refuseReason || '-' }}</div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-template #noDataTemplate>
+            <div class="border-1 border-solid border-round surface-border p-3">
+                <div class="flex flex-column gap-3">
+                    <div>Fecha de evaluación: --/--/----</div>
+                    <div class="font-bold">DESCRIPCIÓN</div>
+                    <div>-</div>
+                </div>
+            </div>
+        </ng-template>
+
+    </div>
+</ng-template>

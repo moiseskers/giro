@@ -1,0 +1,63 @@
+<form (submit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+    <div class="grid formgrid">
+        <div class="col-12 field" *ngIf="reload">
+            <label appRedAsterisk for="declaredMonthYear">Mês a declarar *</label>
+            <app-p-calendar
+                    id="declaredMonthYear"
+                    styleClass="w-full" class="w-full"
+                    inputId="declaredMonthYear"
+                    formControlName="declaredMonthYear"
+                    dateFormat="MM yy"
+                    view="month"
+                    appendTo="body"
+            >
+            </app-p-calendar>
+            <small app-form-error formControlName="declaredMonthYear"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="endDate">Fecha final *</label>
+            <app-p-calendar
+                    id="endDate"
+                    [minDate]="endDateMin"
+                    styleClass="w-full" class="w-full"
+                    inputId="endDate"
+                    formControlName="endDate"
+                    dateFormat="dd/mm/yy"
+                    appendTo="body">
+            </app-p-calendar>
+            <small app-form-error formControlName="endDate"></small>
+        </div>
+
+        <div class="col-12 field">
+            <label appRedAsterisk for="organizations">Consumidores industriales *</label>
+            <app-p-autoComplete
+                   #producersNgModelChangeRef="ngModel"
+                    [forceSelection]="true"
+                    [required]="true"
+                    [ngModel]="organizationsValue"
+                    (ngModelChange)="organizationsValueNgModelChange($event)"
+                    [ngModelOptions]="{standalone: true}"
+                    (completeMethod)="filterProducers($event)"
+                    [suggestions]="filtered"
+                    id="organizations"
+                    optionLabel="businessName"
+                    appendTo="body"
+                    placeholder="Seleccione los consumidores que debén declarar"
+                    styleClass="w-full"
+                    class="w-full"
+                    [lazy]="true"
+                    [dropdown]="true"
+                    [multiple]="true">
+            </app-p-autoComplete>
+            <small app-form-error [formControl]="producersNgModelChangeRef?.control" ></small>
+        </div>
+
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" (onClick)="cancel()" label="Cancelar"></p-button>
+            <p-button [disabled]="this.form.status === 'PENDING' || !formValueWasChanged" label="Registrar" type="submit" [loading]="saveLoader"></p-button>
+        </div>
+    </div>
+</form>

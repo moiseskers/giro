@@ -1,0 +1,33 @@
+<form #form="ngForm">
+    <div *ngFor="let field of fields" class="flex flex-column gap-2">
+        <label [for]="field.name"> {{ field.label }}</label>
+        <ng-container *ngIf="isBasicInputType(field.type)">
+            <ng-container *ngTemplateOutlet="basicInputTemplate; context: { item: field}"></ng-container>
+            <ng-template #basicInputTemplate let-item="item" >
+                <input
+                        [id]="item?.id ?? defaultIdValue"
+                       [(ngModel)]="item.value"
+                       [name]="item.name"
+                       [type]="item.type"
+                       [placeholder]="item?.placeholder ?? ''"
+                       [required]="item.required"
+                       [disabled]="item.disabled"
+                       [readonly]="item.readonly"
+                       [attr.autocomplete]="item.autocomplete"
+                       [autofocus]="item.autofocus"
+                       pInputText/>
+<!--                <small id="username-help">-->
+<!--                    Enter your username to reset your password.-->
+<!--                </small>-->
+            </ng-template>
+        </ng-container>
+
+        <ng-container [ngSwitch]="field.type">
+
+<!--            <select *ngSwitchCase="'select'" [(ngModel)]="formData[field.name]" [name]="field.name">-->
+<!--                <option *ngFor="let option of field.options" [value]="option">{{ option }}</option>-->
+<!--            </select>-->
+
+        </ng-container>
+    </div>
+</form>

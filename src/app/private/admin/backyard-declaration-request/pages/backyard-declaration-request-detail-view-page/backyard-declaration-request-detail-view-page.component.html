@@ -1,0 +1,67 @@
+<app-p-toolbar class="col-12 " styleClass="shadow-2">
+    <div class="p-toolbar-group-start custom-class">
+        <ng-container *ngIf="this.model?.status">
+            <ng-container [ngSwitch]="DeclarationStatus[this.model?.status]">
+                <app-declaration-statuses [bigger]="true" [status]="DeclarationStatus[modelIn(model)?.status]"></app-declaration-statuses>
+            </ng-container>
+        </ng-container>
+    </div>
+
+    <div class="p-toolbar-group-center"></div>
+
+    <div class="p-toolbar-group-end">
+        <div class="flex gap-2">
+            <app-p-button *ngIf="(DeclarationStatus[modelIn(model)?.status] === DeclarationStatus.FINALIZED || DeclarationStatus[modelIn(model)?.status] === DeclarationStatus.APPROVED)"
+                          (onClick)="edit()"
+                          [disabled]="
+                          (DeclarationStatus[modelIn(model)?.status] !== DeclarationStatus.FINALIZED)
+                          ||
+                          (DeclarationRequestStatus[modelIn(model)?.declarationRequest?.status] === DeclarationRequestStatus.BLOCKED)"
+                          label="Editar"
+                          [outlined]="true"
+                          severity="contrast"/>
+
+            <app-p-button *ngIf="!(DeclarationStatus[modelIn(model)?.status] === DeclarationStatus.FINALIZED || DeclarationStatus[modelIn(model)?.status] === DeclarationStatus.APPROVED)"
+                          [disabled]="!(DeclarationStatus[modelIn(model)?.status] === DeclarationStatus.PENDING
+                          || DeclarationStatus[modelIn(model)?.status] === DeclarationStatus.OVERDUE)
+                          || (DeclarationRequestStatus[modelIn(model)?.declarationRequest?.status] === DeclarationRequestStatus.BLOCKED)"
+                          (onClick)="create()" label="Declarar" [outlined]="true"
+                          severity="contrast"/>
+
+            <app-p-button [disabled]="!(DeclarationStatus[modelIn(model)?.status] === DeclarationStatus.FINALIZED)" label="Cambiar estado" (click)="menu.toggle($event)" iconPos="right" [loading]="loaderService.loading[changeStatusLoaderId]">
+                <p-menu #menu [model]="statuses" [popup]="true" appendTo="body">
+                    <ng-template pTemplate="item" let-item>
+                        <a (click)="action(item, modelIn(model).id)" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                            <div>
+                                <span [class]="item.icon"></span>
+                                <span> {{ item.label }}</span>
+                            </div>
+                            <div>
+                                <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                            </div>
+                        </a>
+                    </ng-template>
+                </p-menu>
+                <ng-template pTemplate="icon">
+                    <div class="flex">
+                        <ChevronDownIcon/>
+                    </div>
+                </ng-template>
+            </app-p-button>
+
+        </div>
+    </div>
+</app-p-toolbar>
+
+<app-card [content]="content"></app-card>
+
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter">
+            <app-backyard-declaration-data class="col-12"                   [model]="model"></app-backyard-declaration-data>
+            <app-backyard-declaration-item-list-container class="col-12"    [model]="model" [requestId]="requestId" [id]="id" *ngIf="!loaderService.loading[loaderId]" ></app-backyard-declaration-item-list-container>
+            <app-backyard-document-list-container                           *ngIf="!loaderService.loading[loaderId]" [declarationResponseDto]="model"  class="col-12"></app-backyard-document-list-container>
+            <app-backyard-declaration-history-list-container class="col-12" [requestId]="requestId" [id]="id"></app-backyard-declaration-history-list-container>
+        </div>
+    </div>
+</ng-template>

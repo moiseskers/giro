@@ -1,0 +1,18 @@
+<app-giro-data-view-v2 aTitle="VIDEOS">
+    <app-material-search-bar [placeholder]="'Buscar por título del vídeo'" [label]="'Nuevo vídeo'" (buttonEvent)="addVideo()" (searchEvent)="search($event)"></app-material-search-bar>
+
+    <div class="grid">
+        <app-video-card
+                *ngFor="let item of model?.items; let i = index"
+                [allowedOrganizationTypes]="item.allowedOrganizationTypes"
+                (deleteButtonEvent)="deleteButtonEvent(item?.id, i)"
+                [header]="item.title"
+                [deleteButtonIsLoading]="loaderService.loading[this.deleteLoaderId[i]] === '1'"
+                [videoUrl]="item?.url"
+                class="col-12 sm:col-12 md:col-6 lg:col-3 xl:col-3">
+        </app-video-card>
+    </div>
+
+    <app-paginator (pageFunction)="page($event)" [rows]="8" [rowsPerPageOptions]="[8, 16, 32]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+
+</app-giro-data-view-v2>

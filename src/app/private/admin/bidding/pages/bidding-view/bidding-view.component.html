@@ -1,0 +1,51 @@
+<app-p-toolbar class="col-12 " styleClass="shadow-2">
+    <div class="p-toolbar-group-start custom-class">
+        <ng-container *ngIf="this.model?.status">
+            <ng-container [ngSwitch]="biddingStatusEnum[this.model?.status]">
+                    <p-tag *ngSwitchCase="biddingStatusEnum.ACTIVATED" [value]="biddingStatusEnum[this.model?.status]" severity="info"></p-tag>
+                    <p-tag *ngSwitchCase="biddingStatusEnum.ABANDONED" [value]="biddingStatusEnum[this.model?.status]"></p-tag>
+                    <p-tag *ngSwitchCase="biddingStatusEnum.AWARDED" [value]="biddingStatusEnum[this.model?.status]" severity="success"></p-tag>
+                    <p-tag *ngSwitchCase="biddingStatusEnum.CANCELLED" [value]="biddingStatusEnum[this.model?.status]" severity="danger"></p-tag>
+                    <p-tag *ngSwitchCase="biddingStatusEnum.FINALIZED" [value]="biddingStatusEnum[this.model?.status]" severity="success"></p-tag>
+                    <p-tag *ngSwitchCase="biddingStatusEnum.OPENED" [value]="biddingStatusEnum[this.model?.status]" severity="info"></p-tag>
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="p-toolbar-group-center">
+    </div>
+    <div class="p-toolbar-group-end">
+        <p-menu #menu [model]="this?.model?.statuses" [popup]="true" appendTo="body">
+            <ng-template pTemplate="item" let-item>
+                <a (click)="action(item)" [attr.tabindex]="-1" class="p-menuitem-link flex justify-content-between align-items-center p-3" [routerLink]="item.routerLink">
+                    <div>
+                        <span [class]="item.icon"></span>
+                        <span> {{ item.label }}</span>
+                    </div>
+                    <div>
+                        <span *ngIf="item.shortcut" [class]="item.shortcutClass">{{ item.shortcut }}</span>
+                    </div>
+                </a>
+            </ng-template>
+        </p-menu>
+
+        <app-p-button [disabled]="this?.model?.statuses?.length === 0 || this?.model?.statuses?.length === null" [loading]="this.loaderService.loading[this.updateLoaderId]" label="Cambiar estado" (click)="menu.toggle($event)" iconPos="right" >
+            <ng-template pTemplate="icon">
+                <div class="flex">
+                    <ChevronDownIcon/>
+                </div>
+            </ng-template>
+        </app-p-button>
+    </div>
+</app-p-toolbar>
+
+<app-card [content]="content"></app-card>
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter">
+            <app-general-information (updatedEvent)="ngOnInit()" *ngIf="!loaderService.loading[this.loaderId]" [model]="model" class="col-12"></app-general-information>
+            <app-question-and-answers-form *ngIf="this.model?.formLink && !loaderService.loading[this.loaderId]" [formLink]="this.model?.formLink" class="col-12"></app-question-and-answers-form>
+            <app-process-files-list [id]="this.id" class="col-12"></app-process-files-list>
+            <app-registered-manager-list class="col-12"></app-registered-manager-list>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,41 @@
+<app-p-toolbar class="col-12 " styleClass="shadow-2">
+    <div class="p-toolbar-group-start custom-class">
+        <ng-container *ngIf="this.model?.status">
+            <ng-container [ngSwitch]="DeclarationStatus[this.model?.status]">
+                <app-declaration-statuses [bigger]="true" [status]="DeclarationStatus[modelIn(model)?.status]"></app-declaration-statuses>
+            </ng-container>
+        </ng-container>
+    </div>
+    <div class="p-toolbar-group-center"></div>
+    <div class="p-toolbar-group-end">
+        <div *ngIf="loaderService.loading[loaderId] === '2'" class="flex gap-2">
+            <app-p-button *ngIf="model?.declarationType !== null" (onClick)="edit()" label="Editar"  />
+            <app-p-button *ngIf="model?.declarationType === null" (onClick)="create()" label="Declarar"  />
+        </div>
+    </div>
+</app-p-toolbar>
+
+<app-card [content]="content"></app-card>
+
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter">
+            <app-organization-declaration-data
+                    [isLoading]="loaderService.loading[loaderId] === '1'"
+                    [model]="organization"
+                    class="col-12">
+            </app-organization-declaration-data>
+
+            <app-declaration-item-list-container
+                    [id]="id"
+                    [model]="model"
+                    [requestId]="requestId"
+                    class="col-12">
+            </app-declaration-item-list-container>
+
+            <app-declaration-history-list-container
+
+                    class="col-12" [requestId]="requestId" [id]="id"></app-declaration-history-list-container>
+        </div>
+    </div>
+</ng-template>

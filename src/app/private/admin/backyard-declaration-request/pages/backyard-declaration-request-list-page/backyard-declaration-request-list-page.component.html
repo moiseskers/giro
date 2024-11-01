@@ -1,0 +1,35 @@
+<app-default-column-separator-grid [content]="content"></app-default-column-separator-grid>
+
+<ng-template #cardBody>
+    <app-admin-backyard-declaration-request-list (actionEvent)="actionEvent($event)"
+                                                 [totalTons]="model?.meta?.totalTons"
+                                                 [loaderId]="loaderId"
+                                                 [model]="model?.items" (viewEvent)="view($event)">
+    </app-admin-backyard-declaration-request-list>
+
+
+    <app-paginator (pageFunction)="page($event)" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="model?.meta?.totalItems"></app-paginator>
+</ng-template>
+
+<ng-template #content>
+    <app-filter-with-loader
+            (clearFilterEvent)="clearFilterEvent()"
+            [addButtonLoading]="loaderServiceV2.loading[this.saveLoaderId] === '2'"
+            addButtonTitle="Solicitar declaración"
+            (actionButtonEvent)="actionButtonEvent()"
+            [isLoading]="!(loaderServiceV2.loading[this.filerLoaderId] === '2')"
+            (filterEvent)="filterProcess($event)"
+            (sortEvent)="sort($event)"
+            [filters]="filters"
+            [table]="backyardDeclarationRequestListComponent?.table">
+    </app-filter-with-loader>
+
+    <app-card [content]="cardBody"></app-card>
+</ng-template>
+
+
+
+
+
+
+

@@ -1,0 +1,20 @@
+<ng-container *ngIf="loaderService.loading[this.loaderId];else loaded">
+    <p-skeleton height="338px" styleClass="mb-2"></p-skeleton>
+</ng-container>
+
+<ng-template #loaded>
+    <app-giro-data-view (actionEmitter)="edit()" [content]="content" aTitle="Datos de usuario" buttonLabel="Editar" class="col-12"></app-giro-data-view>
+</ng-template>
+
+<ng-template #content>
+    <div class="grid py-0 px-3">
+        <app-view-data class="col-12 lg:col-4" [value]="OrganizationTypes[model.organization.organizationType]"  key="Tipo de Entidad"></app-view-data>
+        <app-view-data class="col-12 lg:col-4" [value]="model.organization.businessName"  key="Razón social de la entidad"></app-view-data>
+        <app-view-data class="col-12 lg:col-4" [value]="model.name"  key="Nombre"></app-view-data>
+        <app-view-data class="col-12 lg:col-4" [value]="model.email"  key="Correo"></app-view-data>
+        <app-view-data class="col-12 lg:col-4" [value]="model.phone"  key="Teléfono"></app-view-data>
+        <app-view-data class="col-12 lg:col-4" [value]="model.responsibility"  key="Rol"></app-view-data>
+        <app-view-data class="col-12 lg:col-4" [value]="UserType[model.role]"  key="Tipo"></app-view-data>
+    </div>
+</ng-template>
+

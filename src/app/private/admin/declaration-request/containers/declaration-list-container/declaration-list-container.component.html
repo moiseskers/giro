@@ -1,0 +1,13 @@
+<app-giro-data-view [content]="content" aTitle="DECLARACIONES" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <app-declaration-list
+            [loading]="!(loaderService.loading[this.loaderId] | loaderHelper)"
+            (viewEvent)="viewEvent($event)"
+            (sortEvent)="sortEvent($event)"
+            (filterEvent)="filterProcess($event)"
+            [model]="declarations"
+            (pageEvent)="pageEvent($event)"
+            [filters]="filters"
+    ></app-declaration-list>
+</ng-template>

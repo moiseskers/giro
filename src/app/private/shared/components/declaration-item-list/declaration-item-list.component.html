@@ -1,0 +1,120 @@
+<ng-container [ngSwitch]="declarationTableFormType">
+    <ng-container *ngSwitchCase="DeclarationTableFormType.MONTHLY_CONSOLIDATED">
+        <ng-container *ngTemplateOutlet="monthlyConsolidatedFinishedTemplate"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="DeclarationTableFormType.MONTHLY_DETAILED">
+        <ng-container *ngTemplateOutlet="monthlyDetailedFinishedTemplate"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="DeclarationTableFormType.ANNUALLY">
+        <ng-container *ngTemplateOutlet="annualFinishedTemplate"></ng-container>
+    </ng-container>
+</ng-container>
+
+
+<ng-template #annualFinishedTemplate>
+    <p-table [lazy]="true" #table [tableStyle]="{ 'min-width': '50rem' }" [value]="data?.items" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Categoría</th>
+                <th>Subcategoría</th>
+                <th>Material</th>
+                <th>Tipo</th>
+                <th>Toneladas</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ DeclarationCategory[modelIn(model)?.category] ?? '-' }}</td>
+                <td>{{ modelIn(model)?.subcategory }}</td>
+                <td>{{ modelIn(model)?.material ?? '-' }}</td>
+                <td>{{ DeclarationItemType[modelIn(model)?.declarationItemType] }}</td>
+                <td>{{ modelIn(model)?.tons | milligrams }} t</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="4" class="text-right"></td>
+                <td>{{ totalTons }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</ng-template>
+
+<ng-template #monthlyDetailedFinishedTemplate>
+    <p-table [lazy]="true" #table [tableStyle]="{ 'min-width': '50rem' }" [value]="data?.items" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>SKU</th>
+                <th>Descripción</th>
+                <th>Categoría</th>
+                <th>Subcategoría</th>
+                <th>Material</th>
+                <th>Tipo</th>
+                <th>Equivalencia (toneladas envase)</th>
+                <th>Unidades introducidas</th>
+                <th>Fecha operación comercial</th>
+                <th>Consumidor</th>
+                <th>Clasificación industrial</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model)?.sku ?? '-' }}</td>
+                <td>{{ modelIn(model)?.description ?? '-' }}</td>
+                <td>{{ DeclarationCategory[modelIn(model)?.category] ?? '-' }}</td>
+                <td>{{ modelIn(model)?.subcategory ?? '-' }}</td>
+                <td>{{ modelIn(model)?.material ?? '-' }}</td>
+                <td>{{ DeclarationItemType[modelIn(model)?.declarationItemType] ?? '-' }}</td>
+                <td>{{ modelIn(model)?.tons | milligrams }}</td>
+                <td>{{ modelIn(model)?.quantity | number:'1.2-2' }}</td>
+                <td>{{ modelIn(model)?.businessEndDate | date:'dd/MM/yyyy' }}</td>
+                <td>{{ modelIn(model)?.consumer }}</td>
+                <td>{{ modelIn(model)?.industrialQualification ?? '-' }}</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="6" class="text-right"></td>
+                <td>{{ totalTons }} </td>
+                <td>{{ totalQuantity > 0 ? totalQuantity + ' unidades' : totalQuantity + ' unidade' }}</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </ng-template>
+    </p-table>
+</ng-template>
+
+<ng-template #monthlyConsolidatedFinishedTemplate>
+    <p-table [lazy]="true" #table [tableStyle]="{ 'min-width': '50rem' }" [value]="data?.items" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Categoría</th>
+                <th>Subcategoría</th>
+                <th>Material</th>
+                <th>Tipo</th>
+                <th>Consumidor</th>
+                <th>Toneladas</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ DeclarationCategory[modelIn(model)?.category] ?? '-' }}</td>
+                <td>{{ modelIn(model)?.subcategory ?? '-' }}</td>
+                <td>{{ modelIn(model)?.material ?? '-' }}</td>
+                <td>{{ DeclarationItemType[modelIn(model)?.declarationItemType] }}</td>
+                <td>{{ modelIn(model)?.consumer }}</td>
+                <td>{{ modelIn(model)?.tons | milligrams }} t</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="footer">
+            <tr>
+                <td colspan="5" class="text-right"></td>
+                <td>{{ totalTons }}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+</ng-template>

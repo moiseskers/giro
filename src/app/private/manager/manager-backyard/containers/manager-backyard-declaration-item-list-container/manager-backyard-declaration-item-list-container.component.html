@@ -1,0 +1,13 @@
+<app-giro-data-view [content]="content" aTitle="Toneladas declaradas" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <div class="">
+        <div *ngIf="data?.items?.length > 0;else emptyContainer">
+            <app-backyard-declaration-item-list (sortEvent)="sortEvent($event)"  [loading]="loaderService.loading[loaderId] === '1'" [data]="data"></app-backyard-declaration-item-list>
+            <app-paginator (pageFunction)="page($event)" *ngIf="data?.items?.length > 10" [pageParamName]="'pageIndex'" [pageSizeParamName]="'itemsPerPage'" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="data?.meta?.totalItems"></app-paginator>
+        </div>
+        <ng-template #emptyContainer>
+            <app-empty-image message="Aún no se ha realizado una declaración."></app-empty-image>
+        </ng-template>
+    </div>
+</ng-template>

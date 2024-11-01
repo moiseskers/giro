@@ -1,0 +1,44 @@
+<app-giro-data-view-v2>
+    <ng-template pTemplate="toolbar-content">
+        <app-date-and-action-button
+            [uploadButtonIsLoading]="
+                loaderService.loading[this.uploadButtonLoaderId] === '1'
+            "
+            (uploadBase64)="uploadBase64($event)"
+            aTitle="SUS DECLARACIONES MENSUALES DE GESTIÓN DE PATIO TRASERO"
+            [date]="updatedAt | date : 'dd/MM/yyyy'"
+        >
+        </app-date-and-action-button>
+    </ng-template>
+
+    <div class="grid">
+        <app-skeleton
+            class="col-12"
+            *ngIf="!(displayYearlyChart || displayMonthlyChart)"
+            [isLoading]="loaderService.loading[loaderId] === '1'"
+            height="508px"
+        >
+        </app-skeleton>
+
+        <div class="col-12" *ngIf="displayYearlyChart && !displayMonthlyChart">
+            <app-bar-chart
+                (optionsEvent)="yearlyBarClickedEvent($event)"
+                (yearEvent)="yearlyYearChangeEvent($event)"
+                [data]="yearlyChart"
+                styleClass="border-solid border-1 surface-border p-5 border-round-sm"
+            >
+            </app-bar-chart>
+        </div>
+
+        <div class="col-12" *ngIf="displayMonthlyChart && !displayYearlyChart">
+            <app-bar-chart
+                [displayBackButton]="true"
+                (backEvent)="back()"
+                (yearEvent)="monthlyYearChangeEvent($event)"
+                [data]="monthlyChart"
+                styleClass="border-solid border-1 surface-border p-5 border-round-sm"
+            >
+            </app-bar-chart>
+        </div>
+    </div>
+</app-giro-data-view-v2>

@@ -1,0 +1,11 @@
+<nav class="layout-breadcrumb">
+    <ol>
+        <ng-template ngFor let-item let-last="last" [ngForOf]="breadcrumbs$ | async">
+            <li class="p-text-secondary text-6xl	 font-semibold">{{ item.label }}</li>
+            <li *ngIf="!last" class="layout-breadcrumb-chevron">/</li>
+        </ng-template>
+    </ol>
+</nav>
+
+<!--<p-breadcrumb class="max-w-full" [model]="items"></p-breadcrumb>-->
+

@@ -1,0 +1,230 @@
+<form #backyardDeclarationForm="ngForm" (ngSubmit)="backyardDeclarationForm.valid ?  this.addNewRow() : markAllAsTouched(backyardDeclarationForm)" id="x" focusFirstInvalidField>
+
+    <div class="grid p-fluid" >
+        <div class="col-12">
+            <p-table [value]="this.ts.declarationResponseDtoRef.items" styleClass="mt-3" responsiveLayout="scroll">
+                <ng-template pTemplate="header">
+                    <tr class="font-bold white-space-nowrap">
+                        <th>Subcategoría</th>
+                        <th>Material</th>
+                        <th>Tipo</th>
+                        <th>Fecha de operación</th>
+                        <th *ngIf="[Role.ADMIN] | hasAnyRole">Año de cumplimiento</th>
+                        <th>Recolector</th>
+                        <th>Pretratamiento</th>
+                        <th>Valorizador</th>
+                        <th>Toneladas</th>
+                        <th>Costo</th>
+                        <th>Código del documento tributario</th>
+                        <th>Acción</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                    <tr>
+                        <td class="font-bold" style="min-width: 254px">
+                            <p-dropdown
+                                    tabindex
+                                    [loading]="this.loaderService.loading[this.ts.subCategoryLoaderId[rowIndex]]"
+                                    [disabled]="this.ts.disableDropDownHelper(rowIndex)"
+                                    [(ngModel)]="modelIn(row).subcategoryId"
+                                    (onChange)="this.ts.subcategoryNgModelChange($event.value, rowIndex)"
+                                    [required]="true"
+                                    [name]="'subcategory-' + rowIndex"
+                                    class="w-full"
+                                    appendTo="body"
+                                    [options]="this.ts.subcategories[rowIndex]"
+                                    optionValue="id"
+                                    optionLabel="name"></p-dropdown>
+                        </td>
+                        <td class="font-bold" style="min-width: 168px">
+                            <p-dropdown
+                                    tabindex
+                                    (onChange)="this.ts.materialNgModelChange($event.value, rowIndex)"
+                                    [(ngModel)]="modelIn(row).materialId"
+                                    [disabled]="this.ts.disableDropDownHelper(rowIndex)"
+                                    [loading]="this.loaderService.loading[this.ts.materialLoaderId[rowIndex]]"
+                                    [name]="'material-' + rowIndex"
+                                    [options]="this.ts.materials[rowIndex]"
+                                    [required]="true"
+                                    appendTo="body"
+                                    class="w-full"
+                                    optionLabel="name"
+                                    optionValue="id"
+                                    placeholder="Seleccione el material"></p-dropdown>
+                        </td>
+                        <td class="font-bold" style="min-width: 251px">
+                            <p-dropdown
+                                    tabindex
+                                    [disabled]="this.ts.disableDropDownHelper(rowIndex)"
+                                    [(ngModel)]="modelIn(row).declarationItemType"
+                                    [options]="this.ts.declarationItemTypes[rowIndex]"
+                                    [required]="true"
+                                    [name]="'declarationItemType-' + rowIndex"
+                                    class="w-full"
+                                    appendTo="body"
+                                    optionLabel="key" optionValue="value"
+                            >
+                            </p-dropdown>
+                        </td>
+                        <td class="font-bold" style="min-width: 212px">
+
+                            <app-p-calendar
+                                    [required]="true"
+                                    [name]="'operationEndDate-' + rowIndex"
+                                    appendTo="body"
+                                    dateFormat="dd/mm/yy"
+                                    [(ngModel)]="modelIn(row).operationEndDate"
+                                    [showIcon]="true"
+                                    inputId="icon">
+                            </app-p-calendar>
+                        </td>
+
+                        <td *ngIf="[Role.ADMIN] | hasAnyRole" class="font-bold" style="min-width: 212px">
+                            <app-year-picker
+                                    [required]="true"
+                                    [name]="'complianceYear-' + rowIndex"
+                                    appendTo="body"
+                                    [(ngModel)]="modelIn(row).complianceYear"
+                            ></app-year-picker>
+                        </td>
+
+                        <td class="font-bold" style="min-width: 300px">
+                            <app-p-autoComplete
+                                    [forceSelection]="true"
+                                    [ngModel]="modelIn(row)?.pickup?.businessName"
+                                    (ngModelChange)="pickupNgModelChange($event, modelIn(row))"
+                                    [ngModelOptions]="{standalone: true}"
+                                    (completeMethod)="filterOrganizations($event, GeneralHelper.getKeyByValue(ManagerType, ManagerType.PICKUP))"
+                                    [suggestions]="organizationsFiltered"
+                                    [name]="'pickupId-' + rowIndex"
+                                    id="pickupId"
+                                    optionLabel="businessName"
+                                    optionValue="id"
+                                    appendTo="body"
+                                    placeholder="Seleccione el gestor"
+                                    styleClass="w-full"
+                                    class="w-full"
+                                    [lazy]="true"
+                                    [dropdown]="true">
+                            </app-p-autoComplete>
+                        </td>
+                        <td class="font-bold" style="min-width: 300px">
+                            <app-p-autoComplete
+                                    [forceSelection]="true"
+                                    [ngModel]="modelIn(row)?.pretreatment?.businessName"
+                                    (ngModelChange)="pretreatmentNgModelChange($event, modelIn(row))"
+                                    [ngModelOptions]="{standalone: true}"
+                                    (completeMethod)="filterOrganizations($event, GeneralHelper.getKeyByValue(ManagerType, ManagerType.PRETREATMENT))"
+                                    [suggestions]="organizationsFiltered"
+                                    [name]="'pretreatmentId-' + rowIndex"
+                                    id="pretreatmentId"
+                                    optionLabel="businessName"
+                                    optionValue="id"
+                                    appendTo="body"
+                                    placeholder="Seleccione el gestor"
+                                    styleClass="w-full"
+                                    class="w-full"
+                                    [lazy]="true"
+                                    [dropdown]="true">
+                            </app-p-autoComplete>
+                        </td>
+                        <td class="font-bold" style="min-width: 300px">
+                            <app-p-autoComplete
+                                    [forceSelection]="true"
+                                    [ngModel]="modelIn(row)?.valuer?.businessName"
+                                    (ngModelChange)="valuerNgModelChange($event, modelIn(row))"
+                                    [ngModelOptions]="{standalone: true}"
+                                    (completeMethod)="filterOrganizations($event, GeneralHelper.getKeyByValue(ManagerType, ManagerType.VALUER))"
+                                    [suggestions]="organizationsFiltered"
+                                    [name]="'valuerId-' + rowIndex"
+                                    id="valuerId"
+                                    optionLabel="businessName"
+                                    optionValue="id"
+                                    appendTo="body"
+                                    placeholder="Seleccione el gestor"
+                                    styleClass="w-full"
+                                    class="w-full"
+                                    [lazy]="true"
+                                    [dropdown]="true">
+                            </app-p-autoComplete>
+                        </td>
+                        <td class="font-bold" style="min-width: 300px">
+                            <input [options]="{
+                                        align: 'right',
+                                        allowNegative: false,
+                                        allowZero: true,
+                                        decimal: ',',
+                                        precision: 9,
+                                        prefix: '',
+                                        suffix: '',
+                                        thousands: '',
+                                        nullable: true,
+                                        min: null,
+                                        max: null,
+                                        inputMode: NgxCurrencyInputMode.Natural
+                                    }" currencyMask [required]="true" [name]="'totalDangerousTons' + rowIndex" placeholder="0,000000000 t" [(ngModel)]="modelIn(row).tons" class="p-inputtext w-full" type="text"/>
+                        </td>
+                        <td class="font-bold" style="min-width: 300px">
+                            <input [options]="{ prefix: '', thousands: '.', decimal: ',', suffix: ' CLP', align: 'left' }" currencyMask [required]="true" [name]="'cost' + rowIndex" placeholder="0,00 CLP" [(ngModel)]="modelIn(row).materialCost" class="p-inputtext w-full" type="text"/>
+                        </td>
+                        <td class="font-bold" style="min-width: 300px">
+                            <input [required]="true" [name]="'code' + rowIndex" placeholder="Documento tributario" [(ngModel)]="modelIn(row).document" class="p-inputtext w-full" type="text"/>
+                        </td>
+                        <td>
+                            <p-button icon="pi pi-trash" [outlined]="true" (click)="this.ts.removeRow(rowIndex)"></p-button>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="footer">      
+                    <tr *ngIf="this.ts.declarationResponseDtoRef?.items?.length > 0">
+                        <td *ngIf="!([Role.ADMIN] | hasAnyRole)" colspan="7" class="text-right"></td>
+                        <td *ngIf="([Role.ADMIN] | hasAnyRole)" colspan="8" class="text-right"></td>
+                        <td class="text-right">{{ this.ts.totalTons | milligrams }} t</td>
+                        <td>{{ this.ts.totalCost | number:'1.2-2' }} CLP</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <div class="col-12">
+            <button
+                    iconPos="right"
+                    [loading]="this.ts?.isAddNewRowLoading"
+                    *ngIf="this.ts.declarationResponseDtoRef.items?.length === 0"
+                    icon="pi pi-plus-circle"
+                    label="Agregar embalaje"
+                    pButton
+                    pRipple
+                    type="button"
+                    (click)="this.addNewRow()"
+                    class="p-button-outlined p-button-secondary mr-2 w-full"
+            ></button>
+
+            <button
+                    iconPos="right"
+                    [loading]="this.ts?.isAddNewRowLoading"
+                    *ngIf="this.ts.declarationResponseDtoRef.items?.length !== 0"
+                    icon="pi pi-plus-circle"
+                    label="Agregar embalaje"
+                    pButton
+                    pRipple
+                    type="submit"
+                    class="p-button-outlined p-button-secondary mr-2 w-full"
+            ></button>
+        </div>
+
+        <!-- Additional buttons -->
+        <div class="col-12 flex justify-content-end gap-3 ">
+            <p-button [outlined]="true" label="Cancelar" (click)="this.ref.close(false)"></p-button>
+            <p-button label="Registrar"
+                      [loading]="saveButtonLoading"
+                      (onClick)="this.save(backyardDeclarationForm)"
+                      [disabled]="backyardDeclarationForm?.form?.invalid || this.ts.declarationResponseDtoRef.items.length === 0"></p-button>
+        </div>
+
+    </div>
+
+</form>

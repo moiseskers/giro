@@ -1,0 +1,156 @@
+<form (ngSubmit)="this.form.valid ?  save() : markAllAsTouched(form)" [formGroup]="form" focusFirstInvalidField>
+
+    <div class="grid formgrid gap-3">
+        <ng-container>
+            <div class="col-12 field" *ngIf="isEditing">
+                <label appRedAsterisk for="idBali">ID BALI</label>
+                <input class="p-inputtext w-full" formControlName="idBali" id="idBali" name="idBali"  [disabled]="true"/>
+            </div>
+
+            <div class="col-12 field" *ngIf="!isEditing">
+                <label appRedAsterisk for="biddingType">Tipo de licitación *</label>
+                <p-dropdown [autofocus]="true" (onChange)="organizationTypeOnChange($event)" [options]="biddingTypes" class="w-full" formControlName="biddingType" id="biddingType" optionLabel="key" optionValue="value" styleClass="w-full"></p-dropdown>
+                <small app-form-error formControlName="biddingType"></small>
+            </div>
+
+            <div class="col-12 field" *ngIf="!isEditing">
+                <p-divider></p-divider>
+            </div>
+
+            <div class="col-12 field">
+                <label appRedAsterisk for="description">Descripción</label>
+                <textarea id="description" class="w-full" rows="5" cols="30" pInputTextarea formControlName="description" placeholder="Agregue acá el texto de descripción de la licitación"></textarea>
+                <small app-form-error formControlName="description"></small>
+            </div>
+
+            <div class="col-12 field">
+                <label appRedAsterisk for="initialDate">Fecha de inicio de presentación de ofertas *</label>
+                <app-p-calendar
+                        [keepInvalid]="false"
+                        class="w-full"
+                        styleClass="w-full"
+                        formControlName="initialDate"
+                        [showIcon]="true" id="initialDate" appendTo="body">
+                </app-p-calendar>
+                <small app-form-error  [customErrorMessages]="[{ errorIdentifier: 'minDate', message: 'La fecha no puede ser anterior a hoy.' }]" formControlName="initialDate"></small>
+            </div>
+
+            <div class="col-12 field">
+                <label appRedAsterisk for="finalLimit">Plazo de presentación de ofertas *</label>
+                <app-p-inputNumber [readonly]="this.form.controls['initialDate']?.invalid" type="number" formControlName="finalLimit" placeholder="0 días" [showButtons]="true" inputId="finalLimit" id="finalLimit" [min]="0" class="w-full " styleClass="w-full"></app-p-inputNumber>
+                <small app-form-error formControlName="finalLimit"></small>
+            </div>
+
+            <div class="col-12 field">
+                <label appRedAsterisk for="finalDate">Fecha de fin de presentación de ofertas *</label>
+                <app-p-calendar placeholder="01/01/2022" class="w-full" styleClass="w-full" formControlName="finalDate" [showIcon]="true" id="finalDate" appendTo="body"></app-p-calendar>
+                <small app-form-error formControlName="finalDate"></small>
+            </div>
+
+            <div class="col-12 field">
+                <label appRedAsterisk for="state">Provincia *</label>
+                <app-p-autoComplete
+                        [forceSelection]="true"
+                        #regionNgModelChangeRef="ngModel"
+                        [required]="true"
+                        [disabled]="this.loaderService.loading[this.regionLoaderId]"
+                        [ngModel]="regionValue"
+                        (ngModelChange)="regionNgModelChange($event)"
+                        [ngModelOptions]="{standalone: true}"
+                        id="state"
+                        styleClass="w-full"
+                        placeholder="Seleccione la provincia"
+                        (completeMethod)="filterRegion($event)"
+                        [dropdown]="true"
+                        [suggestions]="filteredRegions"
+                        optionLabel="name">
+                </app-p-autoComplete>
+                <small app-form-error [formControl]="regionNgModelChangeRef?.control" ></small>
+            </div>
+
+            <div class="col-12 field">
+                <label appRedAsterisk for="city">Comuna *</label>
+                <app-p-autoComplete
+                        [forceSelection]="true"
+                        #cityNgModelChangeRef="ngModel"
+                        [required]="true"
+                        [disabled]="this.loaderService.loading[this.regionLoaderId]"
+                        [ngModel]="cityValue"
+                        (ngModelChange)="cityNgModelChange($event)"
+                        [ngModelOptions]="{standalone: true}"
+                        id="city"
+                        styleClass="w-full"
+                        placeholder="Seleccione la comuna"
+                        (completeMethod)="filterCity($event)"
+                        [dropdown]="true"
+                        [suggestions]="filteredCities"
+                        optionLabel="name">
+                </app-p-autoComplete>
+                <small app-form-error [formControl]="cityNgModelChangeRef?.control" ></small>
+            </div>
+
+        </ng-container>
+
+        <div class="col-12 field" >
+            <label for="formLink" appRedAsterisk>Formulario de preguntas</label>
+            <input placeholder="Formulario de preguntas" class="p-inputtext w-full" formControlName="formLink" id="formLink" name="formLink" type="text"/>
+            <small app-form-error formControlName="formLink"></small>
+        </div>
+
+        <div class="col-12 field" *ngIf="biddingType[this.form.controls['biddingType'].value] === biddingType.PICKUP">
+            <label for="routeFrequency" appRedAsterisk>Frecuencia de ruta *</label>
+            <input class="p-inputtext w-full" formControlName="routeFrequency" id="routeFrequency" name="routeFrequency" placeholder="Informe la frequencia de la ruta" type="text"/>
+            <small app-form-error formControlName="routeFrequency"></small>
+        </div>
+
+        <!-- PC Efficiency -->
+        <ng-container *ngIf="pcEfficiencyDisplay">
+            <div class="col-12 field"
+                 *ngIf="biddingType[this.form.controls['biddingType'].value] === biddingType.PICKUP || biddingType[this.form.controls['biddingType'].value] === biddingType.PRETREATMENT">
+                <label appRedAsterisk for="pcEfficiency">Eficiencia de {{ biddingType[this.form.controls['biddingType'].value] === biddingType.PICKUP ? 'recolección' : 'pretratamiento' }} (%) *</label>
+                <input class="p-inputtext w-full" formControlName="pcEfficiency" id="pcEfficiency" name="pcEfficiency" placeholder="0%" type="number"/>
+                <small app-form-error formControlName="pcEfficiency"></small>
+            </div>
+        </ng-container>
+
+        <!-- Population Served ID -->
+        <div class="col-12 field" *ngIf="biddingType[this.form.controls['biddingType'].value] === biddingType.PICKUP">
+            <label appRedAsterisk for="populationServedId">Viviendas atendidas *</label>
+            <p-dropdown [disabled]="this.loaderService.loading[this.populationServedLoaderId]" [filter]="false" [options]="populationServedArray" class="w-full" formControlName="populationServedId" id="populationServedId" optionLabel="population" optionValue="id" styleClass="w-full"></p-dropdown>
+            <small app-form-error formControlName="populationServedId"></small>
+        </div>
+
+        <ng-container *ngIf="biddingType[this.form.controls['biddingType'].value] === biddingType.VALORIZATION">
+            <div class="col-12 field">
+                <label appRedAsterisk for="materials">Materiales *</label>
+                <input class="p-inputtext w-full" formControlName="materials" id="materials" name="materials" placeholder="Materiales" type="text"/>
+                <small app-form-error formControlName="materials"></small>
+            </div>
+        </ng-container>
+
+        <ng-container>
+            <div class="col-12 field">
+                <label for="observation">Observación</label>
+                <textarea id="observation" class="w-full" rows="5" cols="30" pInputTextarea formControlName="observation" placeholder="Agregue acá las observaciones de la licitación"></textarea>
+                <small app-form-error formControlName="observation"></small>
+            </div>
+
+            <!-- Document upload field -->
+            <div class="col-12 field" *ngIf="!isEditing">
+                <label>Documentos</label>
+                <app-giro-upload formControlName="documents" [base64]="true" accept=".pdf,.csv"></app-giro-upload>
+            </div>
+        </ng-container>
+
+<!--        <div class="col-12 w-full">-->
+<!--            <p-divider></p-divider>-->
+<!--        </div>-->
+
+        <!-- Additional buttons -->
+        <div class="col-12 field flex justify-content-end gap-3">
+            <p-button [outlined]="true" label="Cancelar" (click)="closeEvent.emit()"></p-button>
+            <p-button label="Registrar" type="submit" [disabled]="this.form.status === 'PENDING'" [loading]="this.buttonIsLoading"></p-button>
+        </div>
+    </div>
+</form>
+

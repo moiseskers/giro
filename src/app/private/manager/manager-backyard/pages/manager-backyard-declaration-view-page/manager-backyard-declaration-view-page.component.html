@@ -1,0 +1,21 @@
+<app-p-toolbar *ngIf="[Roles.MANAGER_VALUER] | hasAnyRole" class="col-12 " styleClass="shadow-2">
+    <div class="p-toolbar-group-start custom-class">
+        <ng-container *ngIf="this.model?.status">
+            <ng-container [ngSwitch]="DeclarationStatus[this.model?.status]">
+                <app-declaration-statuses [bigger]="true" [status]="DeclarationStatus[modelIn(model)?.status]"></app-declaration-statuses>
+            </ng-container>
+        </ng-container>
+    </div>
+</app-p-toolbar>
+
+<app-card [content]="content"></app-card>
+
+<ng-template #content>
+    <div class="col-12">
+        <div class="grid grid-nogutter">
+            <app-backyard-declaration-data class="col-12" [model]="model"></app-backyard-declaration-data>
+            <app-manager-backyard-declaration-item-list-container class="col-12" *ngIf="!loaderService.loading[loaderId]" [declarationResponseDto]="model" ></app-manager-backyard-declaration-item-list-container>
+            <app-manager-backyard-document-list-container         class="col-12" *ngIf="!loaderService.loading[loaderId]" [declarationResponseDto]="model"></app-manager-backyard-document-list-container>
+        </div>
+    </div>
+</ng-template>

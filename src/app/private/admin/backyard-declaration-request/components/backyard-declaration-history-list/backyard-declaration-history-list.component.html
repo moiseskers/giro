@@ -1,0 +1,23 @@
+<div class="flex flex-column gap-4">
+    <p-table (onSort)="sort($event)" [lazy]="true" #table [tableStyle]="{ 'min-width': '50rem' }" [value]="data?.items" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Documento</th>
+                <th>Usuario que modifico</th>
+                <th pSortableColumn="lastModifiedAt" class="white-space-nowrap">Fecha de modificación <p-sortIcon field="lastModifiedAt"></p-sortIcon> </th>
+                <th class="text-right">Acción </th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model)?.declarationId + '-' + (modelIn(model)?.lastModifiedAt | date:'dd/MM/yyyy') ?? '-' }}.csv</td>
+                <td>{{ modelIn(model)?.lastModifiedByEmail ?? '-' }}</td>
+                <td>{{(modelIn(model)?.lastModifiedAt | date : 'dd/MM/yyyy') ?? '--/--/----' }}</td>
+                <td class="text-right">
+                    <p-button class="mr-2" icon="pi pi-download" (click)="download(modelIn(model).id)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <app-paginator (pageFunction)="page($event)" *ngIf="data?.meta?.totalItems > 10" [pageParamName]="'pageIndex'" [pageSizeParamName]="'itemsPerPage'" [rowsPerPageOptions]="[10, 20, 30]" [totalElements]="data?.meta?.totalItems"></app-paginator>
+</div>

@@ -1,0 +1,12 @@
+<app-auth-basic-layout [content]="content" componentTitle="Bienvenido"></app-auth-basic-layout>
+<ng-template #content>
+    <div class="w-full flex flex-column gap-4">
+        <p-divider></p-divider>
+        <div class="flex gap-2 justify-content-end">
+            <p-button [link]="true" [routerLink]="emailPage" label="Solicitar Acceso" styleClass="text-600 font-bold text-black-alpha-90"></p-button>
+            <button (click)="login()" iconPos="right" label="Entrar" pButton pRipple></button>
+        </div>
+    </div>
+</ng-template>
+
+

@@ -1,0 +1,15 @@
+<app-skeleton [isLoading]="isLoading" height="59px" >
+    <app-filter
+             *ngIf="!isLoading"
+            [addButtonLoading]="addButtonLoading"
+            (clearFilterEvent)="handleClearFilterEvent()"
+            class="scalein animation-linear animation-duration-1000"
+            (actionButtonEvent)="handleActionButtonEvent()"
+            (filterEvent)="filter($event)"
+            (sortEvent)="sort($event)"
+            [addButtonTitle]="addButtonTitle"
+            [filters]="filters"
+            [table]="table">
+    </app-filter>
+</app-skeleton>
+

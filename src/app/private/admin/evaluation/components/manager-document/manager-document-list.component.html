@@ -1,0 +1,35 @@
+<app-giro-data-view [content]="content" aTitle="Documentos del gestor" class="col-12"></app-giro-data-view>
+
+<ng-template #content>
+    <p-table [loading]="!(this.loaderService.loading[loaderId] | loaderHelper)"
+            (onSort)="sort($event)" [lazy]="true" [tableStyle]="{ 'min-width': '50rem' }" [value]="model?.items || []" styleClass="p-datatable-striped">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Documento</th>
+                <th>Tipo</th>
+                <th pSortableColumn="createdAt" class="white-space-nowrap">Fecha de envío <p-sortIcon field="createdAt"></p-sortIcon></th>
+                <th class="text-right">Acción</th>
+            </tr>
+        </ng-template>
+        <ng-template let-model pTemplate="body">
+            <tr>
+                <td>{{ modelIn(model)?.filename ?? '-' }}</td>
+                <td>{{ modelIn(model)?.document?.name ?? '-' }}</td>
+                <td>{{ (modelIn(model)?.createdAt | date : 'dd/MM/yyyy') ?? '-' }}</td>
+                <td class="text-right white-space-nowrap">
+                    <p-button [disabled]="loaderService.loading[this.downloadLoaderId]" class="mr-2" icon="pi pi-download" (onClick)="download(modelIn(model)?.id)"></p-button>
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <app-paginator
+            (pageFunction)="page($event)"
+            *ngIf="model?.meta?.totalItems > 10"
+            [pageParamName]="'pageIndex'"
+            [pageSizeParamName]="'itemsPerPage'"
+            [rowsPerPageOptions]="[10, 20, 30]"
+            [totalElements]="model?.meta?.totalItems">
+    </app-paginator>
+
+</ng-template>

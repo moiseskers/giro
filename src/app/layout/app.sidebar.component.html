@@ -1,0 +1,36 @@
+<div class="layout-sidebar" (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()">
+
+    <div class="sidebar-header flex justify-content-between">
+
+            <a [routerLink]="['/']" class="app-logo cursor-pointer">
+                <svg width="107" height="32" viewBox="0 0 107 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_8884_43904)">
+                        <path d="M15.9543 18.374L15.9674 13.3866L5.11791 13.3605C6.57582 7.47232 12.5467 3.86455 18.4393 5.31375C24.3318 6.76731 27.944 12.7426 26.4948 18.6351C25.0412 24.5277 19.066 28.1442 13.1734 26.6906C10.201 25.9595 7.80743 24.0707 6.35387 21.6249L2.06718 24.1752C4.18224 27.7264 7.65511 30.4681 11.9766 31.5343C20.5413 33.645 29.2278 28.3966 31.3385 19.8319C33.4492 11.2672 28.2007 2.58072 19.6317 0.470012C14.257 -0.857337 8.83884 0.713722 5.02652 4.18659L5.03522 0.705018L0.0435197 0.691963L0 17.9301V18.3348L15.9543 18.374Z" fill="#231F20"/>
+                        <path d="M90.6645 31.7824C81.8996 31.7824 74.7711 24.6539 74.7711 15.8934C74.7711 7.13287 81.8996 0 90.6645 0C99.4293 0 106.558 7.12852 106.558 15.8934C106.558 24.6582 99.4293 31.7824 90.6645 31.7824ZM90.6645 4.95689C84.6327 4.95689 79.728 9.86155 79.728 15.8934C79.728 21.9252 84.6327 26.8299 90.6645 26.8299C96.6963 26.8299 101.601 21.9252 101.601 15.8934C101.601 9.86155 96.6963 4.95689 90.6645 4.95689Z" fill="#231F20"/>
+                        <path d="M39.2678 0.73113H34.3109V31.2645H39.2678V0.73113Z" fill="#231F20"/>
+                        <path d="M57.6418 0C48.8987 0 41.7832 7.0937 41.7484 15.8281V31.2689H46.7053V15.889C46.7053 9.86155 51.61 4.95689 57.6418 4.95689C63.6736 4.95689 68.5739 9.86155 68.5783 15.889H73.5352C73.5308 7.12852 66.4023 0 57.6418 0Z" fill="#231F20"/>
+                    </g>
+                    <defs>
+                        <clipPath id="clip0_8884_43904">
+                            <rect width="106.554" height="32" fill="white"/>
+                        </clipPath>
+                    </defs>
+                </svg>
+
+            </a>
+
+            <button (click)="this.layoutService.onMenuToggle();" class="topbar-menubutton p-link p-trigger transition-duration-300 " type="button">
+                <i class="pi pi-bars text-xl	"></i>
+            </button>
+
+
+<!--        <button class="layout-sidebar-anchor p-link" type="button" (click)="anchor()"></button>-->
+
+    </div>
+
+
+
+    <div #menuContainer  class="layout-menu-container">
+        <app-menu></app-menu>
+    </div>
+</div>
